@@ -1,5 +1,6 @@
 package com.revature.repository;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,9 +18,7 @@ public class DatabaseConnection {
 
     
     public DatabaseConnection() {
-
-        try (InputStream input = new FileInputStream("config.properties")) {
-
+        try (InputStream input = new FileInputStream("./src/main/resources/config.properties")) {
             Properties prop = new Properties();
 
             // load a properties file
@@ -28,16 +27,13 @@ public class DatabaseConnection {
             // get the property value and print it out
             System.setProperty("databasePath", prop.getProperty("databasePath"));
             //testing print statement
-            System.out.println(prop.getProperty("databasePath"));
+//            System.out.println(prop.getProperty("databasePath"));
 
         } catch (IOException ex) {
+            System.out.println("DB FAILED");
             ex.printStackTrace();
         }
 
-
-        // Use environment variable or default path
-        //System.setProperty("databasePath", "C:\\Users\\peter\\OneDrive\\Desktop\\Desktop\\QEA\\CodeSilver-P1\\expense_apps\\employee\\expense_manager.db");
-        //TODO: validate this works if the property is broken
         this.databasePath = System.getenv("DATABASE_PATH") != null
             ? System.getenv("DATABASE_PATH")
             : System.getProperty("databasePath");
