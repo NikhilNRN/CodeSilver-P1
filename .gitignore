@@ -1,0 +1,2 @@
+expense_apps/manager/src/main/resources/*.properties
+expense_apps/manager/test/classes/*.properties

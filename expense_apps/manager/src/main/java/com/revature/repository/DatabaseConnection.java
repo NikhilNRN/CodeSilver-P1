@@ -1,8 +1,13 @@
 package com.revature.repository;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * Database connection utility for SQLite database.
@@ -10,10 +15,25 @@ import java.sql.SQLException;
  */
 public class DatabaseConnection {
     private final String databasePath;
+
     
     public DatabaseConnection() {
-        // Use environment variable or default path
-        System.setProperty("databasePath", "C:\\Users\\oanht\\Downloads\\Stuff for Jeremiah\\Revature QEA Training\\Miscellaneous\\P1\\expense_apps\\employee\\expense_manager.db");
+        try (InputStream input = new FileInputStream("./src/main/resources/config.properties")) {
+            Properties prop = new Properties();
+
+            // load a properties file
+            prop.load(input);
+
+            // get the property value and print it out
+            System.setProperty("databasePath", prop.getProperty("databasePath"));
+            //testing print statement
+//            System.out.println(prop.getProperty("databasePath"));
+
+        } catch (IOException ex) {
+            System.out.println("DB FAILED");
+            ex.printStackTrace();
+        }
+
         this.databasePath = System.getenv("DATABASE_PATH") != null
             ? System.getenv("DATABASE_PATH")
             : System.getProperty("databasePath");
