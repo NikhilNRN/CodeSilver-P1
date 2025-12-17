@@ -19,25 +19,25 @@ public class TestExpenseControllerApproval {
         //
     }
 
-    // C20
+    // C20_05
     @Test
     public void testApproveExpense_success() {
         // TODO: Implement
     }
 
-    // C20
+    // C20_06
     @Test
     public void testApproveExpense_failure_throwsException() {
         // TODO: Implement
     }
 
-    // C21
+    // C21_05
     @Test
     public void testDenyExpense_success() {
         // TODO: Implement
     }
 
-    // C21
+    // C21_06
     @Test
     public void testDenyExpense_failure_throwsException() {
         // TODO: Implement
