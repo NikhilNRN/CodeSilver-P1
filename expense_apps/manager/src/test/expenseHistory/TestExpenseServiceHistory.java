@@ -14,8 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class TestExpenseServiceHistory {
     @Mock
@@ -43,7 +42,7 @@ public class TestExpenseServiceHistory {
         existingExpenseWithUser = new ExpenseWithUser(existingExpense, existingUser, existingApproval);
     }
 
-    // TC-C11_01
+    // C11_01
     @Test
     @Disabled("Feature not yet implemented - CSP-11")
     public void testGetExpensesByAmount_expectedFail() {
@@ -59,6 +58,7 @@ public class TestExpenseServiceHistory {
 
         List<ExpenseWithUser> actualList = service.getExpensesByEmployee(existingUser.getId());
         assertEquals(expectedList, actualList);
+        verify(expenseDAO, times(1)).findExpensesByUser(existingUser.getId());
     }
 
     // C09_02
@@ -69,6 +69,7 @@ public class TestExpenseServiceHistory {
 
         List<ExpenseWithUser> actualList = service.getExpensesByEmployee(99);
         assertEquals(expectedList, actualList);
+        verify(expenseDAO, times(1)).findExpensesByUser(99);
     }
 
     // C10_01
@@ -81,6 +82,7 @@ public class TestExpenseServiceHistory {
 
         List<ExpenseWithUser> actualList = service.getExpensesByDateRange("2025-12-11", "2025-12-13");
         assertEquals(expectedList, actualList);
+        verify(expenseDAO, times(1)).findExpensesByDateRange("2025-12-11", "2025-12-13");
     }
 
     // C10_02
@@ -91,6 +93,7 @@ public class TestExpenseServiceHistory {
 
         List<ExpenseWithUser> actualList = service.getExpensesByDateRange("2025-12-13", "2025-12-11");
         assertEquals(expectedList, actualList);
+        verify(expenseDAO, times(1)).findExpensesByDateRange("2025-12-13", "2025-12-11");
     }
 
     // C10_03
@@ -101,6 +104,7 @@ public class TestExpenseServiceHistory {
 
         List<ExpenseWithUser> actualList = service.getExpensesByDateRange("12-13-2025", "12-11-2025");
         assertEquals(expectedList, actualList);
+        verify(expenseDAO, times(1)).findExpensesByDateRange("12-13-2025", "12-11-2025");
     }
 
     // C10_04
@@ -111,6 +115,7 @@ public class TestExpenseServiceHistory {
 
         List<ExpenseWithUser> actualList = service.getExpensesByDateRange(null, null);
         assertEquals(expectedList, actualList);
+        verify(expenseDAO, times(1)).findExpensesByDateRange(null, null);
     }
 
     // C12_01
