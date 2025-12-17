@@ -59,56 +59,56 @@ public class TestExpenseServiceApproval {
         //
     }
 
-    // TC-C20_01
+    // C20_01
     @Test
     public void testApproveExpense_normal_returnTrue() {
         actualResult = service.approveExpense(existingExpenseId, existingManagerId, comment);
         assertTrue(actualResult);
     }
 
-    // TC-C20_02
+    // C20_02
     @Test
     public void testApproveExpense_noComment_returnTrue() {
         actualResult = service.approveExpense(existingExpenseId, existingManagerId, null);
         assertTrue(actualResult);
     }
 
-    // TC-C20_03
+    // C20_03
     @Test
     public void testApproveExpense_invalidExpense_returnFalse() {
         actualResult = service.approveExpense(notRealExpenseId, existingManagerId, comment);
         assertFalse(actualResult);
     }
 
-    // TC-C20_04
+    // C20_04
     @Test
     public void testApproveExpense_invalidManager_returnFalse() {
         actualResult = service.approveExpense(existingExpenseId, notRealManagerId, comment);
         assertFalse(actualResult);
     }
 
-    // TC-C21_01
+    // C21_01
     @Test
     public void testDenyExpense_normal_returnTrue() {
         actualResult = service.denyExpense(existingExpenseId, existingManagerId, comment);
         assertTrue(actualResult);
     }
 
-    // TC-C21_02
+    // C21_02
     @Test
     public void testDenyExpense_noComment_returnTrue() {
         actualResult = service.denyExpense(existingExpenseId, existingManagerId, null);
         assertTrue(actualResult);
     }
 
-    // TC-C21_03
+    // C21_03
     @Test
     public void testDenyExpense_invalidExpense_returnFalse() {
         actualResult = service.denyExpense(notRealExpenseId, existingManagerId, comment);
         assertFalse(actualResult);
     }
 
-    // TC-C21_04
+    // C21_04
     @Test
     public void testDenyExpense_invalidManager_returnFalse() {
         actualResult = service.denyExpense(existingExpenseId, notRealManagerId, comment);

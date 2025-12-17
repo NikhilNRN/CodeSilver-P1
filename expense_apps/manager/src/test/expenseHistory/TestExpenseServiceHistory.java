@@ -50,7 +50,7 @@ public class TestExpenseServiceHistory {
         fail("This requirement is currently unimplemented.");
     }
 
-    // TC-C09_01
+    // C09_01
     @Test
     public void testGetExpensesByEmployee_existingUser_returnsList() {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
@@ -61,7 +61,7 @@ public class TestExpenseServiceHistory {
         assertEquals(expectedList, actualList);
     }
 
-    // TC-C09_02
+    // C09_02
     @Test
     public void testGetExpensesByEmployee_userNotFound_returnsEmptyList() {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
@@ -71,7 +71,7 @@ public class TestExpenseServiceHistory {
         assertEquals(expectedList, actualList);
     }
 
-    // TC-C10_01
+    // C10_01
     @Test
     public void testGetExpensesByDateRange_normalRange_returnsList() {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
@@ -83,7 +83,7 @@ public class TestExpenseServiceHistory {
         assertEquals(expectedList, actualList);
     }
 
-    // TC-C10_02
+    // C10_02
     @Test
     public void testGetExpensesByDateRange_invalidRange_returnsEmptyList() {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
@@ -93,7 +93,7 @@ public class TestExpenseServiceHistory {
         assertEquals(expectedList, actualList);
     }
 
-    // TC-C10_03
+    // C10_03
     @Test
     public void testGetExpensesByDateRange_invalidFormat_returnsEmptyList() {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
@@ -103,7 +103,7 @@ public class TestExpenseServiceHistory {
         assertEquals(expectedList, actualList);
     }
 
-    // TC-C10_04
+    // C10_04
     @Test
     public void testGetExpensesByDateRange_nullDates_returnsEmptyList() {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
@@ -113,28 +113,28 @@ public class TestExpenseServiceHistory {
         assertEquals(expectedList, actualList);
     }
 
-    // TC-C12_01
+    // C12_01
     @Test
     @Disabled("Feature not yet implemented - CSP-12")
     public void testSortExpensesByNewestAmount_expectedFail() {
         fail("This requirement is currently unimplemented.");
     }
 
-    // TC-C13_01
+    // C13_01
     @Test
     @Disabled("Feature not yet implemented - CSP-13")
     public void testSortExpensesByOldestAmount_expectedFail() {
         fail("This requirement is currently unimplemented.");
     }
 
-    // TC-C14_01
+    // C14_01
     @Test
     @Disabled("Feature not yet implemented - CSP-14")
     public void testSortExpensesByHighestAmount_expectedFail() {
         fail("This requirement is currently unimplemented.");
     }
 
-    // TC-C15_01
+    // C15_01
     @Test
     @Disabled("Feature not yet implemented - CSP-15")
     public void testSortExpensesByLowestAmount_expectedFail() {
