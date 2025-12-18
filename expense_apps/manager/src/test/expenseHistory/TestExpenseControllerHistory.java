@@ -7,10 +7,7 @@ import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.InternalServerErrorResponse;
 import io.javalin.validation.Validator;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -19,8 +16,8 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
+@DisplayName("ExpenseController History Tests")
 public class TestExpenseControllerHistory {
-    // TODO: Declare mocks and inject mocks
     @Mock
     private static ExpenseService service;
 
@@ -30,11 +27,8 @@ public class TestExpenseControllerHistory {
     @InjectMocks
     private static ExpenseController controller;
 
-    // Test vars
-
     @BeforeAll
     public static void setUp() {
-        // TODO: Set up test vars
         service = mock(ExpenseService.class);
         ctx = mock(Context.class);
         controller = new ExpenseController(service);
@@ -47,6 +41,7 @@ public class TestExpenseControllerHistory {
 
     // C09_03
     @Test
+    @DisplayName("C09_03")
     public void testGetExpensesByEmployee_normal_success() {
         // Stub context
         Validator<Integer> mockValidator = mock(Validator.class);
@@ -64,6 +59,7 @@ public class TestExpenseControllerHistory {
 
     // C09_04
     @Test
+    @DisplayName("C09_04")
     public void testGetExpensesByEmployee_invalidEmployeeIDFormat_throwsException() {
         // Stub to mock context behavior
         Validator<Integer> mockValidator = mock(Validator.class);
@@ -80,6 +76,7 @@ public class TestExpenseControllerHistory {
 
     // C09_05
     @Test
+    @DisplayName("C09_05")
     public void testGetExpensesByEmployee_serverError_throwsException() {
         // Stub context
         Validator<Integer> mockValidator = mock(Validator.class);
