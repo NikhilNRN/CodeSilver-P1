@@ -4,6 +4,7 @@ import com.revature.repository.*;
 import com.revature.service.ExpenseService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+@DisplayName("ExpenseService History Tests")
 public class TestExpenseServiceHistory {
     @Mock
     private static ExpenseRepository expenseDAO;
@@ -45,12 +47,14 @@ public class TestExpenseServiceHistory {
     // C11_01
     @Test
     @Disabled("Feature not yet implemented - CSP-11")
+    @DisplayName("C11_01")
     public void testGetExpensesByAmount_expectedFail() {
         fail("This requirement is currently unimplemented.");
     }
 
     // C09_01
     @Test
+    @DisplayName("C09_01")
     public void testGetExpensesByEmployee_existingUser_returnsList() {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
         expectedList.add(existingExpenseWithUser);
@@ -63,6 +67,7 @@ public class TestExpenseServiceHistory {
 
     // C09_02
     @Test
+    @DisplayName("C09_02")
     public void testGetExpensesByEmployee_userNotFound_returnsEmptyList() {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
         when(expenseDAO.findExpensesByUser(99)).thenReturn(expectedList);
@@ -74,6 +79,7 @@ public class TestExpenseServiceHistory {
 
     // C10_01
     @Test
+    @DisplayName("C10_01")
     public void testGetExpensesByDateRange_normalRange_returnsList() {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
         expectedList.add(existingExpenseWithUser);
@@ -87,6 +93,7 @@ public class TestExpenseServiceHistory {
 
     // C10_02
     @Test
+    @DisplayName("C10_02")
     public void testGetExpensesByDateRange_invalidRange_returnsEmptyList() {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
         when(expenseDAO.findExpensesByDateRange(anyString(), anyString())).thenReturn(expectedList);
@@ -98,6 +105,7 @@ public class TestExpenseServiceHistory {
 
     // C10_03
     @Test
+    @DisplayName("C10_03")
     public void testGetExpensesByDateRange_invalidFormat_returnsEmptyList() {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
         when(expenseDAO.findExpensesByDateRange(anyString(), anyString())).thenReturn(expectedList);
@@ -109,6 +117,7 @@ public class TestExpenseServiceHistory {
 
     // C10_04
     @Test
+    @DisplayName("C10_04")
     public void testGetExpensesByDateRange_nullDates_returnsEmptyList() {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
         when(expenseDAO.findExpensesByDateRange(anyString(), anyString())).thenReturn(expectedList);
@@ -121,6 +130,7 @@ public class TestExpenseServiceHistory {
     // C12_01
     @Test
     @Disabled("Feature not yet implemented - CSP-12")
+    @DisplayName("C12_01")
     public void testSortExpensesByNewestAmount_expectedFail() {
         fail("This requirement is currently unimplemented.");
     }
@@ -128,6 +138,7 @@ public class TestExpenseServiceHistory {
     // C13_01
     @Test
     @Disabled("Feature not yet implemented - CSP-13")
+    @DisplayName("C13_01")
     public void testSortExpensesByOldestAmount_expectedFail() {
         fail("This requirement is currently unimplemented.");
     }
@@ -135,6 +146,7 @@ public class TestExpenseServiceHistory {
     // C14_01
     @Test
     @Disabled("Feature not yet implemented - CSP-14")
+    @DisplayName("C14_01")
     public void testSortExpensesByHighestAmount_expectedFail() {
         fail("This requirement is currently unimplemented.");
     }
@@ -142,6 +154,7 @@ public class TestExpenseServiceHistory {
     // C15_01
     @Test
     @Disabled("Feature not yet implemented - CSP-15")
+    @DisplayName("C15_01")
     public void testSortExpensesByLowestAmount_expectedFail() {
         fail("This requirement is currently unimplemented.");
     }

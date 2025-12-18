@@ -4,6 +4,7 @@ import com.revature.repository.*;
 import com.revature.service.ExpenseService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@DisplayName("ExpenseService Approval Tests")
 public class TestExpenseServiceApproval {
     @Mock
     private static ExpenseRepository expenseDAO;
@@ -62,6 +64,7 @@ public class TestExpenseServiceApproval {
 
     // C20_01
     @Test
+    @DisplayName("C20_01")
     public void testApproveExpense_normal_returnTrue() {
         actualResult = service.approveExpense(existingExpenseId, existingManagerId, comment);
         assertTrue(actualResult);
@@ -70,6 +73,7 @@ public class TestExpenseServiceApproval {
 
     // C20_02
     @Test
+    @DisplayName("C20_02")
     public void testApproveExpense_noComment_returnTrue() {
         actualResult = service.approveExpense(existingExpenseId, existingManagerId, null);
         assertTrue(actualResult);
@@ -78,6 +82,7 @@ public class TestExpenseServiceApproval {
 
     // C20_03
     @Test
+    @DisplayName("C20_03")
     public void testApproveExpense_invalidExpense_returnFalse() {
         actualResult = service.approveExpense(notRealExpenseId, existingManagerId, comment);
         assertFalse(actualResult);
@@ -86,6 +91,7 @@ public class TestExpenseServiceApproval {
 
     // C20_04
     @Test
+    @DisplayName("C20_04")
     public void testApproveExpense_invalidManager_returnFalse() {
         actualResult = service.approveExpense(existingExpenseId, notRealManagerId, comment);
         assertFalse(actualResult);
@@ -94,6 +100,7 @@ public class TestExpenseServiceApproval {
 
     // C21_01
     @Test
+    @DisplayName("C21_01")
     public void testDenyExpense_normal_returnTrue() {
         actualResult = service.denyExpense(existingExpenseId, existingManagerId, comment);
         assertTrue(actualResult);
@@ -102,6 +109,7 @@ public class TestExpenseServiceApproval {
 
     // C21_02
     @Test
+    @DisplayName("C21_02")
     public void testDenyExpense_noComment_returnTrue() {
         actualResult = service.denyExpense(existingExpenseId, existingManagerId, null);
         assertTrue(actualResult);
@@ -110,6 +118,7 @@ public class TestExpenseServiceApproval {
 
     // C21_03
     @Test
+    @DisplayName("C21_03")
     public void testDenyExpense_invalidExpense_returnFalse() {
         actualResult = service.denyExpense(notRealExpenseId, existingManagerId, comment);
         assertFalse(actualResult);
@@ -118,6 +127,7 @@ public class TestExpenseServiceApproval {
 
     // C21_04
     @Test
+    @DisplayName("C21_04")
     public void testDenyExpense_invalidManager_returnFalse() {
         actualResult = service.denyExpense(existingExpenseId, notRealManagerId, comment);
         assertFalse(actualResult);
