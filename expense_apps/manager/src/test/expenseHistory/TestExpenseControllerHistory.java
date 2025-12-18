@@ -3,7 +3,10 @@ package expenseHistory;
 import com.revature.api.ExpenseController;
 import com.revature.repository.ExpenseWithUser;
 import com.revature.service.ExpenseService;
+import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
+import io.javalin.http.InternalServerErrorResponse;
+import io.javalin.validation.Validator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -22,7 +25,7 @@ public class TestExpenseControllerHistory {
     private static ExpenseService service;
 
     @Mock
-    private static final Context ctx = mock(Context.class);
+    private static Context ctx;
 
     @InjectMocks
     private static ExpenseController controller;
@@ -33,6 +36,7 @@ public class TestExpenseControllerHistory {
     public static void setUp() {
         // TODO: Set up test vars
         service = mock(ExpenseService.class);
+        ctx = mock(Context.class);
         controller = new ExpenseController(service);
     }
 
@@ -44,8 +48,10 @@ public class TestExpenseControllerHistory {
     // C09_03
     @Test
     public void testGetExpensesByEmployee_normal_success() {
-        // TODO: Fix this, getting a nullpointerexception at line 48, ctx is null
-        when(ctx.pathParamAsClass("employeeId", Integer.class).get()).thenReturn(1);
+        // Stub context
+        Validator<Integer> mockValidator = mock(Validator.class);
+        when(mockValidator.get()).thenReturn(1);
+        when(ctx.pathParamAsClass("employeeId", Integer.class)).thenReturn(mockValidator);
         // Stub service layer return
         List<ExpenseWithUser> validExpenseList = new ArrayList<>();
         when(service.getExpensesByEmployee(1)).thenReturn(validExpenseList);
@@ -59,12 +65,34 @@ public class TestExpenseControllerHistory {
     // C09_04
     @Test
     public void testGetExpensesByEmployee_invalidEmployeeIDFormat_throwsException() {
-        // TODO: Implement
+        // Stub to mock context behavior
+        Validator<Integer> mockValidator = mock(Validator.class);
+        when(mockValidator.get()).thenThrow(NumberFormatException.class);
+        when(ctx.pathParamAsClass(eq("employeeId"), any(Class.class))).thenReturn(mockValidator);
+        // Act - call the controller method
+        // Assert that the controller method throws an exception
+        Assertions.assertThrows(BadRequestResponse.class,
+                () -> controller.getExpensesByEmployee(ctx),
+                "BadRequestResponse exception should be thrown");
+        // Verify mocked behavior
+        verify(mockValidator).get();
     }
 
     // C09_05
     @Test
     public void testGetExpensesByEmployee_serverError_throwsException() {
-        // TODO: Implement
+        // Stub context
+        Validator<Integer> mockValidator = mock(Validator.class);
+        when(mockValidator.get()).thenReturn(-999);
+        when(ctx.pathParamAsClass("employeeId", Integer.class)).thenReturn(mockValidator);
+        // Stub service layer
+        when(service.getExpensesByEmployee(-999)).thenThrow(RuntimeException.class);
+        // Act - call the controller method
+        // Assert that the controller method throws an exception
+        Assertions.assertThrows(InternalServerErrorResponse.class,
+                () -> controller.getExpensesByEmployee(ctx),
+                "InternalServerErrorResponse exception should be thrown");
+        // Verify mocked behavior
+        verify(service, times(1)).getExpensesByEmployee(-999);
     }
 }
