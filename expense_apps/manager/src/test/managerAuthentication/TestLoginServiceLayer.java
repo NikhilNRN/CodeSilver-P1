@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TestLoginSecure {
+public class TestLoginServiceLayer {
     @BeforeEach
     public void setup(){
 
@@ -89,4 +89,13 @@ public class TestLoginSecure {
         verify(mockUser, times(1)).getRole();
 
     }
+    @Test
+    public void test_isManager_valid(){
+        //user isManager is called through auth isManager
+        doReturn(true).when(mockUser).isManager();
+
+        testAuth.isManager(mockUser);
+        verify(mockUser, times(1)).isManager();
+    }
+    //TODO: test deprecated methods
 }
