@@ -59,7 +59,7 @@ public class TestExpenseRepositoryHistory {
         fail("This requirement is currently unimplemented.");
     }
 
-    // TS-???
+    @DisplayName("C54_01")
     @Test
     public void testFindExpensesByUser_existingEmployee_returnsExpenseWithUserList() {
         // Arrange test vars by stubbing the result set
@@ -90,8 +90,4 @@ public class TestExpenseRepositoryHistory {
         // Assert
         assertIterableEquals(expected, actual);
     }
-
-    // TS-???
-
-    // TS-???
 }
