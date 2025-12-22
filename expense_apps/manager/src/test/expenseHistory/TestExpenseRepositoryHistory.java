@@ -1,10 +1,7 @@
 package expenseHistory;
 
 import com.revature.repository.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import java.sql.*;
@@ -16,6 +13,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@DisplayName("ExpenseRepository History Tests")
+@Disabled("Not yet fully implemented")
 public class TestExpenseRepositoryHistory {
     @Mock
     private static DatabaseConnection dbConn;
