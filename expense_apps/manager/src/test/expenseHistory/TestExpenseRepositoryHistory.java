@@ -4,17 +4,17 @@ import com.revature.repository.*;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.junit.jupiter.api.function.Executable;
+
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @DisplayName("ExpenseRepository History Tests")
-@Disabled("Not yet fully implemented")
 public class TestExpenseRepositoryHistory {
     @Mock
     private static DatabaseConnection dbConn;
@@ -26,7 +26,6 @@ public class TestExpenseRepositoryHistory {
     private Connection conn;
     private PreparedStatement pstmt;
     private ResultSet rs;
-    ExpenseWithUser existingExpenseWithUser;
 
     @BeforeAll
     public static void setUpAll() {
@@ -53,41 +52,61 @@ public class TestExpenseRepositoryHistory {
         //
     }
 
-    // C11-01
     @Test
+    @DisplayName("C11_01")
+    @Disabled("Feature not yet implemented - CSP-11")
     public void testFindExpensesByAmount_expectedFail() {
         fail("This requirement is currently unimplemented.");
     }
 
     @DisplayName("C54_01")
     @Test
-    public void testFindExpensesByUser_existingEmployee_returnsExpenseWithUserList() {
+    public void testFindExpensesByUser_existingEmployee_returnsExpenseWithUserList() throws SQLException {
         // Arrange test vars by stubbing the result set
-        try {
-            when(rs.getInt(anyString())).thenReturn(1);
-            when(rs.getDouble(anyString())).thenReturn(2.0);
-            when(rs.getString("description")).thenReturn("thing");
-            when(rs.getString("date")).thenReturn("2000-01-01");
-            when(rs.getString("username")).thenReturn("Jeffery");
-            when(rs.getString("review_date")).thenReturn(null);
-            when(rs.getString("role")).thenReturn("Employee");
-            when(rs.getString("status")).thenReturn("pending");
-            when(rs.getString("comment")).thenReturn(null);
-            when(rs.getObject("reviewer")).thenReturn(null);
-        } catch (SQLException e) {
-            throw new RuntimeException("SQLException while stubbing ResultSet" + e.getMessage());
-        }
-        existingExpenseWithUser = new ExpenseWithUser(
-                new Expense(1, 1, 2.0, "thing", "2000-01-01"),
-                new User(1, "Jeffery", null, "Employee"),
-                new Approval(1, 1, "pending", null, null, null));
-        List<ExpenseWithUser> expected = new ArrayList<>();
-        expected.add(existingExpenseWithUser);
+        when(rs.next()).thenReturn(true, true, false);
+        when(rs.getInt(anyString())).thenReturn(1);
+        when(rs.getDouble(anyString())).thenReturn(2.0);
+        when(rs.getString("description")).thenReturn("thing");
+        when(rs.getString("date")).thenReturn("2000-01-01");
+        when(rs.getString("username")).thenReturn("Jeffery");
+        when(rs.getString("review_date")).thenReturn("2000-01-02");
+        when(rs.getString("role")).thenReturn("Employee");
+        when(rs.getString("status")).thenReturn("approved");
+        when(rs.getString("comment")).thenReturn("I approve");
+        when(rs.getObject("reviewer")).thenReturn(2);
 
         // Act
         List<ExpenseWithUser> actual = repo.findExpensesByUser(1);
 
         // Assert
-        assertIterableEquals(expected, actual);
+        List<Executable> executables = actual.stream().map(expenseWithUser -> (Executable) () -> {
+            assertEquals(1, expenseWithUser.getExpense().getId());
+            assertEquals(1, expenseWithUser.getExpense().getUserId());
+            assertEquals("thing", expenseWithUser.getExpense().getDescription());
+            assertEquals("2000-01-01", expenseWithUser.getExpense().getDate());
+            assertEquals(1, expenseWithUser.getUser().getId());
+            assertEquals("Jeffery", expenseWithUser.getUser().getUsername());
+            assertEquals("Employee", expenseWithUser.getUser().getRole());
+            assertEquals(1, expenseWithUser.getApproval().getId());
+            assertEquals(1, expenseWithUser.getApproval().getExpenseId());
+            assertEquals("approved", expenseWithUser.getApproval().getStatus());
+            assertEquals(2, expenseWithUser.getApproval().getReviewer());
+            assertEquals("I approve", expenseWithUser.getApproval().getComment());
+            assertEquals("2000-01-02", expenseWithUser.getApproval().getReviewDate());
+        }).collect(Collectors.toList());
+        assertEquals(2, actual.size());
+        assertAll("All mocked expenses should be in list", executables);
+        verify(pstmt).setInt(1, 1);
+        verify(pstmt).executeQuery();
+    }
+
+    @DisplayName("C54_02")
+    @Test
+    public void testFindExpensesByUser_noSuchEmployee_returnsEmptyList() throws SQLException {
+        when(rs.next()).thenReturn(false);
+        List<ExpenseWithUser> actual = repo.findExpensesByUser(-999);
+        assertTrue(actual.isEmpty());
+        verify(pstmt).setInt(1, -999);
+        verify(pstmt).executeQuery();
     }
 }
