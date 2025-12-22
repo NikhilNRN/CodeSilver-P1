@@ -20,7 +20,6 @@
         <cucumber.version>7.14.0</cucumber.version>
         <allure.version>2.25.0</allure.version>
         <allure.maven.version>2.17.0</allure.maven.version>
-        <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
         <jacoco.version>0.8.11</jacoco.version>
     </properties>
 
@@ -233,7 +232,12 @@
                 <configuration>
                     <reportVersion>${allure.version}</reportVersion>
                     <!-- The location where Allure results (JSON files) are stored -->
-                    <allureResultsDirectory>${allure.results.directory}</allureResultsDirectory>
+                    <properties>
+                        <property>
+                            <name>allure.results.directory</name>
+                            <value>${project.build.directory}/allure-results</value>
+                        </property>
+                    </properties>
                 </configuration>
             </plugin>
         </plugins>
