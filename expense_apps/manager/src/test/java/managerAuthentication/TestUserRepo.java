@@ -21,7 +21,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
+@ExtendWith(MockitoExtension.class)
 public class TestUserRepo {
     @Mock
     private DatabaseConnection databaseConnection;
@@ -30,10 +30,10 @@ public class TestUserRepo {
     private Connection connection;
 
     @Mock
-    private PreparedStatement preparedStatement = Mockito.mock(PreparedStatement.class);
+    private PreparedStatement preparedStatement;
 
     @Mock
-    private ResultSet resultSet = Mockito.mock(ResultSet.class);
+    private ResultSet resultSet;
 
     @InjectMocks
     private UserRepository userRepository;
@@ -48,10 +48,8 @@ public class TestUserRepo {
         userRepository = new UserRepository(databaseConnection);
     }
 
-    /* =========================
-       findById Tests
-       ========================= */
 
+    //C6_09
     @Test
     void findById_userFound() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
@@ -74,7 +72,7 @@ public class TestUserRepo {
         verify(preparedStatement).setInt(1, 1);
         verify(preparedStatement).executeQuery();
     }
-
+    //C6_10
     @Test
     void findById_userNotFound() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
@@ -85,7 +83,7 @@ public class TestUserRepo {
 
         assertTrue(result.isEmpty());
     }
-
+    //C6_11
     @Test
     void findById_sqlException_throwsRuntimeException() throws SQLException {
         when(connection.prepareStatement(anyString()))
@@ -99,10 +97,7 @@ public class TestUserRepo {
         assertTrue(exception.getMessage().contains("Error finding user by ID"));
     }
 
-    /* =========================
-       findByUsername Tests
-       ========================= */
-
+    //C6_12
     @Test
     void findByUsername_userFound() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
@@ -123,7 +118,7 @@ public class TestUserRepo {
         verify(preparedStatement).setString(1, "alice");
         verify(preparedStatement).executeQuery();
     }
-
+    //C6_13
     @Test
     void findByUsername_userNotFound() throws SQLException {
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
@@ -135,6 +130,7 @@ public class TestUserRepo {
         assertTrue(result.isEmpty());
     }
 
+    //C6_14
     @Test
     void findByUsername_sqlException_throwsRuntimeException() throws SQLException {
         when(connection.prepareStatement(anyString()))

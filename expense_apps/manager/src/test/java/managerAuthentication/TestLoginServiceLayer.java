@@ -4,6 +4,7 @@ import com.revature.repository.User;
 import com.revature.repository.UserRepository;
 import com.revature.service.AuthenticationService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,6 +42,8 @@ public class TestLoginServiceLayer {
         expectedUser = new User(1, uname, pword, "manager");
     }
     //test authenticate manager
+    //C6_01
+    @DisplayName("Test Case C6_01: Description")
     @Test
     public void test_authenticateManager_positive(){
         //create mock user and return that is correct
@@ -56,7 +59,7 @@ public class TestLoginServiceLayer {
         verify(testAuth, times(1)).authenticateUser(uname, pword);
         verify(testAuth, times(1)).isManager(expectedUser);
     }
-
+    //C6_02
     @Test
     public void test_authenticateManager_negative(){
 
@@ -68,6 +71,8 @@ public class TestLoginServiceLayer {
         //isManager should never be called due to short circuit on isPresent on empty Optional
         verify(testAuth, times(0)).isManager(expectedUser);
     }
+
+    //C6_03
     @Test
     public void test_userAuth_valid(){
         doReturn(Optional.of(expectedUser)).when(mockUserRep).findByUsername(uname);
@@ -76,7 +81,7 @@ public class TestLoginServiceLayer {
 
         verify(mockUserRep, times(1)).findByUsername(uname);
     }
-
+    //C6_04
     @Test
     public void test_jwtCreation_valid(){
         doReturn(1).when(mockUser).getId();
@@ -89,6 +94,8 @@ public class TestLoginServiceLayer {
         verify(mockUser, times(1)).getRole();
 
     }
+
+    //C6_05
     @Test
     public void test_isManager_valid(){
         //user isManager is called through auth isManager
@@ -97,5 +104,4 @@ public class TestLoginServiceLayer {
         testAuth.isManager(mockUser);
         verify(mockUser, times(1)).isManager();
     }
-    //TODO: test deprecated methods
 }

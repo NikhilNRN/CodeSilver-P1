@@ -38,7 +38,7 @@ public class TestLoginAPILayer {
         handler = new AuthenticationMiddleware(mockAuth).validateManager();
     }
 
-
+    //C6_06
     @Test
     void test_validateManagerPositive() throws Exception {
         //string doesnt matter, mocked out
@@ -51,7 +51,7 @@ public class TestLoginAPILayer {
         handler.handle(ctx);
         verify(ctx).attribute("manager", mockUser);
     }
-
+    //C6_07
     @Test
     void test_validateUserBad() throws Exception {
         //string doesnt matter, mocked out
@@ -63,7 +63,7 @@ public class TestLoginAPILayer {
         //make sure we throw because there user isnt a manager
         assertThrows(UnauthorizedResponse.class, ()->{handler.handle(ctx);});
     }
-
+    //C6_08
     @Test
     void test_validateTokenMissing() {
         //this SHOULD be what happens when you logout, as main
@@ -77,11 +77,6 @@ public class TestLoginAPILayer {
                 .thenReturn(Optional.empty());
 
         assertThrows(UnauthorizedResponse.class, ()->{handler.handle(ctx);});
-    }
-
-    @Test
-    void test_logoutAPI(){
-        assert(false);
     }
 
 
