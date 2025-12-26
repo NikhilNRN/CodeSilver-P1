@@ -43,6 +43,7 @@ public class TestApprovalRepositoryUpdateApprovalStatus {
         }
     }
 
+    // TODO: Parameterize status so that all statuses are tested (stretch goal)
     @Test
     @DisplayName("C50_01")
     public void testUpdateApprovalStatus_normal_returnTrue() throws SQLException {
@@ -56,6 +57,7 @@ public class TestApprovalRepositoryUpdateApprovalStatus {
         verify(pstmt).executeUpdate();
     }
 
+    // TODO: Parameterize status so that all statuses are tested (stretch goal)
     @Test
     @DisplayName("C50_02")
     public void testUpdateApprovalStatus_invalidInput_returnFalse() throws SQLException {
@@ -70,6 +72,7 @@ public class TestApprovalRepositoryUpdateApprovalStatus {
         verify(pstmt).executeUpdate();
     }
 
+    // TODO: Parameterize status so that all statuses are tested (stretch goal)
     @Test
     @DisplayName("C50_03")
     public void testUpdateApprovalStatus_SQLException_throwsException() throws SQLException {
