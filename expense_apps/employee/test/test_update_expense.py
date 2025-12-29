@@ -4,7 +4,7 @@ from repository.expense_model import Expense
 from repository.approval_model import Approval
 from service.expense_service import ExpenseService
 
-@pytest.mark.expense_update
+@pytest.mark.expense_editing
 class TestUpdateExpense:
     @pytest.fixture
     def sample_expense(self):

@@ -54,7 +54,7 @@ public class TestDatabaseConnection {
         return DriverManager.getConnection(url);
     }
      */
-    @DisplayName("D01_Egg")
+    @DisplayName("D01")
     @Test
     public void testGetConnectionPositive() throws SQLException {
         DatabaseConnection db = new DatabaseConnection();
@@ -64,6 +64,7 @@ public class TestDatabaseConnection {
 
     }
 
+    @DisplayName("D02")
     @Test
     public void testGetConnectionThrows(){
         //put some random url in and it shouldnt be able to connect to anything
