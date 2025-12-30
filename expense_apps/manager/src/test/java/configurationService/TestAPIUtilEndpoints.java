@@ -7,10 +7,7 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static io.restassured.RestAssured.given;
 
@@ -47,15 +44,20 @@ public class TestAPIUtilEndpoints {
             .when()
                 .get("/health")
             .then()
+                .spec(responseSpec)
                 .statusCode(200)
                 .body("status", Matchers.equalTo("healthy"))
                 .body("version", Matchers.equalTo("1.0.0"))
                 .body("service", Matchers.equalTo("expense-manager-api"));
     }
 
-    // Currently fails (returns 404) since this endpoint is currently not set up
+    /*
+     * Currently fails (returns 404) since this endpoint is currently not set up
+     * Keep expected status code at 200 because documentation indicates that this endpoint should be working
+     */
     @DisplayName("Manager App API Info")
     @Test
+    // @Disabled("Expected to fail since endpoint is currently unimplemented")
     public void testAPIInfo() {
         given()
                 .spec(requestSpec)
