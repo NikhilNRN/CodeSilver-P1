@@ -1,0 +1,136 @@
+{
+	"info": {
+		"_postman_id": "b47dce72-362b-4ab3-adf8-cfcb6f06d937",
+		"name": "Employee Login",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50029051",
+		"_collection_link": "https://jeremiahtrinh-6414835.postman.co/workspace/CodeSilver-P1-Postman-Workspace~5d7c27d6-c4b8-416d-9fd5-69bc065eb8bf/collection/50029051-b47dce72-362b-4ab3-adf8-cfcb6f06d937?action=share&source=collection_link&creator=50029051"
+	},
+	"item": [
+		{
+			"name": "Logout Valid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains correct message\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response.message).to.eq(\"Logout successful\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/logout",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Valid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains correct message\", () => {\r",
+							"    pm.expect(response.message).to.eq(\"Login successful\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains user information\", () => {\r",
+							"    pm.expect(response).to.have.property(\"user\");\r",
+							"    pm.expect(response.user).to.have.property(\"id\");\r",
+							"    pm.expect(response.user).to.have.property(\"role\");\r",
+							"    pm.expect(response.user).to.have.property(\"username\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\": \"employee1\",\r\n\"password\": \"password123\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": ""
+		}
+	]
+}
