@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
  * Provides setup and teardown utilities for integration tests
  * using a separate test database.
  */
-public class TestDatabaseSetup {
+public class TestDatabaseSetup
+{
 
     private static final String TEST_DB_NAME = "test_expense_manager.db";
     private static Path testDbPath;

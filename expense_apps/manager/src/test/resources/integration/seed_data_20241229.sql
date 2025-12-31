@@ -12,7 +12,7 @@ DELETE FROM users;
 INSERT INTO users (id, username, password, role) VALUES 
     (1, 'employee1', 'password123', 'Employee'),
     (2, 'employee2', 'password456', 'Employee'),
-    (3, 'manager1', 'admin123', 'Manager'),
+    (3, 'manager1', 'password123', 'Manager'),
     (4, 'manager2', 'admin456', 'Manager'),
     (5, 'testuser', 'testpass', 'Employee');
 

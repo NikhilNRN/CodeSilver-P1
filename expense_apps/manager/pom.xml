@@ -13,7 +13,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <aspectj.version>1.9.25</aspectj.version>
         <junit.version>5.10.0</junit.version>
-        <junit.platform.suite.version>6.1.0-M1</junit.platform.suite.version>
+        <junit.platform.suite.version>1.10.0</junit.platform.suite.version>
         <mockito.version>5.7.0</mockito.version>
         <restassured.version>5.4.0</restassured.version>
         <selenium.version>4.15.0</selenium.version>
@@ -111,6 +111,13 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy -->
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.18.3</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
