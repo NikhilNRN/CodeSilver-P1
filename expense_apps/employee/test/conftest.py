@@ -1,8 +1,32 @@
 import sqlite3
 from contextlib import contextmanager
 from unittest.mock import Mock
-import pytest
 from repository import DatabaseConnection, UserRepository
+import pytest
+from flask import Flask
+from api.auth_controller import auth_bp  # <- blueprint is here
+
+@pytest.fixture
+def app():
+    app = Flask(__name__)
+    app.config["TESTING"] = True
+    app.secret_key = "testsecret"
+
+    app.register_blueprint(auth_bp, url_prefix="/api/auth")
+    yield app
+
+@pytest.fixture
+def client(app):
+    return app.test_client()
+
+@pytest.fixture(autouse=True)
+def patch_auth_service(monkeypatch):
+    from unittest.mock import MagicMock
+    import api.auth_controller as auth_module  # <- correct module
+
+    mock_auth_service = MagicMock()
+    monkeypatch.setattr(auth_module, "get_auth_service", lambda: mock_auth_service)
+    return mock_auth_service
 
 
 @pytest.fixture
