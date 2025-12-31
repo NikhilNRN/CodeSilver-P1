@@ -11,11 +11,17 @@ Behave Step Definitions for Expense Management
 from behave import given, when, then
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
 import time
 
 
@@ -30,17 +36,40 @@ def step_app_running(context):
     """
     context.base_url = "http://localhost:5000"
 
-    # Setup Chrome WebDriver with options
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Run without GUI for CI/CD
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-dev-shm-usage")
+@given('I am on "{browser}"')
+def step_on_browser(context, browser):
+    match browser:
+        case "chrome":
+            # Setup Chrome WebDriver with options
+            options = ChromeOptions()
+            options.add_argument("--headless")  # Run without GUI for CI/CD
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
 
-    # Auto-install and setup ChromeDriver
-    service = ChromeService(ChromeDriverManager().install())
-    context.driver = webdriver.Chrome(service=service, options=chrome_options)
+            # Auto-install and setup ChromeDriver
+            service = ChromeService(ChromeDriverManager().install())
+            context.driver = webdriver.Chrome(service=service, options=options)
+        case "firefox":
+            # Setup Firefox WebDriver with options
+            options = FirefoxOptions()
+            options.add_argument("--headless")  # Run without GUI for CI/CD
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+
+            # Auto-install and setup GeckoDriver
+            service = FirefoxService(GeckoDriverManager().install())
+            context.driver = webdriver.Firefox(service=service, options=options)
+        case "edge":
+            # Setup Edge WebDriver with options
+            options = EdgeOptions()
+            options.add_argument("--headless")  # Run without GUI for CI/CD
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+
+            # Auto-install and setup ChromeDriver
+            service = EdgeService(EdgeChromiumDriverManager().install())
+            context.driver = webdriver.Edge(service=service, options=options)
     context.driver.implicitly_wait(10)
-
 
 @given('I am on the login page')
 def step_on_login_page(context):
