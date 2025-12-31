@@ -46,11 +46,10 @@ def auth_session():
 
 @allure.epic("Employee App")
 @allure.feature("Get Expense By ID API Tests")
-class test_GetExpenseByIdAPI:
+class TestGetExpenseByIdAPI:
     """API tests for GET /api/expenses/{expenseId} endpoint"""
 
-    # ==================== HAPPY PATH TESTS ====================
-
+    #Happy Path Tests
     @allure.story("Get Expense Details")
     @allure.title("TC-API-001: Successfully retrieve own expense with valid ID")
     @allure.severity(allure.severity_level.CRITICAL)
@@ -138,8 +137,7 @@ class test_GetExpenseByIdAPI:
         assert response.status_code == 200
         assert response.json()["expense"]["status"] == "pending"
 
-    # ==================== SAD PATH TESTS ====================
-
+    # Sad Path Tests
     @allure.story("Get Expense Details")
     @allure.title("TC-API-004: Non-existent expense ID returns 404")
     @allure.severity(allure.severity_level.CRITICAL)
@@ -177,8 +175,7 @@ class test_GetExpenseByIdAPI:
 
         assert response.status_code in [400, 404]
 
-    # ==================== AUTHENTICATION TESTS ====================
-
+    #  Auth Tests
     @allure.story("Authentication")
     @allure.title("TC-API-007: Unauthenticated request returns 401")
     @allure.severity(allure.severity_level.CRITICAL)
@@ -206,8 +203,7 @@ class test_GetExpenseByIdAPI:
 
         assert response.status_code in [401, 403]
 
-    # ==================== EDGE CASE TESTS ====================
-
+    # Edge Case Tests
     @allure.story("Get Expense Details")
     @allure.title("TC-API-009: Expense ID zero returns 404")
     @allure.severity(allure.severity_level.MINOR)
@@ -230,8 +226,7 @@ class test_GetExpenseByIdAPI:
 
         assert response.status_code == 404
 
-    # ==================== RESPONSE VALIDATION TESTS ====================
-
+    # Response Validation Tests
     @allure.story("Response Validation")
     @allure.title("TC-API-011: Response time is acceptable")
     @allure.severity(allure.severity_level.NORMAL)
