@@ -1,13 +1,13 @@
-# Feature: Employee Expense Management (Chrome)
+# Feature: Employee Expense Management (Edge)
 
-Feature: Employee Expense Management (Chrome)
+Feature: Employee Expense Management (Edge)
   As an employee
   I want to manage my expenses through the web application
   So that I can submit reimbursement requests and track their status
 
   Background:
     Given the Employee app is running on port 5000
-    And I am on "chrome"
+    And I am on "Edge"
     And I am on the login page
 
   # Test Case: TC-E2E-001
