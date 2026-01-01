@@ -1,4 +1,4 @@
-package expenseReview;
+package expenseReporting;
 
 import com.revature.api.ReportController;
 import com.revature.repository.ApprovalRepository;
