@@ -45,7 +45,7 @@ public class TestAuthApi {
 
     //With no login recorded, should return false
     @Test
-    @DisplayName("Get Authentication Status 200")
+    @DisplayName("C116_01 Get Authentication Status 200")
     public void getAuthStatus(){
         given()
                 .when()
@@ -63,7 +63,7 @@ public class TestAuthApi {
     //valid login
 
     @Test
-    @DisplayName("Valid Manager")
+    @DisplayName("C116_02 Valid Manager")
     public void validManagerLogin(){
         String uname = "manager1";
         String pword = "password123";
@@ -93,7 +93,7 @@ public class TestAuthApi {
 
 
     //login with user nto a manager
-    @DisplayName("Invalid Logins")
+    @DisplayName("C116_03 Invalid Logins")
     @ParameterizedTest
     @CsvSource({
             "employee1, password123",
@@ -113,7 +113,7 @@ public class TestAuthApi {
                 .body("error",equalTo("Invalid credentials or user is not a manager"))
                 .statusCode(401);
     }
-    @DisplayName("Null Logins")
+    @DisplayName("C116_04 Null Logins")
     @ParameterizedTest
     @CsvSource({
             "{\"password\": null}",
@@ -131,7 +131,7 @@ public class TestAuthApi {
                 .statusCode(400);
     }
 
-    @DisplayName("Malformed Login Request")
+    @DisplayName("C116_05 Malformed Login Request")
     @ParameterizedTest
     @CsvSource({
             "{\"username\": 145,\"password\": \"hi\"}",
@@ -151,7 +151,7 @@ public class TestAuthApi {
 
     //Test logout authorization
     @Test
-    @DisplayName("Full Logout Sequence: BUG")
+    @DisplayName("C116_06 Full Logout Sequence: BUG")
     //BUG: Logging out does not invalidate the jwt token, as it only rmoves it from the client.
     //This is a major security risk, since anyone who can hold on to the cookie can keep reusing it
     //until it expires.

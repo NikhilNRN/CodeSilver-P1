@@ -4,48 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f467ef41-f9a4-4d64-9625-ec7dadd4fbda" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+    <list default="true" id="ceeb8708-c30a-4c99-bc21-657256b34407" name="Changes" comment="">
       <change afterPath="$PROJECT_DIR$/.idea/employee.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pytest.ini" beforeDir="false" afterPath="$PROJECT_DIR$/pytest.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_auth_login.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_auth_logout.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_auth_status.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_delete_expense.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_get_auth_service.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_get_expense_by_id.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_get_expense_with_status.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test_update_expense.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/nonsensePath" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/configurationService/DummyClass.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/databaseValidation/TestDatabaseConnection.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseApproval/ExpenseServiceCategoryTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseApproval/ExpenseServiceCsvReportTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseApproval/ExpenseServiceEscapeCsvValueTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseApproval/ExpenseServiceGetAllTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseApproval/ExpenseServicePendingTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseApproval/TestApprovalRepositoryUpdateApprovalStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseApproval/TestExpenseControllerApproval.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseApproval/TestExpenseServiceApproval.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseHistory/ApprovalRepositoryCreateApproval.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseHistory/ApprovalRepositoryFindExpenseById.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseHistory/ExpenseHistoryFindAllExpensesByUser.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseHistory/TestExpenseControllerHistory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseHistory/TestExpenseRepositoryHistory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseHistory/TestExpenseServiceHistory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseReporting/ReportControllerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseReview/ExpenseControllerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseReview/ExpenseRepositorExpenseByCategory.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseReview/ExpenseRepositoryFindPendingExpenseByUser.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/expenseReview/ExpenseRepositoryTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/managerAuthentication/TestDeprecatedLogin.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/managerAuthentication/TestLoginAPILayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/managerAuthentication/TestLoginServiceLayer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/managerAuthentication/TestUserRepo.java" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test_api_deleteexpense.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test_api_getexpenseid.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test/test_api_putexpenseid.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/expense_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/expense_controller.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/expense_manager.db" beforeDir="false" afterPath="$PROJECT_DIR$/expense_manager.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/expense_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/expense_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../manager/src/main/java/com/revature/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../manager/src/main/java/com/revature/service/AuthenticationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/managerAuthentication/TestAuthApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/../manager/src/test/java/managerAuthentication/TestAuthApi.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,133 +51,117 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python tests.Python tests in test_user_authentication_service.py.executor": "Run",
+    "Python tests.pytest for test_api_deleteexpense.test_deleteexpense.executor": "Run",
+    "Python tests.pytest for test_api_deleteexpense.test_deletenonexistent.executor": "Run",
+    "Python tests.pytest for test_api_deleteexpense.test_deletenonpending.executor": "Run",
+    "Python tests.pytest for test_api_deleteexpense.test_deletepending.executor": "Run",
+    "Python tests.pytest for test_api_putexpenseid.test_nojson.executor": "Run",
+    "Python tests.pytest in test_api_deleteexpense.py.executor": "Run",
+    "Python tests.pytest in test_api_getexpenseid.py.executor": "Run",
+    "Python tests.pytest in test_api_putexpenseid.py.executor": "Run",
     "Python.authentication_service.executor": "Run",
     "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/peter/OneDrive/Desktop/Desktop/QEA/CodeSilver-P1/expense_apps/employee"
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "authenticationAPI__branch",
+    "last_opened_file_path": "C:/Users/peter/OneDrive/Desktop/Desktop/QEA/AssignmentRepo/12_23training"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
-      <module name="employee" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="Tox" factoryName="Tox">
+  <component name="RunManager" selected="Python tests.pytest for test_api_deleteexpense.test_deletenonpending">
+    <configuration name="pytest for test_api_deleteexpense.test_deleteexpense" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="employee" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="docs" factoryName="Docutils task">
-      <module name="employee" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="docutils_input_file" value="" />
-      <option name="docutils_output_file" value="" />
-      <option name="docutils_params" value="" />
-      <option name="docutils_task" value="" />
-      <option name="docutils_open_in_browser" value="false" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="docs" factoryName="Sphinx task">
-      <module name="employee" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="docutils_input_file" value="" />
-      <option name="docutils_output_file" value="" />
-      <option name="docutils_params" value="" />
-      <option name="docutils_task" value="" />
-      <option name="docutils_open_in_browser" value="false" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Autodetect">
-      <module name="employee" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="Doctests">
-      <module name="employee" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="" />
-      <option name="TEST_TYPE" value="TEST_SCRIPT" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <method v="2" />
-    </configuration>
-    <configuration default="true" type="tests" factoryName="py.test">
-      <module name="employee" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <option name="_new_target" value="&quot;test_api_deleteexpense.test_deleteexpense&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest for test_api_deleteexpense.test_deletenonexistent" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="employee" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_api_deleteexpense.test_deletenonexistent&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_api_deleteexpense.test_deletenonpending" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="employee" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_api_deleteexpense.test_deletenonpending&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_api_deleteexpense.test_deletepending" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="employee" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_api_deleteexpense.test_deletepending&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_api_putexpenseid.test_nojson" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="employee" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_api_putexpenseid.test_nojson&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.pytest for test_api_deleteexpense.test_deletenonpending" />
+        <item itemvalue="Python tests.pytest for test_api_deleteexpense.test_deletenonexistent" />
+        <item itemvalue="Python tests.pytest for test_api_deleteexpense.test_deletepending" />
+        <item itemvalue="Python tests.pytest for test_api_deleteexpense.test_deleteexpense" />
+        <item itemvalue="Python tests.pytest for test_api_putexpenseid.test_nojson" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -216,7 +173,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="f467ef41-f9a4-4d64-9625-ec7dadd4fbda" name="Changes" comment="" />
+      <changelist id="ceeb8708-c30a-4c99-bc21-657256b34407" name="Changes" comment="" />
       <created>1766182116456</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />

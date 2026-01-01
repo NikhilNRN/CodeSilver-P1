@@ -106,7 +106,7 @@ public class AuthenticationService {
      */
     public Optional<User> validateManagerAuthentication(String jwtToken) {
         Optional<User> userOpt = validateJwtToken(jwtToken);
-        System.out.println("VALIDATING" + userOpt.isPresent());
+        
         if (userOpt.isPresent() && isManager(userOpt.get())) {
             return userOpt;
         }
