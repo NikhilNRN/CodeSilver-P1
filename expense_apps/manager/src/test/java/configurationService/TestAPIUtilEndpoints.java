@@ -8,10 +8,17 @@ import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
+import io.qameta.allure.*;
 
 import static io.restassured.RestAssured.given;
 
+@Epic("Manager App")
+@Feature("Manager API")
+@Story("API Utilities")
+@DisplayName("API Utility Tests")
 public class TestAPIUtilEndpoints {
+    // IMPORTANT: These tests require the application (Main.java) to be running
+
     private RequestSpecification requestSpec;
     private ResponseSpecification responseSpec;
 
@@ -38,6 +45,7 @@ public class TestAPIUtilEndpoints {
 
     @DisplayName("Manager App API Health")
     @Test
+    @Severity(SeverityLevel.MINOR)
     public void testAPIHealth() {
         given()
                 .spec(requestSpec)
@@ -57,6 +65,7 @@ public class TestAPIUtilEndpoints {
      */
     @DisplayName("Manager App API Info")
     @Test
+    @Severity(SeverityLevel.MINOR)
     // @Disabled("Expected to fail since endpoint is currently unimplemented")
     public void testAPIInfo() {
         given()

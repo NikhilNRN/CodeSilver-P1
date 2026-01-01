@@ -9,6 +9,7 @@ import io.javalin.http.Context;
 import io.javalin.http.InternalServerErrorResponse;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.validation.Validator;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -17,6 +18,8 @@ import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
+@Epic("Manager App")
+@Feature("Expense Controller")
 @DisplayName("ExpenseController Approval Tests")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestExpenseControllerApproval {
@@ -45,6 +48,9 @@ public class TestExpenseControllerApproval {
         existingManager = new User(1, "manager1", "password123", "manager");
     }
 
+    @Story("Expense Approval")
+    @Description("Successful expense approval, no exceptions should be thrown")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     @Order(1)
     @DisplayName("C20_05")
@@ -65,6 +71,9 @@ public class TestExpenseControllerApproval {
         verify(service, times(1)).approveExpense(1, existingManager.getId(), validComment);
     }
 
+    @Story("Expense Approval")
+    @Description("Expense approval results in an internal server error response")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @Order(3)
     @DisplayName("C20_06")
@@ -80,6 +89,9 @@ public class TestExpenseControllerApproval {
                 "InternalServerErrorResponse should be thrown");
     }
 
+    @Story("Expense Approval")
+    @Description("Expense approval with a malformed request")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @Order(2)
     @DisplayName("C20_07")
@@ -91,6 +103,9 @@ public class TestExpenseControllerApproval {
         Assertions.assertThrows(BadRequestResponse.class, () -> controller.approveExpense(ctx), "BadRequestResponse should be thrown");
     }
 
+    @Story("Expense Approval")
+    @Description("Approved expense could not be found")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @Order(2)
     @DisplayName("C20_08")
@@ -111,6 +126,9 @@ public class TestExpenseControllerApproval {
         verify(service, times(1)).approveExpense(-999, existingManager.getId(), validComment);
     }
 
+    @Story("Expense Denial")
+    @Description("Successful expense denial")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     @Order(1)
     @DisplayName("C21_05")
@@ -131,6 +149,9 @@ public class TestExpenseControllerApproval {
         verify(service, times(1)).denyExpense(1, existingManager.getId(), validComment);
     }
 
+    @Story("Expense Denial")
+    @Description("Expense denial results in an internal server error response")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @Order(4)
     @DisplayName("C21_06")
@@ -146,6 +167,9 @@ public class TestExpenseControllerApproval {
                 "InternalServerErrorResponse should be thrown");
     }
 
+    @Story("Expense Denial")
+    @Description("Expense denial with a malformed request")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @Order(2)
     @DisplayName("C21_07")
@@ -157,6 +181,9 @@ public class TestExpenseControllerApproval {
         Assertions.assertThrows(BadRequestResponse.class, () -> controller.denyExpense(ctx), "BadRequestResponse should be thrown");
     }
 
+    @Story("Expense Denial")
+    @Description("Denied expense could not be found")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @Order(2)
     @DisplayName("C21_08")

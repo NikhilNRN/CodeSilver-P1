@@ -1,25 +1,30 @@
+import allure
 import pytest
 import requests
 
-@pytest.fixture(scope='module')
-def app_version():
-    return '1.0.0'
-
-@pytest.fixture(scope='module')
-def base_url():
-    return 'http://127.0.0.1:5000'
-
-@pytest.fixture(scope='module')
-def session():
-    session = requests.Session()
-    session.headers.update({
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-    })
-    yield session
-    session.close()
-
+@allure.epic("Employee App")
+@allure.feature("Utility API")
 class TestAPIUtilEndpoints:
+    # IMPORTANT: These tests require the Flask server to be running.
+
+    @pytest.fixture
+    def app_version(self):
+        return '1.0.0'
+
+    @pytest.fixture
+    def base_url(self):
+        return 'http://127.0.0.1:5000'
+
+    @pytest.fixture
+    def session(self):
+        session = requests.Session()
+        session.headers.update({
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        })
+        yield session
+        session.close()
+
     def test_api_health(self, session, base_url):
         response = session.get(f'{base_url}/health')
         assert response.status_code == 200

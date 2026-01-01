@@ -1,12 +1,13 @@
-# Feature: Employee Expense Management
+# Feature: Employee Expense Management (Edge)
 
-Feature: Employee Expense Management
+Feature: Employee Expense Management (Edge)
   As an employee
   I want to manage my expenses through the web application
   So that I can submit reimbursement requests and track their status
 
   Background:
     Given the Employee app is running on port 5000
+    And I am on "Edge"
     And I am on the login page
 
   # Test Case: TC-E2E-001
@@ -21,11 +22,11 @@ Feature: Employee Expense Management
   # Test Case: TC-E2E-002
   @login @sad_path
   Scenario: Failed login with invalid credentials
-    Given
-    And
-    When
-    Then
-    And
+    Given I enter username "notReal"
+    And I enter password "wrongPassword321"
+    When I click the login button
+    Then I should remain on the login page
+    And I should see an error message "Invalid credentials"
 
   # Test Case: TC-E2E-003
   @expense @submit
@@ -42,30 +43,30 @@ Feature: Employee Expense Management
   # Test Case: TC-E2E-004
   @expense @view
   Scenario: View expense list
-    Given
-    When
-    Then
-    And
+    Given I am logged in as "employee1" with password "password123"
+    When I navigate to the expense list
+    Then I should see a table of my expenses
+    And each expense should show amount, description, date, and status
 
   # Test Case: TC-E2E-005
   @expense @edit
   Scenario: Edit a pending expense
-    Given
-    And
-    When
-    And
-    And
-    And
-    Then
-    And
+    Given I am logged in as "employee1" with password "password123"
+    And I have a pending expense
+    When I click the edit button for the pending expense
+    And I change the amount to "24.67"
+    And I change the description to "I could be gaming (updated description)"
+    And I save the changes
+    Then I should see the updated expense in the list
+    And the expense amount should be "24.67"
 
   # Test Case: TC-E2E-007 - Scenario Outline
   @expense @filter
   Scenario Outline: Filter expenses by status
-    Given
-    When
-    And
-    Then
+    Given I am logged in as "employee1" with password "password123"
+    When I navigate to the expense list
+    And I filter by status "<status>"
+    Then I should only see expenses with status "<status>"
 
     Examples:
       | status   |
@@ -75,7 +76,7 @@ Feature: Employee Expense Management
 
   @logout
   Scenario: Employee logout
-    Given
-    When
-    Then
-    And
+    Given I am logged in as "employee1" with password "password123"
+    When I click the logout button
+    Then I should be redirected to the login page
+    And I should not be able to access the dashboard

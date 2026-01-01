@@ -1,3 +1,4 @@
+import allure
 import sqlite3
 from contextlib import contextmanager
 from unittest.mock import Mock
@@ -124,3 +125,16 @@ def db_connection():
 @pytest.fixture
 def user_repository(db_connection):
     return UserRepository(db_connection)
+
+# Allure reporting helpers
+@allure.step("Validate response status code")
+def assert_status_code(response, expected_code):
+    """Helper to validate status codes with Allure step."""
+    assert response.status_code == expected_code, \
+        f"Expected {expected_code}, got {response.status_code}"
+
+
+@allure.step("Validate response contains key")
+def assert_response_has_key(response_json, key):
+    """Helper to validate response structure with Allure step."""
+    assert key in response_json, f"Response missing key: {key}"
