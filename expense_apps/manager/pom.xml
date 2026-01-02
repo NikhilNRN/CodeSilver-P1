@@ -13,6 +13,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <aspectj.version>1.9.25</aspectj.version>
         <junit.version>5.10.0</junit.version>
+        <junit.platform.suite.version>1.10.0</junit.platform.suite.version>
         <mockito.version>5.7.0</mockito.version>
         <restassured.version>5.4.0</restassured.version>
         <selenium.version>4.15.0</selenium.version>
@@ -43,21 +44,21 @@
             <artifactId>javalin</artifactId>
             <version>6.7.0</version>
         </dependency>
-        
+
         <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.50.3.0</version>
         </dependency>
-        
+
         <!-- Jackson for JSON handling -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.18.2</version>
         </dependency>
-        
+
         <!-- SLF4J Simple for logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -88,6 +89,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.junit.platform/junit-platform-suite -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>${junit.platform.suite.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
         <dependency>
             <groupId>org.mockito</groupId>
@@ -102,6 +111,13 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.bytebuddy/byte-buddy -->
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.18.3</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
@@ -206,24 +222,23 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
+                <version>${jacoco.version}</version> <!-- Use a recent version -->
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
                         <goals>
-                            <!-- Prepares the JaCoCo agent to run with tests (linked to the test phase) -->
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
                         <id>report</id>
-                        <phase>test</phase>
                         <goals>
-                            <!-- Generates the JaCoCo reports (HTML, XML, CSV) after tests run -->
                             <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+
 
             <!-- Allure Maven Plugin -->
             <plugin>

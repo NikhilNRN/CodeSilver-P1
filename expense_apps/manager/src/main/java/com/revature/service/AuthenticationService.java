@@ -150,6 +150,7 @@ public class AuthenticationService {
         
         if (userOpt.isPresent()) {
             User user = userOpt.get();
+
             // Simple password comparison - in production, passwords should be hashed
             if (password.equals(user.getPassword())) {
                 return userOpt;

@@ -1,8 +1,12 @@
 from datetime import datetime
 import pytest
+import allure
 
 from service.expense_service import ExpenseService
 
+@allure.epic("Employee App")
+@allure.feature("Expense Service")
+@allure.story("Expense Submission")
 @pytest.mark.submission
 class TestExpenseSubmission:
     """
@@ -13,6 +17,8 @@ class TestExpenseSubmission:
     """
 
     # C75_01
+    @allure.title("Submit expense with valid data")
+    @allure.severity(allure.severity_level.CRITICAL)
     @pytest.mark.positive
     @pytest.mark.smoke
     @pytest.mark.parametrize("user_id, amount, description, date", [
@@ -61,6 +67,8 @@ class TestExpenseSubmission:
         assert actual_approval.status == "pending"
 
     # C75_02
+    @allure.title("Submit expense with invalid amount")
+    @allure.severity(allure.severity_level.CRITICAL)
     @pytest.mark.negative
     @pytest.mark.parametrize("user_id, amount, description, date", [
         (2, 0, "for the lulz", "2001-11-09"),
@@ -82,6 +90,7 @@ class TestExpenseSubmission:
         assert "Amount must be greater than 0" in str(excinfo.value)
 
     # C75_03
+    @allure.title("Submit expense with invalid description")
     @pytest.mark.negative
     @pytest.mark.parametrize("user_id, amount, description, date", [
         (3, 22.17, " ", "2001-11-09"),

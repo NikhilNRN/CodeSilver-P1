@@ -1,6 +1,7 @@
 package expenseHistory;
 
 import com.revature.repository.*;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -14,6 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+@Epic("Manager App")
+@Feature("Expense Repository")
+@Story("Viewing Expense History")
 @DisplayName("ExpenseRepository History Tests")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestExpenseRepositoryHistory {
@@ -51,6 +55,8 @@ public class TestExpenseRepositoryHistory {
         //
     }
 
+    @Description("Finding expenses by amount, unimplemented feature that cannot be traced back to a requirement")
+    @Severity(SeverityLevel.TRIVIAL)
     @Test
     @DisplayName("C11_01")
     @Disabled("Feature not yet implemented - CSP-11")
@@ -58,6 +64,8 @@ public class TestExpenseRepositoryHistory {
         fail("This requirement is currently unimplemented.");
     }
 
+    @Description("Finding all expenses from an existing employee by user ID")
+    @Severity(SeverityLevel.CRITICAL)
     @DisplayName("C54_01")
     @Test
     @Order(1)
@@ -102,6 +110,8 @@ public class TestExpenseRepositoryHistory {
         verify(pstmt).executeQuery();
     }
 
+    @Description("Finding expenses for a non-existent employee ID")
+    @Severity(SeverityLevel.BLOCKER)
     @DisplayName("C54_02")
     @Test
     @Order(2)
@@ -115,6 +125,8 @@ public class TestExpenseRepositoryHistory {
         verify(pstmt).executeQuery();
     }
 
+    @Description("Finding expenses by user throws an SQLException")
+    @Severity(SeverityLevel.BLOCKER)
     @DisplayName("C54_03")
     @Test
     @Order(3)
@@ -127,6 +139,8 @@ public class TestExpenseRepositoryHistory {
         verify(pstmt, never()).setInt(1, -69);
     }
 
+    @Description("Finding all expenses within a valid date range")
+    @Severity(SeverityLevel.CRITICAL)
     @DisplayName("C55_01")
     @Test
     @Order(1)
@@ -172,6 +186,8 @@ public class TestExpenseRepositoryHistory {
         verify(pstmt).executeQuery();
     }
 
+    @Description("Finding expenses for an invalid date range")
+    @Severity(SeverityLevel.BLOCKER)
     @DisplayName("C55_02")
     @Test
     @Order(2)
@@ -186,6 +202,8 @@ public class TestExpenseRepositoryHistory {
         verify(pstmt).executeQuery();
     }
 
+    @Description("Finding expenses by date range throws an SQLException")
+    @Severity(SeverityLevel.BLOCKER)
     @DisplayName("C55_03")
     @Test
     @Order(3)
