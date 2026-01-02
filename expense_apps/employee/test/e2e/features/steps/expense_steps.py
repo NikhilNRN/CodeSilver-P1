@@ -45,9 +45,15 @@ def step_on_browser(context, browser):
         case "chrome":
             # Setup Chrome WebDriver with options
             options = ChromeOptions()
-            options.add_argument("--headless")  # Run without GUI for CI/CD
+            # options.add_argument("--headless")  # Run without GUI for CI/CD
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
+            prefs = {
+                "credentials_enable_service": False,
+                "profile.password_manager_enabled": False,
+                "profile.password_manager_leak_detection": False
+            }
+            options.add_experimental_option("prefs", prefs)
 
             # Auto-install and setup ChromeDriver
             service = ChromeService(ChromeDriverManager().install())
@@ -65,11 +71,11 @@ def step_on_browser(context, browser):
         case "edge":
             # Setup Edge WebDriver with options
             options = EdgeOptions()
-            options.add_argument("--headless")  # Run without GUI for CI/CD
+            options.add_argument("--headless=new")  # Run without GUI for CI/CD
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
 
-            # Auto-install and setup ChromeDriver
+            # Auto-install and setup EdgeChromiumDriver
             service = EdgeService(EdgeChromiumDriverManager().install())
             context.driver = webdriver.Edge(service=service, options=options)
     context.driver.implicitly_wait(10)
@@ -343,13 +349,12 @@ def step_expense_amount(context, amount):
 def step_click_logout(context):
     """Click the logout button."""
     logout_locator = (By.ID, "logout-btn")
-    context.wait.until(ec.visibility_of_element_located(logout_locator)).click()
+    context.wait.until(ec.element_to_be_clickable(logout_locator)).click()
 
 
 @then('I should be redirected to the login page')
 def step_redirected_to_login(context):
     """Verify redirection to login."""
-    # context.driver.implicitly_wait(10)
     assert "/login" in context.driver.current_url
 
 
@@ -359,7 +364,6 @@ def step_no_dashboard_access(context):
 
     # Should redirect to login or show unauthorized
     context.driver.back()
-    # context.driver.implicitly_wait(10)
     if "/app" in context.driver.current_url:
         auth_msg_locator = (By.ID, "expenses-list")
         auth_msg = context.wait.until(ec.visibility_of_element_located(auth_msg_locator))
