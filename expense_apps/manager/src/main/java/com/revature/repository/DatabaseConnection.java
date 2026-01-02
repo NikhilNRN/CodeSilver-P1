@@ -16,7 +16,6 @@ import java.util.Properties;
 public class DatabaseConnection {
     private final String databasePath;
 
-    
     public DatabaseConnection() {
         try (InputStream input = new FileInputStream("./src/main/resources/config.properties")) {
             Properties prop = new Properties();
