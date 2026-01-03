@@ -2,6 +2,7 @@ package com.revature.e2e.steps;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Allure;
@@ -12,6 +13,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,7 +41,13 @@ public class ExpenseSteps {
 
         // Configure Chrome options
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless"); // Run without GUI for CI/CD
+        Map<String, Object> chromePrefs = new HashMap<>();
+
+        // Add the preference to disable password leak detection
+        chromePrefs.put("profile.password_manager_leak_detection", false);
+        options.setExperimentalOption("prefs", chromePrefs);
+
+//        options.addArguments("--headless"); // Run without GUI for CI/CD
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
 
@@ -88,14 +98,19 @@ public class ExpenseSteps {
 
     @Given("I enter manager password {string}")
     public void iEnterManagerPassword(String password) {
-        
+        WebElement pwordField = driver.findElement(By.id("password"));
+        pwordField.clear();
+        pwordField.sendKeys(password);
     }
 
     @Given("I am logged in as manager {string} with password {string}")
     public void iAmLoggedInAsManager(String username, String password) {
-      
-
-        // Wait for redirect to dashboard
+        iAmOnTheManagerLoginPage();
+        iEnterManagerUsername(username);
+        iEnterManagerPassword(password);
+        iClickTheManagerLoginButton();
+        // 2. (Optional but recommended) Wait for the URL to contain expected text
+        wait.until(ExpectedConditions.urlContains("http://localhost:5001/manager.html"));
        
     }
 
@@ -113,7 +128,7 @@ public class ExpenseSteps {
 
     @When("I click the manager login button")
     public void iClickTheManagerLoginButton() {
-       
+        driver.findElement(By.xpath("//button[normalize-space()='Login']")).click();
 
         // Wait for response
        
@@ -122,7 +137,8 @@ public class ExpenseSteps {
     @When("I navigate to the pending expenses tab")
     public void iNavigateToThePendingExpensesTab() {
         // Click on pending tab or navigate
-       
+        assertTrue(driver.getCurrentUrl().contains("manager"));
+        iClickTheRefreshButton();
             // Tab might already be selected or different UI
        
     }
@@ -144,19 +160,21 @@ public class ExpenseSteps {
 
     @When("I navigate to the reports section")
     public void iNavigateToTheReportsSection() {
-       
-            // Reports might be on same page
-       
+        driver.findElement(By.xpath("//button[@id='show-reports']")).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h3[normalize-space()='Generate Reports (CSV)']")));
     }
 
     @When("I click the export CSV button")
     public void iClickTheExportCsvButton() {
-      
+        driver.findElement(By.id("generate-date-range-report")).click();
     }
 
     @When("I click the manager logout button")
     public void iClickTheManagerLogoutButton() {
-       
+        System.out.println(driver.getCurrentUrl());
+        driver.findElement(By.xpath("//button[@id='logout-btn']")).click();
+        wait.until(ExpectedConditions.urlContains("http://localhost:5001/login.html"));
+
     }
 
     @When("I navigate to the all expenses view")
@@ -169,7 +187,16 @@ public class ExpenseSteps {
     @When("I select decision {string} with comment {string}")
     public void iSelectDecisionWithComment(String decision, String comment) {
         // Enter comment if provided
-     
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("review-modal")));
+
+        WebElement modalComment = driver.findElement(By.id("review-comment"));
+        modalComment.sendKeys(comment);
+        decision = decision.toLowerCase();
+        decision = decision.concat("-expense");
+        System.out.println(decision);
+
+        driver.findElement(By.id(decision)).click();
+
     }
 
     @When("I submit the decision")
@@ -255,5 +282,67 @@ public class ExpenseSteps {
     @Then("I should be able to filter by status")
     public void iShouldBeAbleToFilterByStatus() {
         // Verify filter is available
+    }
+
+    @Then("I should be redirected to the original login page")
+    public void iShouldBeRedirectedToTheOriginalLoginPage() {
+        // Write code here that turns the phrase above into concrete actions
+        wait.until(ExpectedConditions.urlContains("http://localhost:5001/login.html"));
+        String url = driver.getCurrentUrl();
+        assertTrue(url.contains("login"));
+    }
+
+    @When("I click the refresh button")
+    public void iClickTheRefreshButton() {
+        driver.findElement(By.id("refresh-pending")).click();
+    }
+
+    @Then("all expenses should be visible and reviewable")
+    public void allExpensesShouldBeVisibleAndReviewable() {
+
+        WebElement table = driver.findElement(By.xpath("/html[1]/body[1]")); // Or use other locators like By.tagName or By.cssSelector
+
+        List<WebElement> rows = table.findElements(By.tagName("tr"));
+        assertFalse(rows.isEmpty());
+    }
+
+    @And("I select first reviewable expense")
+    public void iSelectFirstReviewableExpense() {
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//tbody/tr[2]/td[5]/button[1]")));
+
+        driver.findElement(By.xpath("//tbody/tr[2]/td[5]/button[1]")).click();
+
+        // Write code here that turns the phrase above into concrete actions
+
+
+    }
+
+    @Then("The expense should display successful denial")
+    public void theExpenseShouldDisplaySuccessfulDenial() {
+        // Write code here that turns the phrase above into concrete actions
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("review-message")));
+        WebElement msg = driver.findElement(By.id("review-message"));
+        assertTrue(msg.getText().contains("denied"));
+    }
+
+    @And("I should be redirected to the pending expenses tab")
+    public void iShouldBeRedirectedToThePendingExpensesTab() {
+        // Write code here that turns the phrase above into concrete actions
+        assertTrue(driver.getCurrentUrl().contains("manager.html"));
+    }
+
+    @And("I fill out startDate {string} with endDate {string}")
+    public void iFillOutStartDateWithEndDate(String arg0, String arg1) {
+        // Write code here that turns the phrase above into concrete actions
+        driver.findElement(By.id("start-date")).sendKeys(arg0);
+        driver.findElement(By.id("end-date")).sendKeys(arg1);
+    }
+
+    @And("I fill out Employee {string} with Category {string}")
+    public void iFillOutEmployeeWithCategory(String arg0, String arg1) {
+        driver.findElement(By.id("employee-report-id")).sendKeys(arg0);
+        driver.findElement(By.id("category-report")).sendKeys(arg1);
+
     }
 }
