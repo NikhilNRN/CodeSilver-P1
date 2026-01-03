@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import io.qameta.allure.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,6 +18,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+@Epic("Manager App")
+@Feature("Approval Repository")
+@Story("Update Approval Status")
 @DisplayName("Approval Repository Update Approval Status Tests")
 public class TestApprovalRepositoryUpdateApprovalStatus {
     @Mock
@@ -44,6 +48,8 @@ public class TestApprovalRepositoryUpdateApprovalStatus {
     }
 
     // TODO: Parameterize status so that all statuses are tested (stretch goal)
+    @Description("Update approval status with valid inputs")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     @DisplayName("C50_01")
     public void testUpdateApprovalStatus_normal_returnTrue() throws SQLException {
@@ -58,6 +64,8 @@ public class TestApprovalRepositoryUpdateApprovalStatus {
     }
 
     // TODO: Parameterize status so that all statuses are tested (stretch goal)
+    @Description("Update approval status with invalid inputs")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     @DisplayName("C50_02")
     public void testUpdateApprovalStatus_invalidInput_returnFalse() throws SQLException {
@@ -73,6 +81,8 @@ public class TestApprovalRepositoryUpdateApprovalStatus {
     }
 
     // TODO: Parameterize status so that all statuses are tested (stretch goal)
+    @Description("Update approval status with SQLException")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @DisplayName("C50_03")
     public void testUpdateApprovalStatus_SQLException_throwsException() throws SQLException {

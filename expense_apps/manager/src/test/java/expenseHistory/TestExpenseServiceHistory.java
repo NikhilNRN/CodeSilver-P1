@@ -2,6 +2,7 @@ package expenseHistory;
 
 import com.revature.repository.*;
 import com.revature.service.ExpenseService;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+@Epic("Manager App")
+@Feature("Expense Service")
+@Story("Viewing Expense History")
 @DisplayName("ExpenseService History Tests")
 public class TestExpenseServiceHistory {
     @Mock
@@ -45,6 +49,8 @@ public class TestExpenseServiceHistory {
     }
 
     // C11_01
+    @Description("Finding expenses by amount, unimplemented feature that cannot be traced back to a requirement")
+    @Severity(SeverityLevel.TRIVIAL)
     @Test
     @Disabled("Feature not yet implemented - CSP-11")
     @DisplayName("C11_01")
@@ -53,6 +59,8 @@ public class TestExpenseServiceHistory {
     }
 
     // C09_01
+    @Description("Get all expenses from an existing employee by their ID")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     @DisplayName("C09_01")
     public void testGetExpensesByEmployee_existingUser_returnsList() {
@@ -66,6 +74,8 @@ public class TestExpenseServiceHistory {
     }
 
     // C09_02
+    @Description("Get all expenses for an unregistered employee ID")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @DisplayName("C09_02")
     public void testGetExpensesByEmployee_userNotFound_returnsEmptyList() {
@@ -78,6 +88,8 @@ public class TestExpenseServiceHistory {
     }
 
     // C10_01
+    @Description("Get all expenses within a valid date range")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     @DisplayName("C10_01")
     public void testGetExpensesByDateRange_normalRange_returnsList() {
@@ -92,6 +104,8 @@ public class TestExpenseServiceHistory {
     }
 
     // C10_02
+    @Description("Get all expenses within an invalid date range (empty list expected)")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @DisplayName("C10_02")
     public void testGetExpensesByDateRange_invalidRange_returnsEmptyList() {
@@ -104,6 +118,7 @@ public class TestExpenseServiceHistory {
     }
 
     // C10_03
+    @Description("Get expenses for an improperly formatted date range (empty list expected)")
     @Test
     @DisplayName("C10_03")
     public void testGetExpensesByDateRange_invalidFormat_returnsEmptyList() {
@@ -116,6 +131,8 @@ public class TestExpenseServiceHistory {
     }
 
     // C10_04
+    @Description("Get expenses for date range (null dates, empty list expected)")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @DisplayName("C10_04")
     public void testGetExpensesByDateRange_nullDates_returnsEmptyList() {
@@ -128,6 +145,8 @@ public class TestExpenseServiceHistory {
     }
 
     // C12_01
+    @Description("Sorting expenses by newest amount, unimplemented feature that cannot be traced back to a requirement")
+    @Severity(SeverityLevel.TRIVIAL)
     @Test
     @Disabled("Feature not yet implemented - CSP-12")
     @DisplayName("C12_01")
@@ -136,6 +155,8 @@ public class TestExpenseServiceHistory {
     }
 
     // C13_01
+    @Description("Sorting expenses by oldest amount, unimplemented feature that cannot be traced back to a requirement")
+    @Severity(SeverityLevel.TRIVIAL)
     @Test
     @Disabled("Feature not yet implemented - CSP-13")
     @DisplayName("C13_01")
@@ -144,6 +165,8 @@ public class TestExpenseServiceHistory {
     }
 
     // C14_01
+    @Description("Sorting expenses by highest amount, unimplemented feature that cannot be traced back to a requirement")
+    @Severity(SeverityLevel.TRIVIAL)
     @Test
     @Disabled("Feature not yet implemented - CSP-14")
     @DisplayName("C14_01")
@@ -152,6 +175,8 @@ public class TestExpenseServiceHistory {
     }
 
     // C15_01
+    @Description("Sorting expenses by lowest amount, unimplemented feature that cannot be traced back to a requirement")
+    @Severity(SeverityLevel.TRIVIAL)
     @Test
     @Disabled("Feature not yet implemented - CSP-15")
     @DisplayName("C15_01")

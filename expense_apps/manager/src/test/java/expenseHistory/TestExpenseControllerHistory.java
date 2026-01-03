@@ -7,6 +7,7 @@ import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.InternalServerErrorResponse;
 import io.javalin.validation.Validator;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -16,6 +17,9 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
+@Epic("Manager App")
+@Feature("Expense Controller")
+@Story("Viewing Expense History")
 @DisplayName("ExpenseController History Tests")
 public class TestExpenseControllerHistory {
     @Mock
@@ -40,6 +44,8 @@ public class TestExpenseControllerHistory {
     }
 
     // C09_03
+    @Description("Getting all expenses for an employee, valid user ID")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     @DisplayName("C09_03")
     public void testGetExpensesByEmployee_normal_success() {
@@ -58,6 +64,8 @@ public class TestExpenseControllerHistory {
     }
 
     // C09_04
+    @Description("Getting all expenses for an employee, invalid user ID format")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @DisplayName("C09_04")
     public void testGetExpensesByEmployee_invalidEmployeeIDFormat_throwsException() {
@@ -75,6 +83,8 @@ public class TestExpenseControllerHistory {
     }
 
     // C09_05
+    @Description("Getting all expenses for an employee, server error")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @DisplayName("C09_05")
     public void testGetExpensesByEmployee_serverError_throwsException() {

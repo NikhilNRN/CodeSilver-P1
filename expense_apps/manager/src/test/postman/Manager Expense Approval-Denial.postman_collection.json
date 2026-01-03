@@ -1,0 +1,265 @@
+{
+	"info": {
+		"_postman_id": "7c973a9f-ee9a-4391-b6fc-4ee35eee1095",
+		"name": "Manager Expense Approval/Denial",
+		"description": "Rudimentary API tests for the Manager application of the Expense Manager System, relating specifically to the approval and denial of employee expenses.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50029051",
+		"_collection_link": "https://jeremiahtrinh-6414835.postman.co/workspace/CodeSilver-P1-Postman-Workspace~5d7c27d6-c4b8-416d-9fd5-69bc065eb8bf/collection/50029051-7c973a9f-ee9a-4391-b6fc-4ee35eee1095?action=share&source=collection_link&creator=50029051"
+	},
+	"item": [
+		{
+			"name": "Test Login Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is as expected\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"manager1\",\r\n\"password\":\"password123\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				},
+				"description": "Running this test first should enable the other tests to perform as expected."
+			},
+			"response": []
+		},
+		{
+			"name": "Deny Pending Expense",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is as expected\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected message\", () => {\r",
+							"    pm.expect(pm.response.json().message).to.eq(\"Expense denied successfully\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected success details\", () => {\r",
+							"    pm.expect(pm.response.json().success).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"comment\":\"You don't get to eat :(\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/expenses/1/deny",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"expenses",
+						"1",
+						"deny"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Approve Pending Expense",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is as expected\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected message\", () => {\r",
+							"    pm.expect(pm.response.json().message).to.eq(\"Expense approved successfully\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains expected success details\", () => {\r",
+							"    pm.expect(pm.response.json().success).to.be.true;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"comment\":\"Otay\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/expenses/2/approve",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"expenses",
+						"2",
+						"approve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Logout Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is as expected\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/logout",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"logout"
+					]
+				},
+				"description": "Sanity testing logout feature and how it affects approval/denial API tests."
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "jwt",
+		"jwt": [
+			{
+				"key": "algorithm",
+				"value": "HS256",
+				"type": "string"
+			},
+			{
+				"key": "isSecretBase64Encoded",
+				"value": false,
+				"type": "boolean"
+			},
+			{
+				"key": "payload",
+				"value": "{}",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "headerPrefix",
+				"value": "Bearer",
+				"type": "string"
+			},
+			{
+				"key": "queryParamKey",
+				"value": "token",
+				"type": "string"
+			},
+			{
+				"key": "header",
+				"value": "{}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": ""
+		}
+	]
+}

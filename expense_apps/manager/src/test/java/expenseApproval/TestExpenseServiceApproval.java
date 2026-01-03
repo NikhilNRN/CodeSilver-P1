@@ -2,6 +2,7 @@ package expenseApproval;
 
 import com.revature.repository.*;
 import com.revature.service.ExpenseService;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +13,8 @@ import org.mockito.Mock;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@Epic("Manager App")
+@Feature("Expense Service")
 @DisplayName("ExpenseService Approval Tests")
 public class TestExpenseServiceApproval {
     @Mock
@@ -63,6 +66,9 @@ public class TestExpenseServiceApproval {
     }
 
     // C20_01
+    @Story("Expense Approval")
+    @Description("Successful expense approval with comment")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     @DisplayName("C20_01")
     public void testApproveExpense_normal_returnTrue() {
@@ -72,6 +78,9 @@ public class TestExpenseServiceApproval {
     }
 
     // C20_02
+    @Story("Expense Approval")
+    @Description("Successful expense approval with no comment")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     @DisplayName("C20_02")
     public void testApproveExpense_noComment_returnTrue() {
@@ -81,6 +90,9 @@ public class TestExpenseServiceApproval {
     }
 
     // C20_03
+    @Story("Expense Approval")
+    @Description("Approving an expense with an invalid expense ID (expense not in database)")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @DisplayName("C20_03")
     public void testApproveExpense_invalidExpense_returnFalse() {
@@ -90,6 +102,9 @@ public class TestExpenseServiceApproval {
     }
 
     // C20_04
+    @Story("Expense Approval")
+    @Description("Approving an expense with an invalid manager ID (manager not in database)")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @DisplayName("C20_04")
     public void testApproveExpense_invalidManager_returnFalse() {
@@ -99,6 +114,9 @@ public class TestExpenseServiceApproval {
     }
 
     // C21_01
+    @Story("Expense Denial")
+    @Description("Successful expense denial with comment")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     @DisplayName("C21_01")
     public void testDenyExpense_normal_returnTrue() {
@@ -108,6 +126,9 @@ public class TestExpenseServiceApproval {
     }
 
     // C21_02
+    @Story("Expense Denial")
+    @Description("Successful expense denial with no comment")
+    @Severity(SeverityLevel.CRITICAL)
     @Test
     @DisplayName("C21_02")
     public void testDenyExpense_noComment_returnTrue() {
@@ -117,6 +138,9 @@ public class TestExpenseServiceApproval {
     }
 
     // C21_03
+    @Story("Expense Denial")
+    @Description("Denying an expense with an invalid expense ID (expense not in database)")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @DisplayName("C21_03")
     public void testDenyExpense_invalidExpense_returnFalse() {
@@ -126,6 +150,9 @@ public class TestExpenseServiceApproval {
     }
 
     // C21_04
+    @Story("Expense Denial")
+    @Description("Denying an expense with an invalid manager ID (manager not in database)")
+    @Severity(SeverityLevel.BLOCKER)
     @Test
     @DisplayName("C21_04")
     public void testDenyExpense_invalidManager_returnFalse() {
