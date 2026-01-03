@@ -87,8 +87,11 @@ class ExpenseService:
     def delete_expense(self, expense_id: int, user_id: int) -> bool:
         """Delete an expense if it's still pending."""
         # Get expense and check ownership and status
+        print("find expense")
         result = self.get_expense_with_status(expense_id, user_id)
+        print("returnin")
         if not result:
+            print("here?")
             return False
         
         expense, approval = result
