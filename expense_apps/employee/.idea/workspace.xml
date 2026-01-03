@@ -4,22 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ceeb8708-c30a-4c99-bc21-657256b34407" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/employee.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/test_api_deleteexpense.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/test_api_getexpenseid.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/test_api_putexpenseid.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/expense_controller.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/expense_controller.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/expense_manager.db" beforeDir="false" afterPath="$PROJECT_DIR$/expense_manager.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/expense_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/service/expense_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/main/java/com/revature/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../manager/src/main/java/com/revature/service/AuthenticationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../manager/src/test/java/managerAuthentication/TestAuthApi.java" beforeDir="false" afterPath="$PROJECT_DIR$/../manager/src/test/java/managerAuthentication/TestAuthApi.java" afterDir="false" />
-    </list>
+    <list default="true" id="8c87bdf8-3657-4f48-822c-e9c5d723e2c5" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,149 +20,53 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/../.." value="login_branch" />
+        <entry key="$PROJECT_DIR$/../.." value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 6
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 1
 }</component>
-  <component name="ProjectId" id="3759YwOKildmlexcErd06e5nszj" />
+  <component name="ProjectId" id="37UegLUzc29xRDKOZ7DAyL673xk" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Python tests.Python tests in test_user_authentication_service.py.executor": "Run",
-    "Python tests.pytest for test_api_deleteexpense.test_deleteexpense.executor": "Run",
-    "Python tests.pytest for test_api_deleteexpense.test_deletenonexistent.executor": "Run",
-    "Python tests.pytest for test_api_deleteexpense.test_deletenonpending.executor": "Run",
-    "Python tests.pytest for test_api_deleteexpense.test_deletepending.executor": "Run",
-    "Python tests.pytest for test_api_putexpenseid.test_nojson.executor": "Run",
-    "Python tests.pytest in test_api_deleteexpense.py.executor": "Run",
-    "Python tests.pytest in test_api_getexpenseid.py.executor": "Run",
-    "Python tests.pytest in test_api_putexpenseid.py.executor": "Run",
-    "Python.authentication_service.executor": "Run",
+    "Python tests.Python tests in test_api_util_endpoints.py.executor": "Run",
     "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "authenticationAPI__branch",
-    "last_opened_file_path": "C:/Users/peter/OneDrive/Desktop/Desktop/QEA/AssignmentRepo/12_23training"
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "test-jvt",
+    "ignore.virus.scanning.warn.message": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Python tests.pytest for test_api_deleteexpense.test_deletenonpending">
-    <configuration name="pytest for test_api_deleteexpense.test_deleteexpense" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="employee" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_api_deleteexpense.test_deleteexpense&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_api_deleteexpense.test_deletenonexistent" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="employee" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_api_deleteexpense.test_deletenonexistent&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_api_deleteexpense.test_deletenonpending" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="employee" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_api_deleteexpense.test_deletenonpending&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_api_deleteexpense.test_deletepending" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="employee" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_api_deleteexpense.test_deletepending&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_api_putexpenseid.test_nojson" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="employee" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_api_putexpenseid.test_nojson&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python tests.pytest for test_api_deleteexpense.test_deletenonpending" />
-        <item itemvalue="Python tests.pytest for test_api_deleteexpense.test_deletenonexistent" />
-        <item itemvalue="Python tests.pytest for test_api_deleteexpense.test_deletepending" />
-        <item itemvalue="Python tests.pytest for test_api_deleteexpense.test_deleteexpense" />
-        <item itemvalue="Python tests.pytest for test_api_putexpenseid.test_nojson" />
-      </list>
-    </recent_temporary>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\Documents-E\Work\Adulthood\Revature\QEA_Training\P1\expense_apps\employee\test\e2e\features" />
+    </key>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-babbdf50b680-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.15989.155" />
+        <option value="bundled-python-sdk-4e2b1448bda8-9a97661f3031-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.27397.106" />
       </set>
     </attachedChunks>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="ceeb8708-c30a-4c99-bc21-657256b34407" name="Changes" comment="" />
-      <created>1766182116456</created>
+      <changelist id="8c87bdf8-3657-4f48-822c-e9c5d723e2c5" name="Changes" comment="" />
+      <created>1766962192021</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1766182116456</updated>
+      <updated>1766962192021</updated>
     </task>
     <servers />
   </component>
