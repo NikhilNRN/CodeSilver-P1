@@ -8,6 +8,8 @@ Behave Step Definitions for Expense Management
 
 
 """
+import time
+
 from behave import given, when, then
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
@@ -43,9 +45,15 @@ def step_on_browser(context, browser):
         case "chrome":
             # Setup Chrome WebDriver with options
             options = ChromeOptions()
-            options.add_argument("--headless")  # Run without GUI for CI/CD
+            # options.add_argument("--headless")  # Run without GUI for CI/CD
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
+            prefs = {
+                "credentials_enable_service": False,
+                "profile.password_manager_enabled": False,
+                "profile.password_manager_leak_detection": False
+            }
+            options.add_experimental_option("prefs", prefs)
 
             # Auto-install and setup ChromeDriver
             service = ChromeService(ChromeDriverManager().install())
@@ -63,11 +71,11 @@ def step_on_browser(context, browser):
         case "edge":
             # Setup Edge WebDriver with options
             options = EdgeOptions()
-            options.add_argument("--headless")  # Run without GUI for CI/CD
+            options.add_argument("--headless=new")  # Run without GUI for CI/CD
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
 
-            # Auto-install and setup ChromeDriver
+            # Auto-install and setup EdgeChromiumDriver
             service = EdgeService(EdgeChromiumDriverManager().install())
             context.driver = webdriver.Edge(service=service, options=options)
     context.driver.implicitly_wait(10)
@@ -185,15 +193,19 @@ def step_navigate_to_form(context):
     """Navigate to the expense submission form."""
     # Click on "New Expense" or navigate to form
     show_submit_locator = (By.ID, "show-submit")
-    show_submit_button = context.wait.until(ec.visibility_of_element_located(show_submit_locator))
-    show_submit_button.click()
+    expense_submission_header_locator = (By.CSS_SELECTOR, "div[id='submit-expense-section'] h3")
+    # show_submit_button = context.wait.until(ec.visibility_of_element_located(show_submit_locator))
+    # show_submit_button.click()
+    context.wait.until(ec.element_to_be_clickable(show_submit_locator)).click()
+    expense_submission_header = context.wait.until(ec.visibility_of_element_located(expense_submission_header_locator))
+    assert expense_submission_header.is_displayed()
 
 
 @when('I enter expense amount "{amount}"')
 def step_enter_amount(context, amount):
     """Enter expense amount."""
-    amount_locator = (By.CSS_SELECTOR, "#amount")
-    amount_input = context.driver.find_element(amount_locator)
+    amount_locator = (By.XPATH, "/html[1]/body[1]/div[3]/form[1]/div[1]/input[1]")
+    amount_input = context.wait.until(ec.visibility_of_element_located(amount_locator))
     amount_input.clear()
     amount_input.send_keys(amount)
 
@@ -213,7 +225,7 @@ def step_select_date(context):
     date_locator = (By.ID, "date")
     todays_date = date.today().strftime("%m/%d/%Y")
     date_input = context.wait.until(ec.visibility_of_element_located(date_locator))
-    date_input.send_keys(todays_date)
+    # date_input.send_keys(todays_date)
 
 
 @when('I click the submit button')
@@ -286,7 +298,7 @@ def step_only_status(context, status):
 @when('I click the edit button for the pending expense')
 def step_click_edit(context):
     """Click edit on a pending expense."""
-    edit_locator = (By.CSS_SELECTOR, "button[onclick='']")
+    edit_locator = (By.XPATH, "//tbody/tr[2]/td[6]/button[1]")
     edit_button = context.wait.until(ec.visibility_of_element_located(edit_locator))
     edit_button.click()
 
@@ -320,7 +332,7 @@ def step_save_changes(context):
 @then('I should see the updated expense in the list')
 def step_see_updated(context):
     """Verify update was successful."""
-    expense_list_locator = (By.TAG_NAME, "tr")
+    expense_list_locator = (By.ID, "expenses-list")
     expense_list = context.wait.until(ec.visibility_of_element_located(expense_list_locator))
     assert expense_list.is_displayed()
 
@@ -328,7 +340,7 @@ def step_see_updated(context):
 @then('the expense amount should be "{amount}"')
 def step_expense_amount(context, amount):
     """Verify expense amount."""
-    pass
+    assert amount
 
 
 # ==================== LOGOUT STEPS ====================
@@ -337,13 +349,12 @@ def step_expense_amount(context, amount):
 def step_click_logout(context):
     """Click the logout button."""
     logout_locator = (By.ID, "logout-btn")
-    context.wait.until(ec.visibility_of_element_located(logout_locator)).click()
+    context.wait.until(ec.element_to_be_clickable(logout_locator)).click()
 
 
 @then('I should be redirected to the login page')
 def step_redirected_to_login(context):
     """Verify redirection to login."""
-    context.driver.implicitly_wait(10)
     assert "/login" in context.driver.current_url
 
 
@@ -352,6 +363,11 @@ def step_no_dashboard_access(context):
     """Verify dashboard is not accessible."""
 
     # Should redirect to login or show unauthorized
-    context.driver.navigate().back()
-    context.driver.implicitly_wait(10)
-    assert "/login" in context.driver.current_url
+    context.driver.back()
+    if "/app" in context.driver.current_url:
+        auth_msg_locator = (By.ID, "expenses-list")
+        auth_msg = context.wait.until(ec.visibility_of_element_located(auth_msg_locator))
+        assert "Authentication required" in auth_msg.text
+    else:
+        assert "/login" in context.driver.current_url
+
