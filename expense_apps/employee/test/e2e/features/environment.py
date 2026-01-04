@@ -9,7 +9,6 @@ Behave Environment Configuration
 """
 import allure
 
-
 def before_all(context):
     """
     Setup that runs once before all tests.
