@@ -1,0 +1,10 @@
+Expense ID,Employee,Amount,Description,Date,Status,Reviewer,Comment,Review Date
+13,employee1,200.0,hotel,2025-12-20,approved,2,a,2025-12-21
+6,employee1,2.49,Business-related handkerchief,2025-12-10,denied,2,Test,2026-01-03 19:39:28
+7,employee2,5.19,Pizzer (It's hot and it's ready),2025-12-10,pending,,,
+8,employee2,800.97,Togore-tastic Training,2025-12-10,pending,,,
+9,employee2,70.0,Super Mario Party for the Nintendo Switch,2025-12-10,pending,,,
+12,employee3,43.55,Gas,2025-12-10,pending,,,
+1,employee1,22.22,Food,2025-12-01,pending,,,
+2,employee1,39.55,Gas,2025-12-01,pending,,,
+3,employee1,0.01,Min Boundary Test Expense,2025-12-01,pending,,,
