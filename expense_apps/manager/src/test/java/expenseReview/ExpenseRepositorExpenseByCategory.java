@@ -12,7 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,10 +19,12 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+import io.qameta.allure.*;
 
-public class ExpenseRepositorExpenseByCategory
-{
+@ExtendWith(MockitoExtension.class)
+@Epic("Expense Management")
+@Feature("Expense Repository - Find Expenses By Category")
+public class ExpenseRepositorExpenseByCategory {
 
     @Mock
     private DatabaseConnection databaseConnection;
@@ -40,8 +41,7 @@ public class ExpenseRepositorExpenseByCategory
     private ExpenseRepository expenseRepository;
 
     @BeforeEach
-    void setUp() throws SQLException
-    {
+    void setUp() throws SQLException {
         MockitoAnnotations.openMocks(this);
         expenseRepository = new ExpenseRepository(databaseConnection);
         when(databaseConnection.getConnection()).thenReturn(connection);
@@ -51,8 +51,10 @@ public class ExpenseRepositorExpenseByCategory
     }
 
     @Test
+    @Story("Find Expenses by Category")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Verify that expenses matching the given category are returned using LIKE query with wildcards.")
     void testFindExpensesByCategory_LikeQueryWithWildcards() throws SQLException {
-        // Arrange
         String category = "Travel";
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
@@ -82,26 +84,24 @@ public class ExpenseRepositorExpenseByCategory
         });
         when(resultSet.getObject("reviewer")).thenReturn(null);
 
-        // Act
         List<ExpenseWithUser> results = expenseRepository.findExpensesByCategory(category);
 
-        // Assert
         assertNotNull(results);
         assertEquals(1, results.size());
 
-        // Verify the parameter was set with wildcards
         verify(preparedStatement).setString(1, "%" + category + "%");
         verify(preparedStatement).executeQuery();
     }
 
     @Test
+    @Story("Find Expenses by Category")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Verify that partial matches in description return all relevant expenses.")
     void testFindExpensesByCategory_PartialMatchesInDescription() throws SQLException {
-        // Arrange
         String category = "office";
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        // Mock multiple partial matches
         when(resultSet.next()).thenReturn(true, true, true, false);
 
         when(resultSet.getInt(anyString())).thenAnswer(invocation -> {
@@ -116,13 +116,10 @@ public class ExpenseRepositorExpenseByCategory
 
         when(resultSet.getDouble("amount")).thenReturn(50.0, 75.0, 100.0);
 
-        // Different descriptions that all contain "office"
         when(resultSet.getString(anyString())).thenAnswer(invocation -> {
             String columnName = invocation.getArgument(0);
             switch (columnName) {
-                case "description":
-                    // Simulate different partial matches
-                    return null; // Will be overridden below
+                case "description": return null;
                 case "date": return "2024-12-15";
                 case "username": return "user";
                 case "role": return "employee";
@@ -132,21 +129,17 @@ public class ExpenseRepositorExpenseByCategory
         });
 
         when(resultSet.getString("description")).thenReturn(
-                "Office Supplies",      // Contains "office" at start
-                "Home office equipment", // Contains "office" in middle
-                "New office desk"        // Contains "office" in middle
+                "Office Supplies",
+                "Home office equipment",
+                "New office desk"
         );
 
         when(resultSet.getObject("reviewer")).thenReturn(1);
 
-        // Act
         List<ExpenseWithUser> results = expenseRepository.findExpensesByCategory(category);
 
-        // Assert
         assertNotNull(results);
         assertEquals(3, results.size());
-
-        // Verify all results contain the category substring
         assertTrue(results.get(0).getExpense().getDescription().toLowerCase().contains(category));
         assertTrue(results.get(1).getExpense().getDescription().toLowerCase().contains(category));
         assertTrue(results.get(2).getExpense().getDescription().toLowerCase().contains(category));
@@ -155,45 +148,40 @@ public class ExpenseRepositorExpenseByCategory
     }
 
     @Test
+    @Story("Find Expenses by Category")
+    @Severity(SeverityLevel.BLOCKER)
+    @Description("Verify that SQL injection attempts are safely handled using PreparedStatement parameters.")
     void testFindExpensesByCategory_SqlInjectionProtection() throws SQLException {
-        // Arrange
         String maliciousCategory = "'; DROP TABLE expenses; --";
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(false);
 
-        // Act
         List<ExpenseWithUser> results = expenseRepository.findExpensesByCategory(maliciousCategory);
 
-        // Assert
         assertNotNull(results);
         assertTrue(results.isEmpty());
 
-        // Verify that the malicious string was passed as a parameter (safe)
-        // and NOT concatenated into the SQL (which would be unsafe)
         verify(preparedStatement).setString(1, "%" + maliciousCategory + "%");
-
-        // Verify PreparedStatement was used (which protects against SQL injection)
         verify(connection).prepareStatement(argThat(sql ->
                 sql.contains("WHERE e.description LIKE ?") &&
                         !sql.contains(maliciousCategory)
         ));
-
         verify(preparedStatement).executeQuery();
     }
 
     @Test
+    @Story("Find Expenses by Category")
+    @Severity(SeverityLevel.MINOR)
+    @Description("Verify that a non-matching category returns an empty list.")
     void testFindExpensesByCategory_EmptyListForNoMatches() throws SQLException {
-        // Arrange
         String category = "NonExistentCategory";
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(false); // No results
+        when(resultSet.next()).thenReturn(false);
 
-        // Act
         List<ExpenseWithUser> results = expenseRepository.findExpensesByCategory(category);
 
-        // Assert
         assertNotNull(results);
         assertTrue(results.isEmpty());
         assertEquals(0, results.size());

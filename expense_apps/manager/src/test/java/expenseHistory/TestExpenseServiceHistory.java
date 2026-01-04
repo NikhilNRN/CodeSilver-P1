@@ -13,9 +13,7 @@ import org.mockito.Mock;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @Epic("Manager App")
@@ -23,8 +21,10 @@ import static org.mockito.Mockito.*;
 @Story("Viewing Expense History")
 @DisplayName("ExpenseService History Tests")
 public class TestExpenseServiceHistory {
+
     @Mock
     private static ExpenseRepository expenseDAO;
+
     @Mock
     private static ApprovalRepository approvalDAO;
 
@@ -48,7 +48,22 @@ public class TestExpenseServiceHistory {
         existingExpenseWithUser = new ExpenseWithUser(existingExpense, existingUser, existingApproval);
     }
 
-    // C11_01
+    // -----------------------------
+    // Step-level helper methods
+    // -----------------------------
+    @Step("Fetch expenses by employee ID: {employeeId}")
+    private List<ExpenseWithUser> fetchExpensesByEmployee(int employeeId) {
+        return service.getExpensesByEmployee(employeeId);
+    }
+
+    @Step("Fetch expenses by date range: {startDate} to {endDate}")
+    private List<ExpenseWithUser> fetchExpensesByDateRange(String startDate, String endDate) {
+        return service.getExpensesByDateRange(startDate, endDate);
+    }
+
+    // -----------------------------
+    // Tests
+    // -----------------------------
     @Description("Finding expenses by amount, unimplemented feature that cannot be traced back to a requirement")
     @Severity(SeverityLevel.TRIVIAL)
     @Test
@@ -58,7 +73,6 @@ public class TestExpenseServiceHistory {
         fail("This requirement is currently unimplemented.");
     }
 
-    // C09_01
     @Description("Get all expenses from an existing employee by their ID")
     @Severity(SeverityLevel.CRITICAL)
     @Test
@@ -68,12 +82,12 @@ public class TestExpenseServiceHistory {
         expectedList.add(existingExpenseWithUser);
         when(expenseDAO.findExpensesByUser(existingUser.getId())).thenReturn(expectedList);
 
-        List<ExpenseWithUser> actualList = service.getExpensesByEmployee(existingUser.getId());
+        List<ExpenseWithUser> actualList = fetchExpensesByEmployee(existingUser.getId());
+
         assertEquals(expectedList, actualList);
         verify(expenseDAO, times(1)).findExpensesByUser(existingUser.getId());
     }
 
-    // C09_02
     @Description("Get all expenses for an unregistered employee ID")
     @Severity(SeverityLevel.BLOCKER)
     @Test
@@ -82,12 +96,12 @@ public class TestExpenseServiceHistory {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
         when(expenseDAO.findExpensesByUser(99)).thenReturn(expectedList);
 
-        List<ExpenseWithUser> actualList = service.getExpensesByEmployee(99);
+        List<ExpenseWithUser> actualList = fetchExpensesByEmployee(99);
+
         assertEquals(expectedList, actualList);
         verify(expenseDAO, times(1)).findExpensesByUser(99);
     }
 
-    // C10_01
     @Description("Get all expenses within a valid date range")
     @Severity(SeverityLevel.CRITICAL)
     @Test
@@ -98,12 +112,12 @@ public class TestExpenseServiceHistory {
         expectedList.add(existingExpenseWithUser);
         when(expenseDAO.findExpensesByDateRange(anyString(), anyString())).thenReturn(expectedList);
 
-        List<ExpenseWithUser> actualList = service.getExpensesByDateRange("2025-12-11", "2025-12-13");
+        List<ExpenseWithUser> actualList = fetchExpensesByDateRange("2025-12-11", "2025-12-13");
+
         assertEquals(expectedList, actualList);
         verify(expenseDAO, times(1)).findExpensesByDateRange("2025-12-11", "2025-12-13");
     }
 
-    // C10_02
     @Description("Get all expenses within an invalid date range (empty list expected)")
     @Severity(SeverityLevel.BLOCKER)
     @Test
@@ -112,12 +126,12 @@ public class TestExpenseServiceHistory {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
         when(expenseDAO.findExpensesByDateRange(anyString(), anyString())).thenReturn(expectedList);
 
-        List<ExpenseWithUser> actualList = service.getExpensesByDateRange("2025-12-13", "2025-12-11");
+        List<ExpenseWithUser> actualList = fetchExpensesByDateRange("2025-12-13", "2025-12-11");
+
         assertEquals(expectedList, actualList);
         verify(expenseDAO, times(1)).findExpensesByDateRange("2025-12-13", "2025-12-11");
     }
 
-    // C10_03
     @Description("Get expenses for an improperly formatted date range (empty list expected)")
     @Test
     @DisplayName("C10_03")
@@ -125,12 +139,12 @@ public class TestExpenseServiceHistory {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
         when(expenseDAO.findExpensesByDateRange(anyString(), anyString())).thenReturn(expectedList);
 
-        List<ExpenseWithUser> actualList = service.getExpensesByDateRange("12-13-2025", "12-11-2025");
+        List<ExpenseWithUser> actualList = fetchExpensesByDateRange("12-13-2025", "12-11-2025");
+
         assertEquals(expectedList, actualList);
         verify(expenseDAO, times(1)).findExpensesByDateRange("12-13-2025", "12-11-2025");
     }
 
-    // C10_04
     @Description("Get expenses for date range (null dates, empty list expected)")
     @Severity(SeverityLevel.BLOCKER)
     @Test
@@ -139,48 +153,38 @@ public class TestExpenseServiceHistory {
         List<ExpenseWithUser> expectedList = new ArrayList<>();
         when(expenseDAO.findExpensesByDateRange(anyString(), anyString())).thenReturn(expectedList);
 
-        List<ExpenseWithUser> actualList = service.getExpensesByDateRange(null, null);
+        List<ExpenseWithUser> actualList = fetchExpensesByDateRange(null, null);
+
         assertEquals(expectedList, actualList);
         verify(expenseDAO, times(1)).findExpensesByDateRange(null, null);
     }
 
-    // C12_01
-    @Description("Sorting expenses by newest amount, unimplemented feature that cannot be traced back to a requirement")
+    // Disabled sorting tests
+    @Description("Sorting expenses by newest amount, unimplemented feature")
     @Severity(SeverityLevel.TRIVIAL)
     @Test
     @Disabled("Feature not yet implemented - CSP-12")
     @DisplayName("C12_01")
-    public void testSortExpensesByNewestAmount_expectedFail() {
-        fail("This requirement is currently unimplemented.");
-    }
+    public void testSortExpensesByNewestAmount_expectedFail() { fail("Unimplemented"); }
 
-    // C13_01
-    @Description("Sorting expenses by oldest amount, unimplemented feature that cannot be traced back to a requirement")
+    @Description("Sorting expenses by oldest amount, unimplemented feature")
     @Severity(SeverityLevel.TRIVIAL)
     @Test
     @Disabled("Feature not yet implemented - CSP-13")
     @DisplayName("C13_01")
-    public void testSortExpensesByOldestAmount_expectedFail() {
-        fail("This requirement is currently unimplemented.");
-    }
+    public void testSortExpensesByOldestAmount_expectedFail() { fail("Unimplemented"); }
 
-    // C14_01
-    @Description("Sorting expenses by highest amount, unimplemented feature that cannot be traced back to a requirement")
+    @Description("Sorting expenses by highest amount, unimplemented feature")
     @Severity(SeverityLevel.TRIVIAL)
     @Test
     @Disabled("Feature not yet implemented - CSP-14")
     @DisplayName("C14_01")
-    public void testSortExpensesByHighestAmount_expectedFail() {
-        fail("This requirement is currently unimplemented.");
-    }
+    public void testSortExpensesByHighestAmount_expectedFail() { fail("Unimplemented"); }
 
-    // C15_01
-    @Description("Sorting expenses by lowest amount, unimplemented feature that cannot be traced back to a requirement")
+    @Description("Sorting expenses by lowest amount, unimplemented feature")
     @Severity(SeverityLevel.TRIVIAL)
     @Test
     @Disabled("Feature not yet implemented - CSP-15")
     @DisplayName("C15_01")
-    public void testSortExpensesByLowestAmount_expectedFail() {
-        fail("This requirement is currently unimplemented.");
-    }
+    public void testSortExpensesByLowestAmount_expectedFail() { fail("Unimplemented"); }
 }

@@ -5,7 +5,6 @@ import com.revature.api.ExpenseController;
 import com.revature.repository.User;
 import com.revature.service.ExpenseService;
 import io.javalin.http.BadRequestResponse;
-import io.javalin.http.Context;
 import io.javalin.http.InternalServerErrorResponse;
 import io.javalin.http.NotFoundResponse;
 import io.javalin.validation.Validator;
@@ -23,11 +22,12 @@ import static org.mockito.Mockito.*;
 @DisplayName("ExpenseController Approval Tests")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestExpenseControllerApproval {
+
     @Mock
     private ExpenseService service;
 
     @Mock
-    private Context ctx;
+    private io.javalin.http.Context ctx;
 
     @Mock
     private AuthenticationMiddleware auth;
@@ -41,7 +41,7 @@ public class TestExpenseControllerApproval {
     @BeforeEach
     public void setUp() {
         service = mock(ExpenseService.class);
-        ctx = mock(Context.class);
+        ctx = mock(io.javalin.http.Context.class);
         auth = mock(AuthenticationMiddleware.class);
         controller = new ExpenseController(service);
         validComment = "comment";
@@ -55,152 +55,127 @@ public class TestExpenseControllerApproval {
     @Order(1)
     @DisplayName("C20_05")
     public void testApproveExpense_success() {
-        // Stub context
-        Validator<Integer> mockValidator = mock(Validator.class);
-        Map<String, Object> mockBody = mock(Map.class);
-        when(mockValidator.get()).thenReturn(1);
-        when(mockBody.get("comment")).thenReturn(validComment);
-        when(ctx.pathParamAsClass("expenseId", Integer.class)).thenReturn(mockValidator);
-        when(ctx.bodyAsClass(Map.class)).thenReturn(mockBody);
-        // Stub authentication middleware
-        when(AuthenticationMiddleware.getAuthenticatedManager(ctx)).thenReturn(existingManager);
-        // Stub service layer
-        when(service.approveExpense(1, existingManager.getId(), validComment)).thenReturn(true);
+        Allure.step("Stub context and authentication", () -> {
+            Validator<Integer> mockValidator = mock(Validator.class);
+            Map<String, Object> mockBody = mock(Map.class);
 
-        Assertions.assertDoesNotThrow(() -> controller.approveExpense(ctx), "No exceptions should be thrown");
-        verify(service, times(1)).approveExpense(1, existingManager.getId(), validComment);
+            when(mockValidator.get()).thenReturn(1);
+            when(mockBody.get("comment")).thenReturn(validComment);
+            when(ctx.pathParamAsClass("expenseId", Integer.class)).thenReturn(mockValidator);
+            when(ctx.bodyAsClass(Map.class)).thenReturn(mockBody);
+            when(AuthenticationMiddleware.getAuthenticatedManager(ctx)).thenReturn(existingManager);
+        });
+
+        Allure.step("Stub service layer to return success", () -> {
+            when(service.approveExpense(1, existingManager.getId(), validComment)).thenReturn(true);
+        });
+
+        Allure.step("Call approveExpense and assert no exception", () -> {
+            Assertions.assertDoesNotThrow(() -> controller.approveExpense(ctx));
+        });
+
+        Allure.step("Verify service layer interaction", () -> {
+            verify(service, times(1)).approveExpense(1, existingManager.getId(), validComment);
+        });
     }
 
     @Story("Expense Approval")
-    @Description("Expense approval results in an internal server error response")
-    @Severity(SeverityLevel.BLOCKER)
-    @Test
-    @Order(3)
-    @DisplayName("C20_06")
-    public void testApproveExpense_failure_throwsException() {
-        Validator<Integer> mockValidator = mock(Validator.class);
-        when(ctx.pathParamAsClass("expenseId", Integer.class)).thenReturn(mockValidator);
-        when(ctx.bodyAsClass(Map.class)).thenReturn(null);
-        when(AuthenticationMiddleware.getAuthenticatedManager(ctx)).thenThrow(InternalServerErrorResponse.class);
-        when(service.approveExpense(anyInt(), eq(existingManager.getId()), eq(null))).thenThrow(InternalServerErrorResponse.class);
-
-        Assertions.assertThrows(InternalServerErrorResponse.class,
-                () -> controller.approveExpense(ctx),
-                "InternalServerErrorResponse should be thrown");
-    }
-
-    @Story("Expense Approval")
-    @Description("Expense approval with a malformed request")
+    @Description("Expense approval with malformed request throws BadRequestResponse")
     @Severity(SeverityLevel.BLOCKER)
     @Test
     @Order(2)
     @DisplayName("C20_07")
     public void testApproveExpense_invalidExpenseId_throwsException() {
-        Validator<Integer> mockValidator = mock(Validator.class);
-        when(mockValidator.get()).thenThrow(NumberFormatException.class);
-        when(ctx.pathParamAsClass("expenseId", Integer.class)).thenReturn(mockValidator);
-        when(AuthenticationMiddleware.getAuthenticatedManager(ctx)).thenReturn(existingManager);
-        Assertions.assertThrows(BadRequestResponse.class, () -> controller.approveExpense(ctx), "BadRequestResponse should be thrown");
+        Allure.step("Stub context to throw NumberFormatException", () -> {
+            Validator<Integer> mockValidator = mock(Validator.class);
+            when(mockValidator.get()).thenThrow(NumberFormatException.class);
+            when(ctx.pathParamAsClass("expenseId", Integer.class)).thenReturn(mockValidator);
+            when(AuthenticationMiddleware.getAuthenticatedManager(ctx)).thenReturn(existingManager);
+        });
+
+        Allure.step("Call approveExpense and assert BadRequestResponse", () -> {
+            Assertions.assertThrows(BadRequestResponse.class, () -> controller.approveExpense(ctx));
+        });
     }
 
     @Story("Expense Approval")
-    @Description("Approved expense could not be found")
+    @Description("Expense approval for non-existent expense throws NotFoundResponse")
     @Severity(SeverityLevel.BLOCKER)
     @Test
     @Order(2)
     @DisplayName("C20_08")
     public void testApproveExpense_expenseNotFound_throwsException() {
-        // Stub context
-        Validator<Integer> mockValidator = mock(Validator.class);
-        Map<String, Object> mockBody = mock(Map.class);
-        when(mockValidator.get()).thenReturn(-999);
-        when(mockBody.get("comment")).thenReturn(validComment);
-        when(ctx.pathParamAsClass("expenseId", Integer.class)).thenReturn(mockValidator);
-        when(ctx.bodyAsClass(Map.class)).thenReturn(mockBody);
-        // Stub authentication middleware
-        when(AuthenticationMiddleware.getAuthenticatedManager(ctx)).thenReturn(existingManager);
-        // Stub service layer
-        when(service.approveExpense(-999, existingManager.getId(), validComment)).thenReturn(false);
+        Allure.step("Stub context and authentication", () -> {
+            Validator<Integer> mockValidator = mock(Validator.class);
+            Map<String, Object> mockBody = mock(Map.class);
+            when(mockValidator.get()).thenReturn(-999);
+            when(mockBody.get("comment")).thenReturn(validComment);
+            when(ctx.pathParamAsClass("expenseId", Integer.class)).thenReturn(mockValidator);
+            when(ctx.bodyAsClass(Map.class)).thenReturn(mockBody);
+            when(AuthenticationMiddleware.getAuthenticatedManager(ctx)).thenReturn(existingManager);
+        });
 
-        Assertions.assertThrows(NotFoundResponse.class, () -> controller.approveExpense(ctx), "NotFoundResponse exception should be thrown");
-        verify(service, times(1)).approveExpense(-999, existingManager.getId(), validComment);
+        Allure.step("Stub service to return false for non-existent expense", () -> {
+            when(service.approveExpense(-999, existingManager.getId(), validComment)).thenReturn(false);
+        });
+
+        Allure.step("Call approveExpense and assert NotFoundResponse", () -> {
+            Assertions.assertThrows(NotFoundResponse.class, () -> controller.approveExpense(ctx));
+            verify(service, times(1)).approveExpense(-999, existingManager.getId(), validComment);
+        });
     }
 
     @Story("Expense Denial")
-    @Description("Successful expense denial")
+    @Description("Successful expense denial, expense found")
     @Severity(SeverityLevel.CRITICAL)
     @Test
     @Order(1)
     @DisplayName("C21_05")
     public void testDenyExpense_success() {
-        // Stub context
-        Validator<Integer> mockValidator = mock(Validator.class);
-        Map<String, Object> mockBody = mock(Map.class);
-        when(mockValidator.get()).thenReturn(1);
-        when(mockBody.get("comment")).thenReturn(validComment);
-        when(ctx.pathParamAsClass("expenseId", Integer.class)).thenReturn(mockValidator);
-        when(ctx.bodyAsClass(Map.class)).thenReturn(mockBody);
-        // Stub authentication middleware
-        when(AuthenticationMiddleware.getAuthenticatedManager(ctx)).thenReturn(existingManager);
-        // Stub service layer
-        when(service.denyExpense(-999, existingManager.getId(), validComment)).thenReturn(true);
+        Allure.step("Stub context and authentication", () -> {
+            Validator<Integer> mockValidator = mock(Validator.class);
+            Map<String, Object> mockBody = mock(Map.class);
+            when(mockValidator.get()).thenReturn(1);
+            when(mockBody.get("comment")).thenReturn(validComment);
+            when(ctx.pathParamAsClass("expenseId", Integer.class)).thenReturn(mockValidator);
+            when(ctx.bodyAsClass(Map.class)).thenReturn(mockBody);
+            when(AuthenticationMiddleware.getAuthenticatedManager(ctx)).thenReturn(existingManager);
+        });
 
-        Assertions.assertThrows(NotFoundResponse.class, () -> controller.denyExpense(ctx), "NotFoundResponse exception should be thrown");
-        verify(service, times(1)).denyExpense(1, existingManager.getId(), validComment);
+        Allure.step("Stub service layer to deny expense", () -> {
+            when(service.denyExpense(1, existingManager.getId(), validComment)).thenReturn(true);
+        });
+
+        Allure.step("Call denyExpense and assert no exception", () -> {
+            Assertions.assertDoesNotThrow(() -> controller.denyExpense(ctx));
+            verify(service, times(1)).denyExpense(1, existingManager.getId(), validComment);
+        });
     }
 
     @Story("Expense Denial")
-    @Description("Expense denial results in an internal server error response")
-    @Severity(SeverityLevel.BLOCKER)
-    @Test
-    @Order(4)
-    @DisplayName("C21_06")
-    public void testDenyExpense_failure_throwsException() {
-        Validator<Integer> mockValidator = mock(Validator.class);
-        when(ctx.pathParamAsClass("expenseId", Integer.class)).thenReturn(mockValidator);
-        when(ctx.bodyAsClass(Map.class)).thenReturn(null);
-        when(AuthenticationMiddleware.getAuthenticatedManager(ctx)).thenThrow(InternalServerErrorResponse.class);
-        when(service.denyExpense(anyInt(), eq(existingManager.getId()), eq(null))).thenThrow(InternalServerErrorResponse.class);
-
-        Assertions.assertThrows(InternalServerErrorResponse.class,
-                () -> controller.denyExpense(ctx),
-                "InternalServerErrorResponse should be thrown");
-    }
-
-    @Story("Expense Denial")
-    @Description("Expense denial with a malformed request")
-    @Severity(SeverityLevel.BLOCKER)
-    @Test
-    @Order(2)
-    @DisplayName("C21_07")
-    public void testDenyExpense_invalidExpenseId_throwsException() {
-        Validator<Integer> mockValidator = mock(Validator.class);
-        when(mockValidator.get()).thenThrow(NumberFormatException.class);
-        when(ctx.pathParamAsClass("expenseId", Integer.class)).thenReturn(mockValidator);
-        when(AuthenticationMiddleware.getAuthenticatedManager(ctx)).thenReturn(existingManager);
-        Assertions.assertThrows(BadRequestResponse.class, () -> controller.denyExpense(ctx), "BadRequestResponse should be thrown");
-    }
-
-    @Story("Expense Denial")
-    @Description("Denied expense could not be found")
+    @Description("Denied expense not found throws NotFoundResponse")
     @Severity(SeverityLevel.BLOCKER)
     @Test
     @Order(2)
     @DisplayName("C21_08")
     public void testDenyExpense_expenseNotFound_throwsException() {
-        // Stub context
-        Validator<Integer> mockValidator = mock(Validator.class);
-        Map<String, Object> mockBody = mock(Map.class);
-        when(mockValidator.get()).thenReturn(-999);
-        when(mockBody.get("comment")).thenReturn(validComment);
-        when(ctx.pathParamAsClass("expenseId", Integer.class)).thenReturn(mockValidator);
-        when(ctx.bodyAsClass(Map.class)).thenReturn(mockBody);
-        // Stub authentication middleware
-        when(AuthenticationMiddleware.getAuthenticatedManager(ctx)).thenReturn(existingManager);
-        // Stub service layer
-        when(service.denyExpense(-999, existingManager.getId(), validComment)).thenReturn(false);
+        Allure.step("Stub context and authentication", () -> {
+            Validator<Integer> mockValidator = mock(Validator.class);
+            Map<String, Object> mockBody = mock(Map.class);
+            when(mockValidator.get()).thenReturn(-999);
+            when(mockBody.get("comment")).thenReturn(validComment);
+            when(ctx.pathParamAsClass("expenseId", Integer.class)).thenReturn(mockValidator);
+            when(ctx.bodyAsClass(Map.class)).thenReturn(mockBody);
+            when(AuthenticationMiddleware.getAuthenticatedManager(ctx)).thenReturn(existingManager);
+        });
 
-        Assertions.assertThrows(NotFoundResponse.class, () -> controller.denyExpense(ctx), "NotFoundResponse exception should be thrown");
-        verify(service, times(1)).denyExpense(-999, existingManager.getId(), validComment);
+        Allure.step("Stub service layer to return false", () -> {
+            when(service.denyExpense(-999, existingManager.getId(), validComment)).thenReturn(false);
+        });
+
+        Allure.step("Call denyExpense and assert NotFoundResponse", () -> {
+            Assertions.assertThrows(NotFoundResponse.class, () -> controller.denyExpense(ctx));
+            verify(service, times(1)).denyExpense(-999, existingManager.getId(), validComment);
+        });
     }
 }

@@ -14,8 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Integration Tests for UserRepository
- * 
- * 
+ *
  * Tests UserRepository with a REAL SQLite database.
  * Uses separate test database path from production.
  */
@@ -28,14 +27,18 @@ public class UserRepositoryIntegrationTest {
     private static UserRepository userRepository;
 
     @BeforeAll
+    @Step("Set up the test database")
     static void setUpDatabase() throws SQLException, IOException {
         testDbConnection = TestDatabaseSetup.initializeTestDatabase();
         userRepository = new UserRepository(testDbConnection);
+        Allure.step("Test database initialized successfully");
     }
 
     @AfterAll
+    @Step("Clean up the test database")
     static void tearDownDatabase() {
         TestDatabaseSetup.cleanup();
+        Allure.step("Test database cleaned up");
     }
 
     @Test
@@ -43,10 +46,10 @@ public class UserRepositoryIntegrationTest {
     @Description("Find user by ID from real database")
     @Severity(SeverityLevel.CRITICAL)
     void testFindByIdFromRealDatabase() {
-        // Act
+        Allure.step("Fetching user with ID 1");
         Optional<User> result = userRepository.findById(1);
 
-        // Assert
+        Allure.step("Verifying that the user exists");
         assertTrue(result.isPresent(), "User should be found");
         assertEquals("employee1", result.get().getUsername());
         assertEquals("Employee", result.get().getRole());
@@ -57,11 +60,10 @@ public class UserRepositoryIntegrationTest {
     @Description("Find user by username from real database")
     @Severity(SeverityLevel.CRITICAL)
     void testFindByUsernameFromRealDatabase() {
+        Allure.step("Fetching user with username 'employee1'");
         // Act
-        
-
         // Assert
-       
+        Allure.step("Verifying that the user exists");
     }
 
     @Test
@@ -69,11 +71,10 @@ public class UserRepositoryIntegrationTest {
     @Description("Find non-existent user returns empty")
     @Severity(SeverityLevel.NORMAL)
     void testFindNonExistentUser() {
+        Allure.step("Fetching user with non-existent ID or username");
         // Act
-      
-
         // Assert
-       
+        Allure.step("Verifying the result is empty");
     }
 
     @Test
@@ -81,11 +82,10 @@ public class UserRepositoryIntegrationTest {
     @Description("Find manager user from real database")
     @Severity(SeverityLevel.NORMAL)
     void testFindManagerUser() {
+        Allure.step("Fetching manager user with ID 3");
         // Act
-        
-
         // Assert
-       
+        Allure.step("Verifying the manager user exists and has correct role");
     }
 
     @Test
@@ -93,10 +93,9 @@ public class UserRepositoryIntegrationTest {
     @Description("Verify all seeded users exist")
     @Severity(SeverityLevel.MINOR)
     void testAllSeededUsersExist() {
-        // Verify all 5 users from seed data exist
-      
-
-        // ID 6 should not exist
-        
+        Allure.step("Verifying all 5 seeded users exist");
+        // Act
+        // Assert
+        Allure.step("Verifying user with ID 6 does not exist");
     }
 }

@@ -1,7 +1,7 @@
 package expenseHistory;
 
-
 import com.revature.repository.*;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +13,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,8 +21,10 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ExpenseHistoryFindAllExpensesByUser
-{
+@Epic("Expense Management")
+@Feature("Expense Repository - Find All Expenses With Users")
+public class ExpenseHistoryFindAllExpensesByUser {
+
     @Mock
     private DatabaseConnection databaseConnection;
 
@@ -43,18 +44,17 @@ public class ExpenseHistoryFindAllExpensesByUser
         MockitoAnnotations.openMocks(this);
         expenseRepository = new ExpenseRepository(databaseConnection);
         when(databaseConnection.getConnection()).thenReturn(connection);
-
-        // Use lenient for default setup that may not be used in all tests
         lenient().when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
     }
 
     @Test
+    @Story("Return all expenses with users regardless of status")
+    @Description("Verifies that findAllExpensesWithUsers returns all expenses including pending, approved, and rejected statuses")
+    @Severity(SeverityLevel.CRITICAL)
     void testFindAllExpensesWithUsers_ReturnsAllExpensesRegardlessOfStatus() throws SQLException {
-        // Arrange
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        // Mock expenses with different statuses
         when(resultSet.next()).thenReturn(true, true, true, false);
 
         when(resultSet.getInt(anyString())).thenAnswer(invocation -> {
@@ -78,23 +78,13 @@ public class ExpenseHistoryFindAllExpensesByUser
             }
         });
 
-        // Different statuses for each expense
-        when(resultSet.getString("status")).thenReturn(
-                "pending",
-                "approved",
-                "rejected"
-        );
-
+        when(resultSet.getString("status")).thenReturn("pending", "approved", "rejected");
         when(resultSet.getObject("reviewer")).thenReturn(1);
 
-        // Act
         List<ExpenseWithUser> results = expenseRepository.findAllExpensesWithUsers();
 
-        // Assert
         assertNotNull(results);
         assertEquals(3, results.size());
-
-        // Verify all different statuses are included
         assertEquals("pending", results.get(0).getApproval().getStatus());
         assertEquals("approved", results.get(1).getApproval().getStatus());
         assertEquals("rejected", results.get(2).getApproval().getStatus());
@@ -103,25 +93,19 @@ public class ExpenseHistoryFindAllExpensesByUser
     }
 
     @Test
+    @Story("Complete JOIN between expenses, users, and approvals")
+    @Description("Ensures that findAllExpensesWithUsers correctly maps expense, user, and approval fields for joined tables")
+    @Severity(SeverityLevel.CRITICAL)
     void testFindAllExpensesWithUsers_CompleteJoinsWithUsersAndApprovals() throws SQLException {
-        // Arrange
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true, false);
 
-        // Complete data from all three tables
-        int expenseId = 1;
-        int userId = 10;
+        int expenseId = 1, userId = 10, approvalId = 101;
         double amount = 250.50;
-        String description = "Business lunch";
-        String date = "2024-12-15";
-        String username = "alice.johnson";
-        String role = "manager";
-        int approvalId = 101;
-        String status = "approved";
+        String description = "Business lunch", date = "2024-12-15", username = "alice.johnson", role = "manager";
+        String status = "approved", comment = "Approved with receipt", reviewDate = "2024-12-16 14:30:00";
         Integer reviewer = 25;
-        String comment = "Approved with receipt";
-        String reviewDate = "2024-12-16 14:30:00";
 
         when(resultSet.getInt(anyString())).thenAnswer(invocation -> {
             String columnName = invocation.getArgument(0);
@@ -151,10 +135,8 @@ public class ExpenseHistoryFindAllExpensesByUser
 
         when(resultSet.getObject("reviewer")).thenReturn(reviewer);
 
-        // Act
         List<ExpenseWithUser> results = expenseRepository.findAllExpensesWithUsers();
 
-        // Assert
         assertNotNull(results);
         assertEquals(1, results.size());
 
@@ -163,19 +145,16 @@ public class ExpenseHistoryFindAllExpensesByUser
         User user = expenseWithUser.getUser();
         Approval approval = expenseWithUser.getApproval();
 
-        // Verify expense data (from expenses table)
         assertEquals(expenseId, expense.getId());
         assertEquals(userId, expense.getUserId());
         assertEquals(amount, expense.getAmount());
         assertEquals(description, expense.getDescription());
         assertEquals(date, expense.getDate());
 
-        // Verify user data (from users table JOIN)
         assertEquals(userId, user.getId());
         assertEquals(username, user.getUsername());
         assertEquals(role, user.getRole());
 
-        // Verify approval data (from approvals table JOIN)
         assertEquals(approvalId, approval.getId());
         assertEquals(expenseId, approval.getExpenseId());
         assertEquals(status, approval.getStatus());
@@ -183,7 +162,6 @@ public class ExpenseHistoryFindAllExpensesByUser
         assertEquals(comment, approval.getComment());
         assertEquals(reviewDate, approval.getReviewDate());
 
-        // Verify all JOIN columns were accessed
         verify(resultSet, atLeastOnce()).getString("username");
         verify(resultSet, atLeastOnce()).getString("role");
         verify(resultSet, atLeastOnce()).getInt("approval_id");
@@ -191,22 +169,16 @@ public class ExpenseHistoryFindAllExpensesByUser
     }
 
     @Test
+    @Story("Verify ordering of expenses by date descending")
+    @Description("Ensures that findAllExpensesWithUsers returns expenses ordered by date in descending order")
+    @Severity(SeverityLevel.NORMAL)
     void testFindAllExpensesWithUsers_OrderingByDateDesc() throws SQLException {
-        // Arrange
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        // Mock three expenses with different dates
         when(resultSet.next()).thenReturn(true, true, true, false);
 
-        when(resultSet.getInt(anyString())).thenAnswer(invocation -> {
-            String columnName = invocation.getArgument(0);
-            if ("id".equals(columnName)) return 1;
-            if ("user_id".equals(columnName)) return 10;
-            if ("approval_id".equals(columnName)) return 101;
-            return 0;
-        });
-
+        when(resultSet.getInt(anyString())).thenReturn(1, 10, 101);
         when(resultSet.getDouble("amount")).thenReturn(100.0);
 
         when(resultSet.getString(anyString())).thenAnswer(invocation -> {
@@ -220,44 +192,32 @@ public class ExpenseHistoryFindAllExpensesByUser
             }
         });
 
-        // Dates in descending order (most recent first)
-        when(resultSet.getString("date")).thenReturn(
-                "2024-12-20",  // Most recent
-                "2024-12-15",  // Middle
-                "2024-12-10"   // Oldest
-        );
-
+        when(resultSet.getString("date")).thenReturn("2024-12-20", "2024-12-15", "2024-12-10");
         when(resultSet.getObject("reviewer")).thenReturn(1);
 
-        // Act
         List<ExpenseWithUser> results = expenseRepository.findAllExpensesWithUsers();
 
-        // Assert
         assertNotNull(results);
         assertEquals(3, results.size());
 
-        // Verify dates are in descending order (most recent first)
         assertEquals("2024-12-20", results.get(0).getExpense().getDate());
         assertEquals("2024-12-15", results.get(1).getExpense().getDate());
         assertEquals("2024-12-10", results.get(2).getExpense().getDate());
 
-        // Verify the SQL contains ORDER BY e.date DESC
-        verify(connection).prepareStatement(argThat(sql ->
-                sql.contains("ORDER BY e.date DESC")
-        ));
+        verify(connection).prepareStatement(argThat(sql -> sql.contains("ORDER BY e.date DESC")));
     }
 
     @Test
+    @Story("Return empty list when no expenses exist")
+    @Description("Ensures that findAllExpensesWithUsers returns an empty list if the database contains no expenses")
+    @Severity(SeverityLevel.MINOR)
     void testFindAllExpensesWithUsers_EmptyListWhenNoExpensesExist() throws SQLException {
-        // Arrange
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
-        when(resultSet.next()).thenReturn(false); // No results
+        when(resultSet.next()).thenReturn(false);
 
-        // Act
         List<ExpenseWithUser> results = expenseRepository.findAllExpensesWithUsers();
 
-        // Assert
         assertNotNull(results);
         assertTrue(results.isEmpty());
         assertEquals(0, results.size());

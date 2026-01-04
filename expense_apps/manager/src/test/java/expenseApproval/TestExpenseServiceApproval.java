@@ -3,10 +3,7 @@ package expenseApproval;
 import com.revature.repository.*;
 import com.revature.service.ExpenseService;
 import io.qameta.allure.*;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -17,27 +14,26 @@ import static org.mockito.Mockito.*;
 @Feature("Expense Service")
 @DisplayName("ExpenseService Approval Tests")
 public class TestExpenseServiceApproval {
+
     @Mock
-    private static ExpenseRepository expenseDAO;
+    private ExpenseRepository expenseDAO;
     @Mock
-    private static ApprovalRepository approvalDAO;
+    private ApprovalRepository approvalDAO;
 
     @InjectMocks
-    private static ExpenseService service;
+    private ExpenseService service;
 
-    // Test vars
-    private static int existingExpenseId;
-    private static int notRealExpenseId;
-    private static int existingManagerId;
-    private static int notRealManagerId;
-    private static String comment;
-    private static String approve;
-    private static String deny;
+    // Test variables
+    private int existingExpenseId;
+    private int notRealExpenseId;
+    private int existingManagerId;
+    private int notRealManagerId;
+    private String comment;
+    private String approve;
+    private String deny;
 
-    private boolean actualResult;
-
-    @BeforeAll
-    public static void setUp() {
+    @BeforeEach
+    public void setUp() {
         expenseDAO = mock(ExpenseRepository.class);
         approvalDAO = mock(ApprovalRepository.class);
         service = new ExpenseService(expenseDAO, approvalDAO);
@@ -50,19 +46,15 @@ public class TestExpenseServiceApproval {
         deny = "denied";
         comment = "Some words";
 
+        // Stub approvalDAO for various scenarios
         when(approvalDAO.updateApprovalStatus(existingExpenseId, approve, existingManagerId, comment)).thenReturn(true);
         when(approvalDAO.updateApprovalStatus(existingExpenseId, approve, existingManagerId, null)).thenReturn(true);
         when(approvalDAO.updateApprovalStatus(existingExpenseId, deny, existingManagerId, comment)).thenReturn(true);
         when(approvalDAO.updateApprovalStatus(existingExpenseId, deny, existingManagerId, null)).thenReturn(true);
-        when(approvalDAO.updateApprovalStatus(notRealExpenseId, approve, existingExpenseId, comment)).thenReturn(false);
-        when(approvalDAO.updateApprovalStatus(notRealExpenseId, deny, existingExpenseId, comment)).thenReturn(false);
+        when(approvalDAO.updateApprovalStatus(notRealExpenseId, approve, existingManagerId, comment)).thenReturn(false);
+        when(approvalDAO.updateApprovalStatus(notRealExpenseId, deny, existingManagerId, comment)).thenReturn(false);
         when(approvalDAO.updateApprovalStatus(existingExpenseId, approve, notRealManagerId, comment)).thenReturn(false);
         when(approvalDAO.updateApprovalStatus(existingExpenseId, deny, notRealManagerId, comment)).thenReturn(false);
-    }
-
-    @AfterAll
-    public static void tearDown() {
-        //
     }
 
     // C20_01
@@ -72,9 +64,14 @@ public class TestExpenseServiceApproval {
     @Test
     @DisplayName("C20_01")
     public void testApproveExpense_normal_returnTrue() {
-        actualResult = service.approveExpense(existingExpenseId, existingManagerId, comment);
-        assertTrue(actualResult);
-        verify(approvalDAO).updateApprovalStatus(existingExpenseId, approve, existingManagerId, comment);
+        Allure.step("Call approveExpense with existing expense and manager IDs", () -> {
+            boolean result = service.approveExpense(existingExpenseId, existingManagerId, comment);
+
+            Allure.step("Assert result is true", () -> assertTrue(result));
+            Allure.step("Verify DAO updateApprovalStatus called", () ->
+                    verify(approvalDAO).updateApprovalStatus(existingExpenseId, approve, existingManagerId, comment)
+            );
+        });
     }
 
     // C20_02
@@ -84,9 +81,14 @@ public class TestExpenseServiceApproval {
     @Test
     @DisplayName("C20_02")
     public void testApproveExpense_noComment_returnTrue() {
-        actualResult = service.approveExpense(existingExpenseId, existingManagerId, null);
-        assertTrue(actualResult);
-        verify(approvalDAO).updateApprovalStatus(existingExpenseId, approve, existingManagerId, null);
+        Allure.step("Call approveExpense with null comment", () -> {
+            boolean result = service.approveExpense(existingExpenseId, existingManagerId, null);
+
+            Allure.step("Assert result is true", () -> assertTrue(result));
+            Allure.step("Verify DAO updateApprovalStatus called", () ->
+                    verify(approvalDAO).updateApprovalStatus(existingExpenseId, approve, existingManagerId, null)
+            );
+        });
     }
 
     // C20_03
@@ -96,9 +98,14 @@ public class TestExpenseServiceApproval {
     @Test
     @DisplayName("C20_03")
     public void testApproveExpense_invalidExpense_returnFalse() {
-        actualResult = service.approveExpense(notRealExpenseId, existingManagerId, comment);
-        assertFalse(actualResult);
-        verify(approvalDAO).updateApprovalStatus(notRealExpenseId, approve, existingManagerId, comment);
+        Allure.step("Call approveExpense with invalid expense ID", () -> {
+            boolean result = service.approveExpense(notRealExpenseId, existingManagerId, comment);
+
+            Allure.step("Assert result is false", () -> assertFalse(result));
+            Allure.step("Verify DAO updateApprovalStatus called", () ->
+                    verify(approvalDAO).updateApprovalStatus(notRealExpenseId, approve, existingManagerId, comment)
+            );
+        });
     }
 
     // C20_04
@@ -108,9 +115,14 @@ public class TestExpenseServiceApproval {
     @Test
     @DisplayName("C20_04")
     public void testApproveExpense_invalidManager_returnFalse() {
-        actualResult = service.approveExpense(existingExpenseId, notRealManagerId, comment);
-        assertFalse(actualResult);
-        verify(approvalDAO).updateApprovalStatus(existingExpenseId, approve, notRealManagerId, comment);
+        Allure.step("Call approveExpense with invalid manager ID", () -> {
+            boolean result = service.approveExpense(existingExpenseId, notRealManagerId, comment);
+
+            Allure.step("Assert result is false", () -> assertFalse(result));
+            Allure.step("Verify DAO updateApprovalStatus called", () ->
+                    verify(approvalDAO).updateApprovalStatus(existingExpenseId, approve, notRealManagerId, comment)
+            );
+        });
     }
 
     // C21_01
@@ -120,9 +132,14 @@ public class TestExpenseServiceApproval {
     @Test
     @DisplayName("C21_01")
     public void testDenyExpense_normal_returnTrue() {
-        actualResult = service.denyExpense(existingExpenseId, existingManagerId, comment);
-        assertTrue(actualResult);
-        verify(approvalDAO).updateApprovalStatus(existingExpenseId, deny, existingManagerId, comment);
+        Allure.step("Call denyExpense with comment", () -> {
+            boolean result = service.denyExpense(existingExpenseId, existingManagerId, comment);
+
+            Allure.step("Assert result is true", () -> assertTrue(result));
+            Allure.step("Verify DAO updateApprovalStatus called", () ->
+                    verify(approvalDAO).updateApprovalStatus(existingExpenseId, deny, existingManagerId, comment)
+            );
+        });
     }
 
     // C21_02
@@ -132,32 +149,47 @@ public class TestExpenseServiceApproval {
     @Test
     @DisplayName("C21_02")
     public void testDenyExpense_noComment_returnTrue() {
-        actualResult = service.denyExpense(existingExpenseId, existingManagerId, null);
-        assertTrue(actualResult);
-        verify(approvalDAO).updateApprovalStatus(existingExpenseId, deny, existingManagerId, null);
+        Allure.step("Call denyExpense with null comment", () -> {
+            boolean result = service.denyExpense(existingExpenseId, existingManagerId, null);
+
+            Allure.step("Assert result is true", () -> assertTrue(result));
+            Allure.step("Verify DAO updateApprovalStatus called", () ->
+                    verify(approvalDAO).updateApprovalStatus(existingExpenseId, deny, existingManagerId, null)
+            );
+        });
     }
 
     // C21_03
     @Story("Expense Denial")
-    @Description("Denying an expense with an invalid expense ID (expense not in database)")
+    @Description("Denying an expense with an invalid expense ID")
     @Severity(SeverityLevel.BLOCKER)
     @Test
     @DisplayName("C21_03")
     public void testDenyExpense_invalidExpense_returnFalse() {
-        actualResult = service.denyExpense(notRealExpenseId, existingManagerId, comment);
-        assertFalse(actualResult);
-        verify(approvalDAO).updateApprovalStatus(notRealExpenseId, deny, existingManagerId, comment);
+        Allure.step("Call denyExpense with invalid expense ID", () -> {
+            boolean result = service.denyExpense(notRealExpenseId, existingManagerId, comment);
+
+            Allure.step("Assert result is false", () -> assertFalse(result));
+            Allure.step("Verify DAO updateApprovalStatus called", () ->
+                    verify(approvalDAO).updateApprovalStatus(notRealExpenseId, deny, existingManagerId, comment)
+            );
+        });
     }
 
     // C21_04
     @Story("Expense Denial")
-    @Description("Denying an expense with an invalid manager ID (manager not in database)")
+    @Description("Denying an expense with an invalid manager ID")
     @Severity(SeverityLevel.BLOCKER)
     @Test
     @DisplayName("C21_04")
     public void testDenyExpense_invalidManager_returnFalse() {
-        actualResult = service.denyExpense(existingExpenseId, notRealManagerId, comment);
-        assertFalse(actualResult);
-        verify(approvalDAO).updateApprovalStatus(existingExpenseId, deny, notRealManagerId, comment);
+        Allure.step("Call denyExpense with invalid manager ID", () -> {
+            boolean result = service.denyExpense(existingExpenseId, notRealManagerId, comment);
+
+            Allure.step("Assert result is false", () -> assertFalse(result));
+            Allure.step("Verify DAO updateApprovalStatus called", () ->
+                    verify(approvalDAO).updateApprovalStatus(existingExpenseId, deny, notRealManagerId, comment)
+            );
+        });
     }
 }

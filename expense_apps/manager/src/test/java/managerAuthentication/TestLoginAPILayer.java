@@ -6,6 +6,7 @@ import com.revature.service.AuthenticationService;
 import io.javalin.http.Context;
 import io.javalin.http.Handler;
 import io.javalin.http.UnauthorizedResponse;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,11 +19,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Epic("Manager API Authentication")
+@Feature("Middleware validation for manager access")
 @ExtendWith(MockitoExtension.class)
 public class TestLoginAPILayer {
 
     @Mock
     private User mockUser;
+
     @Mock
     private Context ctx;
 
@@ -32,52 +36,63 @@ public class TestLoginAPILayer {
     private AuthenticationService mockAuth;
 
     @BeforeEach
-    public void setupHandler(){
-        //create handler to deal with this middleware stuff
-        //cant do a mock injection since we need handler type
+    public void setupHandler() {
         handler = new AuthenticationMiddleware(mockAuth).validateManager();
     }
 
-    //C6_06
+    // ============================
+    // Positive Path: Valid Manager
+    // ============================
     @Test
+    @Story("Valid manager JWT allows access")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("If the JWT cookie is valid and corresponds to a manager, the middleware should attach the user to the context")
+    @Step("Test middleware validates manager JWT successfully")
     void test_validateManagerPositive() throws Exception {
-        //string doesnt matter, mocked out
         String jwt = "mock-jwt-token";
-        when(ctx.cookie("jwt")).thenReturn(jwt);
 
+        when(ctx.cookie("jwt")).thenReturn(jwt);
         when(mockAuth.validateManagerAuthentication(jwt))
                 .thenReturn(Optional.of(mockUser));
 
         handler.handle(ctx);
+
         verify(ctx).attribute("manager", mockUser);
     }
-    //C6_07
-    @Test
-    void test_validateUserBad() throws Exception {
-        //string doesnt matter, mocked out
-        String jwt = "funny_token";
-        when(ctx.cookie("jwt")).thenReturn(jwt);
 
+    // ============================
+    // Negative Path: User Not Manager
+    // ============================
+    @Test
+    @Story("Invalid manager JWT should throw Unauthorized")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("If the JWT is valid but user is not a manager, an UnauthorizedResponse should be thrown")
+    @Step("Test middleware rejects non-manager JWT")
+    void test_validateUserBad() throws Exception {
+        String jwt = "funny_token";
+
+        when(ctx.cookie("jwt")).thenReturn(jwt);
         when(mockAuth.validateManagerAuthentication(jwt))
                 .thenReturn(Optional.empty());
-        //make sure we throw because there user isnt a manager
-        assertThrows(UnauthorizedResponse.class, ()->{handler.handle(ctx);});
+
+        assertThrows(UnauthorizedResponse.class, () -> handler.handle(ctx));
     }
-    //C6_08
+
+    // ============================
+    // Negative Path: Token Missing or Invalid
+    // ============================
     @Test
+    @Story("Missing or invalid JWT should throw Unauthorized")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("If the JWT is missing or invalid (e.g., after logout), the middleware should throw UnauthorizedResponse")
+    @Step("Test middleware rejects missing or invalid JWT")
     void test_validateTokenMissing() {
-        //this SHOULD be what happens when you logout, as main
-        //calls ctx.removeCookie("jwt")
-        //Need to also integration test that removal
         String jwt = "no-token";
 
         when(ctx.cookie("jwt")).thenReturn(jwt);
-        //fail on validation
         when(mockAuth.validateJwtToken(jwt))
                 .thenReturn(Optional.empty());
 
-        assertThrows(UnauthorizedResponse.class, ()->{handler.handle(ctx);});
+        assertThrows(UnauthorizedResponse.class, () -> handler.handle(ctx));
     }
-
-
 }

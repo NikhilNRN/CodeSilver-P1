@@ -14,15 +14,6 @@ import java.sql.SQLException;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
-/**
- * E2E Integration Tests with Real Database (Java Manager App)
- *
- *
- * These tests simulate complete manager workflows using REST Assured
- * with a REAL SQLite database backend.
- *
- * NOTE: Tests require Manager API running on port 5001
- */
 @Epic("Manager App")
 @Feature("E2E Integration Tests")
 @Tag("e2e")
@@ -34,15 +25,19 @@ public class E2EIntegrationTest {
 
     @BeforeAll
     static void setupDatabase() throws SQLException, IOException {
-        testDbConnection = TestDatabaseSetup.initializeTestDatabase();
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 5001;
+        Allure.step("Initialize test database and configure REST Assured", () -> {
+            testDbConnection = TestDatabaseSetup.initializeTestDatabase();
+            RestAssured.baseURI = "http://localhost";
+            RestAssured.port = 5001;
+        });
     }
 
     @AfterAll
     static void tearDown() {
-        TestDatabaseSetup.cleanup();
-        RestAssured.reset();
+        Allure.step("Cleanup test database and reset REST Assured", () -> {
+            TestDatabaseSetup.cleanup();
+            RestAssured.reset();
+        });
     }
 
     // ==================== COMPLETE WORKFLOW TESTS ====================
@@ -53,53 +48,50 @@ public class E2EIntegrationTest {
     @Description("Full workflow: Login → View pending → Approve → Verify")
     @Severity(SeverityLevel.CRITICAL)
     void testCompleteApprovalWorkflow() {
-        // Step 1: Login as manager
-        Response loginResponse = given()
-                .contentType(ContentType.JSON)
-                .body("{\"username\": \"manager1\", \"password\": \"admin123\"}")
-                .when()
-                .post("/api/auth/login");
+        Response loginResponse = Allure.step("Step 1: Login as manager", () ->
+                given()
+                        .contentType(ContentType.JSON)
+                        .body("{\"username\": \"manager1\", \"password\": \"admin123\"}")
+                        .post("/api/auth/login")
+        );
 
-        if (loginResponse.getStatusCode() != 200) {
-            // Server not running, skip test
-            return;
-        }
+        if (loginResponse.getStatusCode() != 200) return;
 
         String jwt = loginResponse.getCookie("jwt");
         Assertions.assertNotNull(jwt, "Should receive JWT on login");
 
-        // Step 2: View pending expenses
-        Response pendingResponse = given()
-                .cookie("jwt", jwt)
-                .when()
-                .get("/api/expenses/pending")
-                .then()
-                .statusCode(200)
-                .extract()
-                .response();
+        Response pendingResponse = Allure.step("Step 2: View pending expenses", () ->
+                given()
+                        .cookie("jwt", jwt)
+                        .get("/api/expenses/pending")
+                        .then()
+                        .statusCode(200)
+                        .extract()
+                        .response()
+        );
 
-        // Step 3: Approve first pending expense (ID 1)
-        Response approveResponse = given()
-                .cookie("jwt", jwt)
-                .contentType(ContentType.JSON)
-                .body("{\"comment\": \"E2E workflow approval\"}")
-                .when()
-                .post("/api/expenses/1/approve");
+        Response approveResponse = Allure.step("Step 3: Approve first pending expense (ID 1)", () ->
+                given()
+                        .cookie("jwt", jwt)
+                        .contentType(ContentType.JSON)
+                        .body("{\"comment\": \"E2E workflow approval\"}")
+                        .post("/api/expenses/1/approve")
+        );
 
-        // Should succeed or return appropriate status
         Assertions.assertTrue(
                 approveResponse.getStatusCode() == 200 ||
                         approveResponse.getStatusCode() == 404 ||
                         approveResponse.getStatusCode() == 400,
-                "Approve should return valid status");
+                "Approve should return valid status"
+        );
 
-        // Step 4: Verify by checking expenses again
-        given()
-                .cookie("jwt", jwt)
-                .when()
-                .get("/api/expenses")
-                .then()
-                .statusCode(200);
+        Allure.step("Step 4: Verify expenses after approval", () ->
+                given()
+                        .cookie("jwt", jwt)
+                        .get("/api/expenses")
+                        .then()
+                        .statusCode(200)
+        );
     }
 
     @Test
@@ -108,11 +100,7 @@ public class E2EIntegrationTest {
     @Description("Full workflow: Login → View pending → Deny → Verify")
     @Severity(SeverityLevel.CRITICAL)
     void testCompleteDenialWorkflow() {
-        // Step 1: Login
-
-
-        // Step 2: Deny expense (ID 4 is pending for employee2)
-
+        Allure.step("Complete Denial Workflow test (not implemented)", () -> {});
     }
 
     @Test
@@ -121,13 +109,7 @@ public class E2EIntegrationTest {
     @Description("Full workflow: Login → Generate multiple report types")
     @Severity(SeverityLevel.NORMAL)
     void testReportGenerationWorkflow() {
-
-
-        // Generate CSV report
-
-
-        // Get expenses by date range
-
+        Allure.step("Report Generation Workflow test (not implemented)", () -> {});
     }
 
     @Test
@@ -136,13 +118,7 @@ public class E2EIntegrationTest {
     @Description("Full workflow: Login → View expenses by employee → Review")
     @Severity(SeverityLevel.NORMAL)
     void testEmployeeExpenseReviewWorkflow() {
-
-
-        // View employee1's expenses (has 3 in seed data)
-
-
-        // View employee2's expenses (has 2 in seed data)
-
+        Allure.step("Employee Expense Review Workflow test (not implemented)", () -> {});
     }
 
     @Test
@@ -151,7 +127,7 @@ public class E2EIntegrationTest {
     @Description("Verify unauthorized access is blocked")
     @Severity(SeverityLevel.CRITICAL)
     void testUnauthorizedAccessPrevention() {
-        // Try to access protected endpoints without auth
+        Allure.step("Unauthorized Access Prevention test (not implemented)", () -> {});
     }
 
     @Test
@@ -160,13 +136,6 @@ public class E2EIntegrationTest {
     @Description("Full workflow: Login → Logout → Verify access revoked")
     @Severity(SeverityLevel.NORMAL)
     void testSessionManagementWorkflow() {
-        // Login
-
-
-        // Verify access works
-
-
-        // Logout
-
+        Allure.step("Session Management Workflow test (not implemented)", () -> {});
     }
 }

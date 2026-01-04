@@ -4,7 +4,7 @@ import com.revature.repository.DatabaseConnection;
 import com.revature.repository.User;
 import com.revature.repository.UserRepository;
 import com.revature.service.AuthenticationService;
-import org.junit.jupiter.api.BeforeEach;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,44 +15,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.doReturn;
 
+@Epic("Deprecated Manager Authentication")
+@Feature("Legacy authentication methods")
 @ExtendWith(MockitoExtension.class)
 public class TestDeprecatedLogin {
 
-    /*
-        @Deprecated
-    public Optional<User> validateManagerAuthenticationLegacy(String authorizationHeader) {
-        Optional<User> userOpt = validateAuthentication(authorizationHeader);
-
-        if (userOpt.isPresent() && isManager(userOpt.get())) {
-            return userOpt;
-        }
-
-        return Optional.empty();
-    }
-
-
-        @Deprecated
-    public Optional<User> validateAuthentication(String authorizationHeader) {
-        // Check if Authorization header is present and properly formatted
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return Optional.empty();
-        }
-
-        try {
-            String userIdStr = authorizationHeader.substring("Bearer ".length());
-            int userId = Integer.parseInt(userIdStr);
-            return userRepository.findById(userId);
-        } catch (NumberFormatException e) {
-            return Optional.empty();
-        }
-    }
-     */
     @Mock
     DatabaseConnection conn;
+
     @Mock
     UserRepository mockRep;
+
     @InjectMocks
     @Spy
     AuthenticationService authServ;
@@ -60,50 +34,69 @@ public class TestDeprecatedLogin {
     @Mock
     User mockU;
 
-    //C6_15
+    // ==========================
+    // validateAuthentication tests
+    // ==========================
     @Test
+    @Story("Legacy authentication positive path")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Valid Authorization header with numeric user ID should call repository and return user")
+    @Step("Test deprecated authentication positive scenario")
     public void testDeprecatedAuthenticatePositive() {
         String header = "Bearer 12";
-        String userIdStr = header.substring("Bearer ".length());
-        int userId = Integer.parseInt(userIdStr);
-        System.out.println(userId);
 
-        when(mockRep.findById(12)).thenReturn(Optional.ofNullable(mockU));
+        int userId = Integer.parseInt(header.substring("Bearer ".length()));
+
+        when(mockRep.findById(userId)).thenReturn(Optional.of(mockU));
 
         authServ.validateAuthentication(header);
 
-        verify(mockRep, times(1)).findById(12);
-
-
+        verify(mockRep, times(1)).findById(userId);
     }
 
-    //C6_16
     @Test
+    @Story("Legacy authentication malformed header")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Malformed user ID should not call repository and return empty")
+    @Step("Test deprecated authentication with malformed ID")
     public void testDeprecatedAuthenticateMalformedID() {
         String header = "Bearer A";
+
         authServ.validateAuthentication(header);
 
-        verify(mockRep, times(0)).findById(12);
-
+        verify(mockRep, times(0)).findById(anyInt());
     }
-    //C6_17
+
+    // ==========================
+    // validateManagerAuthenticationLegacy tests
+    // ==========================
     @Test
+    @Story("Legacy manager authentication positive")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Header is validated and isManager should be called on returned user")
+    @Step("Test deprecated manager authentication positive scenario")
     public void testDeprecatedManagerPositive() {
-        String header= "Header 12";
+        String header = "Header 12";
 
-        doReturn(Optional.ofNullable(mockU)).when(authServ).validateAuthentication(header);
+        doReturn(Optional.of(mockU)).when(authServ).validateAuthentication(header);
+
         authServ.validateManagerAuthenticationLegacy(header);
+
         verify(authServ, times(1)).isManager(mockU);
-
     }
-    //C6_18
+
     @Test
+    @Story("Legacy manager authentication negative")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Header invalid or user not found should skip isManager check")
+    @Step("Test deprecated manager authentication negative scenario")
     public void testDeprecatedManagerNegative() {
-        String header= "Header A";
-        doReturn(Optional.ofNullable(null)).when(authServ).validateAuthentication(header);
+        String header = "Header A";
+
+        doReturn(Optional.empty()).when(authServ).validateAuthentication(header);
+
         authServ.validateManagerAuthenticationLegacy(header);
+
         verify(authServ, times(0)).isManager(mockU);
     }
-
-
 }

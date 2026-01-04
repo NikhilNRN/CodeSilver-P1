@@ -23,9 +23,11 @@ public class TestAPIUtilEndpoints {
     private ResponseSpecification responseSpec;
 
     @BeforeEach
+    @Step("Set up RestAssured request and response specifications")
     public void setUp() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port    = 5001;
+
         requestSpec = new RequestSpecBuilder()
                 .setContentType(ContentType.JSON)
                 .setAccept(ContentType.JSON)
@@ -36,27 +38,34 @@ public class TestAPIUtilEndpoints {
                 .expectContentType(ContentType.JSON)
                 .expectResponseTime(Matchers.lessThan(500L))
                 .build();
+
+        Allure.step("RequestSpec and ResponseSpec initialized successfully");
     }
 
     @AfterEach
+    @Step("Reset RestAssured configuration")
     public void tearDown() {
         RestAssured.reset();
+        Allure.step("RestAssured configuration reset");
     }
 
     @DisplayName("Manager App API Health")
     @Test
     @Severity(SeverityLevel.MINOR)
     public void testAPIHealth() {
-        given()
-                .spec(requestSpec)
-            .when()
-                .get("/health")
-            .then()
-                .spec(responseSpec)
-                .statusCode(200)
-                .body("status", Matchers.equalTo("healthy"))
-                .body("version", Matchers.equalTo("1.0.0"))
-                .body("service", Matchers.equalTo("expense-manager-api"));
+        Allure.step("Sending GET request to /health endpoint", () -> {
+            given()
+                    .spec(requestSpec)
+                    .when()
+                    .get("/health")
+                    .then()
+                    .spec(responseSpec)
+                    .statusCode(200)
+                    .body("status", Matchers.equalTo("healthy"))
+                    .body("version", Matchers.equalTo("1.0.0"))
+                    .body("service", Matchers.equalTo("expense-manager-api"));
+        });
+        Allure.step("/health endpoint returned expected values");
     }
 
     /*
@@ -68,11 +77,14 @@ public class TestAPIUtilEndpoints {
     @Severity(SeverityLevel.MINOR)
     // @Disabled("Expected to fail since endpoint is currently unimplemented")
     public void testAPIInfo() {
-        given()
-                .spec(requestSpec)
-            .when()
-                .get("/api")
-            .then()
-                .statusCode(200);
+        Allure.step("Sending GET request to /api endpoint", () -> {
+            given()
+                    .spec(requestSpec)
+                    .when()
+                    .get("/api")
+                    .then()
+                    .statusCode(200);
+        });
+        Allure.step("/api endpoint returned expected status code 200");
     }
 }

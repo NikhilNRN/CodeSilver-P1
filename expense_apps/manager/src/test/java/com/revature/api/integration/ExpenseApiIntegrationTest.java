@@ -14,16 +14,6 @@ import java.sql.SQLException;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
-/**
- * API Integration Tests with Real Database (Java Manager App)
- * 
- * 
- * These tests use REST Assured with a REAL SQLite database.
- * The test database is created at a SEPARATE PATH from production.
- * 
- * NOTE: These tests require the Manager API to be running on port 5001
- * with the test database configured.
- */
 @Epic("Manager App")
 @Feature("API Integration Tests")
 @Tag("integration")
@@ -35,18 +25,19 @@ public class ExpenseApiIntegrationTest {
 
     @BeforeAll
     static void setupDatabase() throws SQLException, IOException {
-        // Initialize test database with seed data
-        testDbConnection = TestDatabaseSetup.initializeTestDatabase();
-
-        // Configure REST Assured
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 5001;
+        Allure.step("Initialize test database and configure REST Assured", () -> {
+            testDbConnection = TestDatabaseSetup.initializeTestDatabase();
+            RestAssured.baseURI = "http://localhost";
+            RestAssured.port = 5001;
+        });
     }
 
     @AfterAll
     static void tearDown() {
-        TestDatabaseSetup.cleanup();
-        RestAssured.reset();
+        Allure.step("Cleanup test database and reset REST Assured", () -> {
+            TestDatabaseSetup.cleanup();
+            RestAssured.reset();
+        });
     }
 
     // ==================== AUTHENTICATION TESTS ====================
@@ -64,15 +55,17 @@ public class ExpenseApiIntegrationTest {
                 }
                 """;
 
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .body(requestBody)
-                .when()
-                .post("/api/auth/login")
-                .then()
-                .statusCode(anyOf(equalTo(200), equalTo(401))) // May fail if server not running
-                .extract()
-                .response();
+        Response response = Allure.step("Send login request with manager credentials", () ->
+                given()
+                        .contentType(ContentType.JSON)
+                        .body(requestBody)
+                        .when()
+                        .post("/api/auth/login")
+                        .then()
+                        .statusCode(anyOf(equalTo(200), equalTo(401))) // May fail if server not running
+                        .extract()
+                        .response()
+        );
 
         if (response.getStatusCode() == 200) {
             managerJwtCookie = response.getCookie("jwt");
@@ -86,7 +79,7 @@ public class ExpenseApiIntegrationTest {
     @Description("Employee cannot login to manager app")
     @Severity(SeverityLevel.CRITICAL)
     void testEmployeeCannotLoginToManagerApp() {
-        
+        Allure.step("Test employee login to manager app (not implemented)", () -> {});
     }
 
     // ==================== EXPENSE ENDPOINT TESTS ====================
@@ -97,20 +90,20 @@ public class ExpenseApiIntegrationTest {
     @Description("Get pending expenses from seeded database")
     @Severity(SeverityLevel.CRITICAL)
     void testGetPendingExpensesFromSeededData() {
-        // Login first
         String jwt = loginAsManager();
 
         if (jwt != null) {
-            Response response = given()
-                    .cookie("jwt", jwt)
-                    .when()
-                    .get("/api/expenses/pending")
-                    .then()
-                    .statusCode(200)
-                    .extract()
-                    .response();
+            Response response = Allure.step("Send GET /api/expenses/pending request", () ->
+                    given()
+                            .cookie("jwt", jwt)
+                            .when()
+                            .get("/api/expenses/pending")
+                            .then()
+                            .statusCode(200)
+                            .extract()
+                            .response()
+            );
 
-            // Should have pending expenses from seed data
             Assertions.assertTrue(
                     response.getBody().asString().contains("pending") ||
                             response.getBody().asString().contains("data"),
@@ -124,7 +117,7 @@ public class ExpenseApiIntegrationTest {
     @Description("Get all expenses from seeded database")
     @Severity(SeverityLevel.NORMAL)
     void testGetAllExpensesFromSeededData() {
-       
+        Allure.step("Test get all expenses (not implemented)", () -> {});
     }
 
     @Test
@@ -133,7 +126,7 @@ public class ExpenseApiIntegrationTest {
     @Description("Get expenses for specific employee from seeded data")
     @Severity(SeverityLevel.NORMAL)
     void testGetExpensesByEmployeeFromSeededData() {
-       
+        Allure.step("Test get expenses by employee (not implemented)", () -> {});
     }
 
     @Test
@@ -142,7 +135,7 @@ public class ExpenseApiIntegrationTest {
     @Description("Approve expense and verify in database")
     @Severity(SeverityLevel.CRITICAL)
     void testApproveExpenseUpdatesDatabase() {
-       
+        Allure.step("Test approve expense (not implemented)", () -> {});
     }
 
     @Test
@@ -151,7 +144,7 @@ public class ExpenseApiIntegrationTest {
     @Description("Deny expense with reason")
     @Severity(SeverityLevel.CRITICAL)
     void testDenyExpenseUpdatesDatabase() {
-      
+        Allure.step("Test deny expense (not implemented)", () -> {});
     }
 
     @Test
@@ -160,7 +153,7 @@ public class ExpenseApiIntegrationTest {
     @Description("Generate CSV report from seeded data")
     @Severity(SeverityLevel.NORMAL)
     void testGenerateCsvReportFromSeededData() {
-       
+        Allure.step("Test generate CSV report (not implemented)", () -> {});
     }
 
     // ==================== HELPER METHODS ====================
