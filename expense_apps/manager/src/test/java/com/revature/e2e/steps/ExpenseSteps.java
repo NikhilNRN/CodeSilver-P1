@@ -12,6 +12,12 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -40,14 +46,30 @@ public class ExpenseSteps {
         WebDriverManager.chromedriver().setup();
 
         // Configure Chrome options
+
+        String downloadFilepath = System.getProperty("user.dir")
+                + File.separator + "src"  + File.separator + "test"
+                + File.separator + "resources" + File.separator + "downloads";
+        File downloadFolder = new File(downloadFilepath);
+        if (downloadFolder.exists()) {
+            downloadFolder.delete();
+        }
+        downloadFolder.mkdir();
+
         ChromeOptions options = new ChromeOptions();
         Map<String, Object> chromePrefs = new HashMap<>();
 
         // Add the preference to disable password leak detection
         chromePrefs.put("profile.password_manager_leak_detection", false);
+        //file management
+        chromePrefs.put("download.default_directory", downloadFilepath);
+
+        // Disable the "Ask where to save each file" prompt
+        chromePrefs.put("download.prompt_for_download", false);
+
         options.setExperimentalOption("prefs", chromePrefs);
 
-//        options.addArguments("--headless"); // Run without GUI for CI/CD
+        options.addArguments("--headless"); // Run without GUI for CI/CD
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
 
@@ -249,8 +271,20 @@ public class ExpenseSteps {
 
     @Then("a CSV file should be downloaded")
     public void aCsvFileShouldBeDownloaded() {
-        // Note: File download verification is complex in Selenium
-        // In real tests, check download directory or response headers
+        //download folder path
+        String downloadFilepath = System.getProperty("user.dir")
+                + File.separator + "src"  + File.separator + "test"
+                + File.separator + "resources" + File.separator + "downloads";
+        //need to add the info somehow
+        Path dirPath = Paths.get(downloadFilepath);
+        wait.withTimeout(Duration.ofSeconds(4));
+        try (DirectoryStream<Path> dirStream = Files.newDirectoryStream(dirPath)) {
+            // If the iterator has a next item, the directory is not empty
+            assertTrue(dirStream.iterator().hasNext());
+        }
+        catch(IOException e){
+            assert(false);
+        }
     }
 
     @Then("the CSV should contain expense data")
