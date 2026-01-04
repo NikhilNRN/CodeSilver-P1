@@ -108,7 +108,7 @@ def get_expense(expense_id):
         expense_service = get_expense_service()
         
         result = expense_service.get_expense_with_status(expense_id, current_user.id)
-        
+
         if not result:
             return jsonify({'error': 'Expense not found'}), 404
         
@@ -189,9 +189,9 @@ def delete_expense(expense_id):
     try:
         current_user = get_current_user()
         expense_service = get_expense_service()
-        
+        print("deleting...")
         success = expense_service.delete_expense(expense_id, current_user.id)
-        
+        print("Success?")
         if not success:
             return jsonify({'error': 'Expense not found'}), 404
         

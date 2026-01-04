@@ -54,6 +54,7 @@ public class AuthenticationService {
      */
     public Optional<User> validateJwtToken(String jwtToken) {
         if (jwtToken == null || jwtToken.trim().isEmpty()) {
+            System.out.println("jwt null");
             return Optional.empty();
         }
         
