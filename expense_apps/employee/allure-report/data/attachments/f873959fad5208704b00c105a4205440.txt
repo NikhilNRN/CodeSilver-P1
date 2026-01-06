@@ -1,0 +1,1 @@
+✓ ValueError raised with message: Amount must be greater than 0

@@ -1,0 +1,3 @@
+User ID: 5
+Total Expenses: 2
+Statuses: pending, approved

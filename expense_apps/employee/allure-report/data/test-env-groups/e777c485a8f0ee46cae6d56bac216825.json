@@ -1,0 +1,1 @@
+{"id":"e777c485a8f0ee46cae6d56bac216825","fullName":"test.integration.test_repository_integration.TestExpenseRepositoryIntegration#test_find_by_id_real_db","name":"TC-INT-EXP-001: Find expense by ID from real database","status":"passed","testResultsByEnv":{"default":"53458449bd42c11800c8237b85d87582"}}

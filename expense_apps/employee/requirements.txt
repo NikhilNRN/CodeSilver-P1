@@ -30,3 +30,5 @@ webdriver-manager>=4.0.0
 allure-behave>=2.13.0
 DateTime~=5.5
 allure-python-commons~=2.15.3
+
+bcrypt>=4.0.0

@@ -1,0 +1,5 @@
+ID: 1
+User ID: 42
+Amount: $100.0
+Description: Lunch
+Date: 2024-01-01

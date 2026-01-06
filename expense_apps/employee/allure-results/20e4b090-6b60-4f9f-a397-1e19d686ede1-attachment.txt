@@ -1,0 +1,1 @@
+Service correctly returned None for non-existent expense

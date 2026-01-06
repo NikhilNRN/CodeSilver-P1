@@ -1,0 +1,1 @@
+✓ Correctly returned None (expense not found)

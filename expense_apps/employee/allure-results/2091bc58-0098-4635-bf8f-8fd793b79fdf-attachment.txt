@@ -1,0 +1,2 @@
+Expected: {'authenticated': False}
+Actual: {'authenticated': False}

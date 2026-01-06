@@ -1,0 +1,1 @@
+Mocked to raise RuntimeError: 'Service failure'

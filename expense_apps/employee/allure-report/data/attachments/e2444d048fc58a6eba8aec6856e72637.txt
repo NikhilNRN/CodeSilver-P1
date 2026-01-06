@@ -1,0 +1,1 @@
+✓ Correct count: 2 pending expenses

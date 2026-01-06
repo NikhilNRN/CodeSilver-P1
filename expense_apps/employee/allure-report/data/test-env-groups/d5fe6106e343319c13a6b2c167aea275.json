@@ -1,0 +1,1 @@
+{"id":"d5fe6106e343319c13a6b2c167aea275","fullName":"test.integration.test_repository_integration.TestExpenseRepositoryIntegration#test_delete_expense_real_db","name":"TC-INT-EXP-005: Delete expense from real database","status":"passed","testResultsByEnv":{"default":"ef7c6910c340828ad6331dee176c1bbb"}}

@@ -1,0 +1,1 @@
+✓ SameSite=Lax attribute present

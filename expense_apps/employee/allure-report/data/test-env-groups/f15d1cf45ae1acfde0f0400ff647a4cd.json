@@ -1,0 +1,1 @@
+{"id":"f15d1cf45ae1acfde0f0400ff647a4cd","fullName":"test.test_get_expense_history.TestGetExpenseHistory#test_get_expense_history_filters_approved","name":"Get expense history with 'approved' filter returns only approved expenses","status":"passed","testResultsByEnv":{"default":"7383c1cc3f71ba802ab28231ad391739"}}

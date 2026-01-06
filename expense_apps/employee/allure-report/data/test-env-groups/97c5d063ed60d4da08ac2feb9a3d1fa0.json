@@ -1,0 +1,1 @@
+{"id":"97c5d063ed60d4da08ac2feb9a3d1fa0","fullName":"test.test_get_user_expenses_with_status.TestGetUserExpensesWithStatus#test_get_user_expenses_with_status_returns_list_of_tuples","name":"Returns data in correct structure (list of tuples)","status":"passed","testResultsByEnv":{"default":"8705e9ebb77117fd40f2de070e0b135c"}}

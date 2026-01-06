@@ -1,0 +1,1 @@
+{"id":"1cd528fdbf49e4a21f77eb87fab90ca6","fullName":"test.test_update_expense.TestUpdateExpense#test_update_expense_invalid_amount_raises","name":"Raises ValueError for invalid amount: -1","status":"passed","testResultsByEnv":{"default":"b27cc12e0be20d4d82eb8bcddbacad8d"}}

@@ -1,0 +1,1 @@
+{"id":"5bc355d35898179fba31a8f0c09ca24c","fullName":"test.test_get_expense_history.TestGetExpenseHistory#test_get_expense_history_returns_all_when_no_filter","name":"Get expense history without filter returns all expenses","status":"passed","testResultsByEnv":{"default":"c5c3072c508a4c3af9f0bf704ac059e7"}}

@@ -1,0 +1,1 @@
+{"id":"0bb1e59554de7d979f4c00567666cd8e","fullName":"test.test_get_expense_history.TestGetExpenseHistory#test_get_expense_history_empty_expenses","name":"Get expense history returns empty list when user has no expenses","status":"passed","testResultsByEnv":{"default":"afa146fbff616b0dd442e9cd4880f4a6"}}

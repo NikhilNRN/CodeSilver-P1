@@ -1,0 +1,1 @@
+{"id":"45be435230c218505c66ab9918bc2f0d","fullName":"test.test_get_auth_service#test_raises_runtime_error_when_called_without_app_context","name":"Get auth service without app context raises RuntimeError","status":"passed","testResultsByEnv":{"default":"cb834c8099fd99576f212f06bb275cc7"}}

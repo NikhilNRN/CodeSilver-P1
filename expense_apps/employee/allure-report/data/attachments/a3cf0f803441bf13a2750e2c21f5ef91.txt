@@ -1,0 +1,1 @@
+{"expense":{"amount":39.55,"date":"2025-12-01","description":"Gas","id":22,"status":"pending"},"message":"Expense submitted successfully"}

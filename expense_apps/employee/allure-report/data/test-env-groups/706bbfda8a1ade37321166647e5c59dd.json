@@ -1,0 +1,1 @@
+{"id":"706bbfda8a1ade37321166647e5c59dd","fullName":"test.test_auth_status#test_status_no_token","name":"Check authentication status without token returns unauthenticated","status":"passed","testResultsByEnv":{"default":"20df9531446c91dca0a9711dd50870ce"}}

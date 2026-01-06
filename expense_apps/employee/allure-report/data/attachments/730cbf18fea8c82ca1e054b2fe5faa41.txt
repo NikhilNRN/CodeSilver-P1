@@ -1,0 +1,1 @@
+All expenses correctly belong to user 1

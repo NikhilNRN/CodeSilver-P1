@@ -1,0 +1,2 @@
+Result type: <class 'tuple'>
+Result value: (Expense(id=1, user_id=42, amount=100.0, description='Lunch', date='2024-01-01'), Approval(id=10, expense_id=1, status='pending', reviewer=5, comment=None, review_date=None))

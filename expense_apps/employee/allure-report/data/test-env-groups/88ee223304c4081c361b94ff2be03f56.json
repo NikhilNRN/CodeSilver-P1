@@ -1,0 +1,1 @@
+{"id":"88ee223304c4081c361b94ff2be03f56","fullName":"test.integration.test_repository_integration.TestUserRepositoryIntegration#test_find_by_id_real_db","name":"TC-INT-USER-002: Find user by ID from real database","status":"passed","testResultsByEnv":{"default":"423d33a04c3db7151968737d7fd8a30d"}}

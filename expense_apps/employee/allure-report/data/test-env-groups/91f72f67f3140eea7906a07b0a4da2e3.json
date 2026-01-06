@@ -1,0 +1,1 @@
+{"id":"91f72f67f3140eea7906a07b0a4da2e3","fullName":"test.integration.test_repository_integration.TestApprovalRepositoryIntegration#test_find_by_expense_id_real_db","name":"TC-INT-APR-001: Find approval by expense ID from real database","status":"passed","testResultsByEnv":{"default":"43f586241b6043f21d0c0850b29a7498"}}

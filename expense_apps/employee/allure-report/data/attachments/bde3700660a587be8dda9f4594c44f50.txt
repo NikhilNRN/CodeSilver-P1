@@ -1,0 +1,2 @@
+Result type: <class 'NoneType'>
+Result value: None

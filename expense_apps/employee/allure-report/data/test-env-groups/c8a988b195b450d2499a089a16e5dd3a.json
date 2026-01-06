@@ -1,0 +1,1 @@
+{"id":"c8a988b195b450d2499a089a16e5dd3a","fullName":"test.test_expense_submission.TestExpenseSubmission#test_submit_expense_invalid_desc_raises_err","name":"Submit expense with invalid description","status":"passed","testResultsByEnv":{"default":"8c63851ce2204a94ed3c5bb37e906e54"}}

@@ -1,0 +1,1 @@
+✓ ValueError raised with message: Cannot delete expense that has been reviewed

@@ -1,0 +1,1 @@
+{"id":"7bc6b55890b6485ed517af8e27bada68","fullName":"test.integration.test_repository_integration.TestExpenseRepositoryIntegration#test_update_expense_real_db","name":"TC-INT-EXP-004: Update expense in real database","status":"passed","testResultsByEnv":{"default":"bdae2b2834d7ecff45e168534f90f2c0"}}

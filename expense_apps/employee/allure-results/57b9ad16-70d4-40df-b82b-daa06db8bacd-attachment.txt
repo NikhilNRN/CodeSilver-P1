@@ -1,0 +1,1 @@
+✓ Returned exactly 1 approved expense (correct filtering)

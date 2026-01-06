@@ -1,0 +1,2 @@
+create() → returns mocked expense
+find_expense_by_id() → returns mocked expense

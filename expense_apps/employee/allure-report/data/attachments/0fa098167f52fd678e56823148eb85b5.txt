@@ -1,0 +1,3 @@
+✓ Correctly returned None (authorization failure)
+  Expense Owner: 99
+  Requesting User: 42

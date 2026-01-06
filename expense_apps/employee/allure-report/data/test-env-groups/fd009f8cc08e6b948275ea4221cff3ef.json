@@ -1,0 +1,1 @@
+{"id":"fd009f8cc08e6b948275ea4221cff3ef","fullName":"test.test_get_auth_service#test_raises_attribute_error_when_auth_service_not_configured","name":"Get auth service from unconfigured app raises AttributeError","status":"passed","testResultsByEnv":{"default":"9402cafb80eb3b1082560164eec1fc14"}}

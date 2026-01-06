@@ -1,0 +1,1 @@
+{"id":"dfb7548e5e5a9d1eca1e6d746e9df441","fullName":"test.test_get_auth_service#test_returns_auth_service_from_flask_app_context","name":"Get auth service from Flask app context returns correct service instance","status":"passed","testResultsByEnv":{"default":"b51ac0acab67d29bb96436f1dfb36999"}}

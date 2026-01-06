@@ -1,0 +1,2 @@
+Filter: 'approved'
+Returned: 1 expenses

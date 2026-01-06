@@ -12,7 +12,7 @@ from service.expense_service import ExpenseService
 @pytest.mark.expense_status
 class TestGetExpenseWithStatus:
 
-    @allure.title("Get expense with status: {expense_return.description if expense_return else 'Missing expense'}")
+    @allure.title("Get expense with status")
     @allure.description("""
     Test the get_expense_with_status method which retrieves an expense along with its approval status.
     The method should:

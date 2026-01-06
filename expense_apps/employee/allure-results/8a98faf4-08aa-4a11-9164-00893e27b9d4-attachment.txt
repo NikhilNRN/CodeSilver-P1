@@ -1,0 +1,14 @@
+-- Seed Data for Integration Tests
+-- Database: test_expense_manager.db
+-- Created: 2024-12-29T19:10:00-06:00
+-- Purpose: Populate test database with sample data for integration testing
+
+-- Clear existing data (in reverse order due to foreign key constraints)
+DELETE FROM approvals;
+DELETE FROM expenses;
+DELETE FROM users;
+
+-- Insert test users
+INSERT INTO users (id, username, password, role) VALUES 
+    (1, 'employee1', 'password123', 'Employee'),
+    (2, 'employee2', 'password456', 'Employee'),...

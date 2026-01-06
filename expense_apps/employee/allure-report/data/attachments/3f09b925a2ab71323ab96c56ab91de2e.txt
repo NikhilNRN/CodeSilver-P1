@@ -1,0 +1,2 @@
+✓ RuntimeError propagated correctly
+Exception message: Service failure

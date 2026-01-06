@@ -1,0 +1,1 @@
+✓ Amount: $22.17 (valid and > 0)

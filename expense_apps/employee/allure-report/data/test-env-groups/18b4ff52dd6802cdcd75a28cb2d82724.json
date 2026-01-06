@@ -1,0 +1,1 @@
+{"id":"18b4ff52dd6802cdcd75a28cb2d82724","fullName":"test.test_get_expense_history.TestGetExpenseHistory#test_get_expense_history_propagates_exception","name":"Get expense history propagates exceptions from get_user_expenses_with_status","status":"passed","testResultsByEnv":{"default":"f03a6f928c5dc21902aa586651154565"}}

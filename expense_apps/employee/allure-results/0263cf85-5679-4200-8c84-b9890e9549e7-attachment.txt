@@ -1,0 +1,2 @@
+✓ AttributeError raised
+Exception message: 'Flask' object has no attribute 'auth_service'

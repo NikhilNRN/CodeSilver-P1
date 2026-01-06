@@ -1,0 +1,1 @@
+jwt_token=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; Path=/; SameSite=Lax

@@ -1,0 +1,4 @@
+User ID: 3
+Amount: $22.17
+Description: ' ' (INVALID - empty/whitespace)
+Date: 2001-11-09

@@ -1,0 +1,1 @@
+{"endpoints":{"authentication":"/api/auth","expenses":"/api/expenses","health":"/health"},"service":"Employee Expense Management API","version":"1.0.0"}

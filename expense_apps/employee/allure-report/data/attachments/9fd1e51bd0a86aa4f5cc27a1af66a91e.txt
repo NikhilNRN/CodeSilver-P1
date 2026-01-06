@@ -1,0 +1,1 @@
+✓ expense_repo.delete called once with (1)

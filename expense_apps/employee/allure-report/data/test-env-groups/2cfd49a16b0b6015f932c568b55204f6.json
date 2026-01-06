@@ -1,0 +1,1 @@
+{"id":"2cfd49a16b0b6015f932c568b55204f6","fullName":"test.integration.test_repository_integration.TestExpenseRepositoryIntegration#test_create_expense_real_db","name":"TC-INT-EXP-003: Create new expense in real database","status":"passed","testResultsByEnv":{"default":"74eed55f17ad06a140e13cc527671ca7"}}

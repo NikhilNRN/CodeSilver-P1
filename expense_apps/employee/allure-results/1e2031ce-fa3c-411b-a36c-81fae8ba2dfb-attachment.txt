@@ -1,0 +1,2 @@
+Filter: 'denied'
+Returned: 1 expenses

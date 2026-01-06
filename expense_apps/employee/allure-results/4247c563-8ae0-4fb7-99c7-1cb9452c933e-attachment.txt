@@ -1,0 +1,3 @@
+Original Amount: $150.0 → New: $999.99
+Original Description: Business lunch
+New Description: UPDATED: Integration test

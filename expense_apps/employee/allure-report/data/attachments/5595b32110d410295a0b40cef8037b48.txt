@@ -1,0 +1,1 @@
+✓ expense_repo.delete was not called (correct behavior)

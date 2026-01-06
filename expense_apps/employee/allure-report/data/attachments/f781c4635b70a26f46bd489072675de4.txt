@@ -1,0 +1,1 @@
+Repository returns None (expense not found)

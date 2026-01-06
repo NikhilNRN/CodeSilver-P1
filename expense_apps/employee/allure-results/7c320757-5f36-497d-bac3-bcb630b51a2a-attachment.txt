@@ -1,0 +1,2 @@
+Invalid Amount: -10
+Expected Error: Amount must be greater than 0

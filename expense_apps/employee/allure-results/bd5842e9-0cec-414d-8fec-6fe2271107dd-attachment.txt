@@ -1,0 +1,4 @@
+User ID: 3
+Total Expenses: 2
+Statuses: approved, denied
+Expected approved count: 1

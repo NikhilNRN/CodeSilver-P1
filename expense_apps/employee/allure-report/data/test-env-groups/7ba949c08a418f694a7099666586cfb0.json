@@ -1,0 +1,1 @@
+{"id":"7ba949c08a418f694a7099666586cfb0","fullName":"test.test_get_expense_history.TestGetExpenseHistory#test_get_expense_history_calls_get_user_expenses_with_status","name":"Get expense history calls get_user_expenses_with_status with correct user_id","status":"passed","testResultsByEnv":{"default":"4c736118c34976c957bf8c9b69317f77"}}

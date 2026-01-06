@@ -1,0 +1,2 @@
+Expected: Expense object
+Actual: Expense(id=1, user_id=42, amount=100.0, description='Lunch', date='2024-01-01')

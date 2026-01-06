@@ -1,0 +1,2 @@
+Scenario: Expense does not exist
+Expected: None

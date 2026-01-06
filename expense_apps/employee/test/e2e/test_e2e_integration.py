@@ -30,9 +30,11 @@ SEED_SQL_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)),
 @pytest.fixture(scope='module')
 def test_app():
     """Create Flask test application with real database."""
+    # Initialize test database
     db_conn = DatabaseConnection(TEST_DB_PATH)
     db_conn.initialize_database()
 
+    # Load seed data
     with open(SEED_SQL_PATH, 'r') as f:
         seed_sql = f.read()
 
@@ -40,6 +42,7 @@ def test_app():
         conn.executescript(seed_sql)
         conn.commit()
 
+    # Set environment variable for app to use test database
     os.environ['DATABASE_PATH'] = TEST_DB_PATH
 
     from main import create_app
@@ -48,11 +51,23 @@ def test_app():
 
     yield app
 
-    # Cleanup
-    if os.path.exists(TEST_DB_PATH):
-        os.remove(TEST_DB_PATH)
-    if 'DATABASE_PATH' in os.environ:
-        del os.environ['DATABASE_PATH']
+    # Cleanup (Windows-safe)
+    import gc, time
+
+    # Clear env var first
+    os.environ.pop("DATABASE_PATH", None)
+
+    # Force Python to release any lingering sqlite objects
+    gc.collect()
+
+    # Retry delete because Windows can hold the file briefly
+    for _ in range(30):
+        try:
+            if os.path.exists(TEST_DB_PATH):
+                os.remove(TEST_DB_PATH)
+            break
+        except PermissionError:
+            time.sleep(0.1)
 
 
 @pytest.fixture
@@ -61,12 +76,10 @@ def client(test_app):
     return test_app.test_client()
 
 
-# =========================
-# Login Workflow Tests
-# =========================
 @allure.epic("Employee App")
 @allure.feature("E2E Integration Tests")
 class TestLoginWorkflowE2E:
+    """End-to-end login workflow tests."""
 
     @allure.story("Login Flow")
     @allure.title("TC-E2E-INT-001: Complete login workflow with real database")
@@ -74,32 +87,31 @@ class TestLoginWorkflowE2E:
     @pytest.mark.e2e
     @pytest.mark.integration
     def test_complete_login_workflow(self, client):
-        with allure.step("Access login page"):
-            response = client.get('/')
-            assert response.status_code == 200
+        """Test complete login workflow with seeded user."""
+        # Step 1: Access login page
+        response = client.get('/')
 
-        with allure.step("Login with valid credentials"):
-            login_response = client.post('/api/auth/login',
-                                         data=json.dumps({
-                                             'username': 'employee1',
-                                             'password': 'password123'
-                                         }),
-                                         content_type='application/json')
-            assert login_response.status_code == 200
-            allure.attach(login_response.data.decode(),
-                          name="Login Response",
-                          attachment_type=allure.attachment_type.JSON)
+        assert response.status_code == 200
 
-        with allure.step("Access protected resource"):
-            expenses_response = client.get('/api/expenses')
-            assert expenses_response.status_code == 200
-            allure.attach(json.dumps(expenses_response.json, indent=2),
-                          name="Expenses List",
-                          attachment_type=allure.attachment_type.JSON)
+        # Step 2: Login with valid credentials
+        login_response = client.post('/api/auth/login',
+                                     data=json.dumps({
+                                         'username': 'employee1',
+                                         'password': 'password123'
+                                     }),
+                                     content_type='application/json')
 
-        with allure.step("Logout"):
-            logout_response = client.post('/api/auth/logout')
-            assert logout_response.status_code in [200, 302]
+        print(login_response.status_code)
+        print(login_response.get_data(as_text=True))
+        assert login_response.status_code == 200
+
+        # Step 3: Access protected resource
+        expenses_response = client.get('/api/expenses')
+        assert expenses_response.status_code == 200
+
+        # Step 4: Logout
+        logout_response = client.post('/api/auth/logout')
+        assert logout_response.status_code in [200, 302]
 
     @allure.story("Login Flow")
     @allure.title("TC-E2E-INT-002: Failed login blocks access")
@@ -107,33 +119,27 @@ class TestLoginWorkflowE2E:
     @pytest.mark.e2e
     @pytest.mark.integration
     def test_failed_login_blocks_access(self, client):
-        with allure.step("Access login page"):
-            response = client.get('/')
-            assert response.status_code == 200
+        """Test that failed login prevents access to protected resources."""
+        # Step 1: Try login with wrong password
+        response = client.get('/')
+        assert response.status_code == 200
+        login_response = client.post('/api/auth/login',
+                                     data=json.dumps({
+                                         'username': 'employeeNotReal',
+                                         'password': 'wrongPassword321'
+                                     }),
+                                     content_type='application/json')
+        assert login_response.status_code == 401
 
-        with allure.step("Attempt login with invalid credentials"):
-            login_response = client.post('/api/auth/login',
-                                         data=json.dumps({
-                                             'username': 'employeeNotReal',
-                                             'password': 'wrongPassword321'
-                                         }),
-                                         content_type='application/json')
-            assert login_response.status_code == 401
-            allure.attach(login_response.data.decode(),
-                          name="Failed Login Response",
-                          attachment_type=allure.attachment_type.JSON)
-
-        with allure.step("Attempt access to protected resource"):
-            response = client.get('/api/expenses')
-            assert response.status_code == 401
+        # Step 2: Try to access protected resource - should fail
+        response = client.get('/api/expenses')
+        assert response.status_code == 401
 
 
-# =========================
-# Expense Workflow Tests
-# =========================
 @allure.epic("Employee App")
 @allure.feature("E2E Integration Tests")
 class TestExpenseWorkflowE2E:
+    """End-to-end expense management workflow tests."""
 
     @allure.story("Expense Submission")
     @allure.title("TC-E2E-INT-003: Complete expense submission workflow")
@@ -141,48 +147,50 @@ class TestExpenseWorkflowE2E:
     @pytest.mark.e2e
     @pytest.mark.integration
     def test_complete_expense_submission_workflow(self, client):
-        with allure.step("Login as employee1"):
-            response = client.get('/')
-            assert response.status_code == 200
-            login_response = client.post('/api/auth/login',
-                                         data=json.dumps({
-                                             'username': 'employee1',
-                                             'password': 'password123'
-                                         }),
-                                         content_type='application/json')
-            assert login_response.status_code == 200
+        """Test complete workflow: login → submit expense → verify."""
+        # Step 1: Login
+        response = client.get('/')
+        assert response.status_code == 200
+        login_response = client.post('/api/auth/login',
+                                     data=json.dumps({
+                                         'username': 'employee1',
+                                         'password': 'password123'
+                                     }),
+                                     content_type='application/json')
+        assert login_response.status_code == 200
 
-        with allure.step("Get initial expense count"):
-            response = client.get('/api/expenses')
-            assert response.status_code == 200
-            data = response.json
-            initial_count = data["count"]
+        # Step 2: Get initial expense count
+        response = client.get('/api/expenses')
+        assert response.status_code == 200
+        data = response.json
+        expense_count_initial = data["count"]
 
-        with allure.step("Submit new expense"):
-            submit_response = client.post('/api/expenses',
-                                          data=json.dumps({
-                                              "amount": 25.50,
-                                              "description": "Client lunch meeting",
-                                              "date": "2025-10-14"
-                                          }),
-                                          content_type='application/json')
-            assert submit_response.status_code == 201
-            expense_data = submit_response.json['expense']
-            allure.attach(json.dumps(expense_data, indent=2),
-                          name="Submitted Expense",
-                          attachment_type=allure.attachment_type.JSON)
+        # Step 3: Submit new expense
+        submit_response = client.post('/api/expenses',
+                                      data=json.dumps({
+                                          "amount": 25.50,
+                                          "description": "Client lunch meeting",
+                                          "date": "2025-10-14"
+                                      }),
+                                      content_type='application/json')
+        assert submit_response.status_code == 201
+        expense_data = submit_response.json['expense']
 
-        with allure.step("Verify expense appears in list"):
-            response = client.get('/api/expenses')
-            data = response.json
-            found = any(
-                e["amount"] == expense_data["amount"] and
-                e["description"] == expense_data["description"] and
-                e["date"] == expense_data["date"]
-                for e in data["expenses"]
-            )
-            assert found
-            assert data["count"] > initial_count
+        # Step 4: Verify expense appears in list
+        response = client.get('/api/expenses')
+        data = response.json
+        is_expense_in_list = False
+        for expense in data["expenses"]:
+            if (expense["amount"] == expense_data["amount"]
+                    and expense["description"] == expense_data["description"]
+                    and expense["date"] == expense_data["date"]):
+                is_expense_in_list = True
+                break
+        assert is_expense_in_list == True
+
+        # Should have one more expense
+        expense_count_new = data["count"]
+        assert expense_count_new > expense_count_initial
 
     @allure.story("Expense View")
     @allure.title("TC-E2E-INT-004: View expense list from seeded data")
@@ -190,25 +198,27 @@ class TestExpenseWorkflowE2E:
     @pytest.mark.e2e
     @pytest.mark.integration
     def test_view_seeded_expenses(self, client):
-        with allure.step("Login as employee1"):
-            response = client.get('/')
-            assert response.status_code == 200
-            login_response = client.post('/api/auth/login',
-                                         data=json.dumps({
-                                             'username': 'employee1',
-                                             'password': 'password123'
-                                         }),
-                                         content_type='application/json')
-            assert login_response.status_code == 200
+        """Test viewing expenses from seeded database."""
+        # Login
+        response = client.get('/')
+        assert response.status_code == 200
+        login_response = client.post('/api/auth/login',
+                                     data=json.dumps({
+                                         'username': 'employee1',
+                                         'password': 'password123'
+                                     }),
+                                     content_type='application/json')
+        assert login_response.status_code == 200
 
-        with allure.step("Fetch expenses"):
-            response = client.get('/api/expenses')
-            assert response.status_code == 200
-            data = response.json
-            allure.attach(json.dumps(data, indent=2),
-                          name="Seeded Expenses",
-                          attachment_type=allure.attachment_type.JSON)
-            assert data["count"] >= 3
+        # Get expenses
+        response = client.get('/api/expenses')
+        assert response.status_code == 200
+        data = response.json
+
+        # Employee1 has 3 expenses in seed data (IDs 1, 2, 3)
+        # May have more if previous tests added expenses
+        expense_count = data["count"]
+        assert expense_count >= 3
 
     @allure.story("Expense Update")
     @allure.title("TC-E2E-INT-005: Update pending expense workflow")
@@ -216,51 +226,46 @@ class TestExpenseWorkflowE2E:
     @pytest.mark.e2e
     @pytest.mark.integration
     def test_update_expense_workflow(self, client):
-        with allure.step("Login as employee1"):
-            response = client.get('/')
-            assert response.status_code == 200
-            login_response = client.post('/api/auth/login',
-                                         data=json.dumps({
-                                             'username': 'employee1',
-                                             'password': 'password123'
-                                         }),
-                                         content_type='application/json')
-            assert login_response.status_code == 200
+        """Test updating a pending expense."""
+        # Login
+        response = client.get('/')
+        assert response.status_code == 200
+        login_response = client.post('/api/auth/login',
+                                     data=json.dumps({
+                                         'username': 'employee1',
+                                         'password': 'password123'
+                                     }),
+                                     content_type='application/json')
+        assert login_response.status_code == 200
 
-        with allure.step("Create a new expense to update"):
-            submit_response = client.post('/api/expenses',
-                                          data=json.dumps({
-                                              "amount": 13.37,
-                                              "description": "Undertale for the Pope",
-                                              "date": "2025-03-30"
-                                          }),
-                                          content_type='application/json')
-            assert submit_response.status_code == 201
-            expense_data_initial = submit_response.json['expense']
-            allure.attach(json.dumps(expense_data_initial, indent=2),
-                          name="Initial Expense",
-                          attachment_type=allure.attachment_type.JSON)
+        # Create a new expense to update
+        submit_response = client.post('/api/expenses',
+                                      data=json.dumps({
+                                          "amount": 13.37,
+                                          "description": "Undertale for the Pope",
+                                          "date": "2025-03-30"
+                                      }),
+                                      content_type='application/json')
+        assert submit_response.status_code == 201
+        expense_data_initial = submit_response.json['expense']
 
-        with allure.step("Update the expense"):
-            update_response = client.put(f'/api/expenses/{expense_data_initial["id"]}',
-                                         data=json.dumps({
-                                              "amount": 123.45,
-                                              "description": "Travel",
-                                              "date": "2025-12-31"
-                                          }),
-                                         content_type='application/json')
-            assert update_response.status_code in [200, 202, 204, 403, 409, 412]
-            allure.attach(update_response.data.decode(),
-                          name="Update Response",
-                          attachment_type=allure.attachment_type.JSON)
+        # Update the expense
+        update_response = client.put(f'/api/expenses/{expense_data_initial["id"]}',
+                                     data=json.dumps({
+                                          "amount": 123.45,
+                                          "description": "Travel",
+                                          "date": "2025-12-31"
+                                      }),
+                                      content_type='application/json')
+
+        # Should succeed [200, 202, 204] or may fail if already approved [403, 409, 412]
+        assert update_response.status_code in [200, 202, 204, 403, 409, 412]
 
 
-# =========================
-# Multi-User Workflow Tests
-# =========================
 @allure.epic("Employee App")
 @allure.feature("E2E Integration Tests")
 class TestMultiUserWorkflowE2E:
+    """Multi-user workflow tests."""
 
     @allure.story("Multi-User")
     @allure.title("TC-E2E-INT-006: Different users see different expenses")
@@ -268,52 +273,48 @@ class TestMultiUserWorkflowE2E:
     @pytest.mark.e2e
     @pytest.mark.integration
     def test_different_users_different_expenses(self, client):
-        with allure.step("Login as employee1"):
-            login_response = client.post('/api/auth/login',
-                                         data=json.dumps({
-                                             'username': 'employee1',
-                                             'password': 'password123'
-                                         }),
-                                         content_type='application/json')
-            assert login_response.status_code == 200
+        """Test that different users only see their own expenses."""
+        response = client.get('/')
+        assert response.status_code == 200
 
-        with allure.step("Fetch employee1 expenses"):
-            response = client.get('/api/expenses')
-            data_employee1 = response.json
-            count_employee1 = data_employee1["count"]
-            allure.attach(json.dumps(data_employee1, indent=2),
-                          name="Employee1 Expenses",
-                          attachment_type=allure.attachment_type.JSON)
+        # Login as employee1 and get their expenses
+        login_response = client.post('/api/auth/login',
+                                     data=json.dumps({
+                                         'username': 'employee1',
+                                         'password': 'password123'
+                                     }),
+                                     content_type='application/json')
+        assert login_response.status_code == 200
+        view_response = client.get('/api/expenses')
+        assert view_response.status_code == 200
+        data_employee1 = view_response.json
+        expense_count_employee1 = data_employee1["count"]
 
-        with allure.step("Logout employee1"):
-            logout_response = client.post('/api/auth/logout')
-            assert logout_response.status_code in [200, 302]
+        # Logout
+        logout_response = client.post('/api/auth/logout')
+        assert logout_response.status_code in [200, 302]
 
-        with allure.step("Login as employee2"):
-            login_response = client.post('/api/auth/login',
-                                         data=json.dumps({
-                                             'username': 'employee2',
-                                             'password': 'password456'
-                                         }),
-                                         content_type='application/json')
-            assert login_response.status_code == 200
+        # Login as employee2 and get their expenses
+        login_response = client.post('/api/auth/login',
+                                     data=json.dumps({
+                                         'username': 'employee2',
+                                         'password': 'password456'
+                                     }),
+                                     content_type='application/json')
+        assert login_response.status_code == 200
+        view_response = client.get('/api/expenses')
+        assert view_response.status_code == 200
+        data_employee2 = view_response.json
+        expense_count_employee2 = data_employee2["count"]
 
-        with allure.step("Fetch employee2 expenses"):
-            response = client.get('/api/expenses')
-            data_employee2 = response.json
-            count_employee2 = data_employee2["count"]
-            allure.attach(json.dumps(data_employee2, indent=2),
-                          name="Employee2 Expenses",
-                          attachment_type=allure.attachment_type.JSON)
+        # Both should have data but different counts
+        # (employee1 has 3, employee2 has 2 in seed data)
+        assert data_employee1 is not None and expense_count_employee1 >= 3
+        assert data_employee2 is not None and expense_count_employee2 >= 2
 
-        with allure.step("Verify different counts"):
-            assert count_employee1 != count_employee2
-            assert count_employee1 >= 3
-            assert count_employee2 >= 2
+        # They should have different expense counts
+        assert expense_count_employee1 != expense_count_employee2
 
 
-# =========================
-# Main entry (optional)
-# =========================
 if __name__ == '__main__':
     pytest.main([__file__, '-v', '-m', 'e2e or integration'])

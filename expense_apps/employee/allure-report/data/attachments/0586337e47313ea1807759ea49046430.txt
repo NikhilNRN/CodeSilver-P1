@@ -1,0 +1,4 @@
+User ID: 22
+Amount: $-16.11 (INVALID)
+Description: 'other'
+Date: 2025-12-24

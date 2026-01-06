@@ -1,0 +1,2 @@
+DummyAuthService instance attached to app
+Instance ID: 1812426554448

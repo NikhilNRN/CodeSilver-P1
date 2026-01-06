@@ -1,0 +1,1 @@
+{"id":"647e09e3b71174d51fdec56a734ed57d","fullName":"test.integration.test_repository_integration.TestApprovalRepositoryIntegration#test_find_pending_approval_real_db","name":"TC-INT-APR-002: Find pending approval from real database","status":"passed","testResultsByEnv":{"default":"697a0dd651e460195d7893f15d819fb2"}}

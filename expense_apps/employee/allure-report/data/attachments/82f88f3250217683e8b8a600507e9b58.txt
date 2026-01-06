@@ -1,0 +1,1 @@
+{"error":"Cannot delete expense that has been reviewed"}

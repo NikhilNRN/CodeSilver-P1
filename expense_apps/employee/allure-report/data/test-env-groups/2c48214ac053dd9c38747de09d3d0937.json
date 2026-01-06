@@ -1,0 +1,1 @@
+{"id":"2c48214ac053dd9c38747de09d3d0937","fullName":"test.test_get_user_expenses_with_status.TestGetUserExpensesWithStatus#test_get_user_expenses_with_status_returns_expenses","name":"Returns expenses with approval status (Happy Path)","status":"passed","testResultsByEnv":{"default":"fc42f0c08cd6da834f68f5f58068351b"}}

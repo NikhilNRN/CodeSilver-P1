@@ -21,9 +21,13 @@ def client(app):
     return app.test_client()
 
 @pytest.fixture(autouse=True)
-def patch_auth_service(monkeypatch):
+def patch_auth_service(request, monkeypatch):
+    # Skip mocking for E2E/integration tests
+    if request.node.get_closest_marker("e2e") or request.node.get_closest_marker("integration"):
+        return None
+
     from unittest.mock import MagicMock
-    import api.auth_controller as auth_module  # <- correct module
+    import api.auth_controller as auth_module
 
     mock_auth_service = MagicMock()
     monkeypatch.setattr(auth_module, "get_auth_service", lambda: mock_auth_service)

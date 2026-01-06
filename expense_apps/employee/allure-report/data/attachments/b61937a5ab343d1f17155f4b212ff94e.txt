@@ -1,0 +1,4 @@
+User ID: 27
+Amount: $67.67
+Description: '   funny joke  '
+Date: 2026-01-06

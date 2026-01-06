@@ -1,0 +1,1 @@
+{"id":"318280f9c4f0d5ae52c67143d0a089bd","fullName":"test.test_get_expense_history.TestGetExpenseHistory#test_get_expense_history_filters_denied","name":"Get expense history with 'denied' filter returns only denied expenses","status":"passed","testResultsByEnv":{"default":"25c3d030a1d487ed6c79c9c179f3e371"}}

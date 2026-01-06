@@ -1,0 +1,1 @@
+{"id":"b02b4a22d51c5df81adc9ee69e4bca2a","fullName":"test.test_get_expense_history.TestGetExpenseHistory#test_get_expense_history_filters_pending","name":"Get expense history with 'pending' filter returns only pending expenses","status":"passed","testResultsByEnv":{"default":"69f2504d0cf1a9ce90aba9b08fef9e97"}}

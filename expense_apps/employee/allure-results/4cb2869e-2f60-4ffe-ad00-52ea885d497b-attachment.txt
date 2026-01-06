@@ -1,0 +1,2 @@
+Filter: 'pending'
+Returned: 2 expenses

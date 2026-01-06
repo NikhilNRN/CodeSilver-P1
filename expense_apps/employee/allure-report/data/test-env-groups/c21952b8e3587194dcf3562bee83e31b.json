@@ -1,0 +1,1 @@
+{"id":"c21952b8e3587194dcf3562bee83e31b","fullName":"test.integration.test_repository_integration.TestApprovalRepositoryIntegration#test_find_expenses_with_status_real_db","name":"TC-INT-APR-004: Find expenses with status for user","status":"passed","testResultsByEnv":{"default":"d39a1d656c1ab3550bc02c8f010d6ec5"}}

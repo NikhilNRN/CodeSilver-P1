@@ -1,0 +1,1 @@
+{"id":"0e06a805d00c2d875ec999296ef51b2e","fullName":"test.integration.test_repository_integration.TestUserRepositoryIntegration#test_create_user_real_db","name":"TC-INT-USER-004: Create new user in real database","status":"passed","testResultsByEnv":{"default":"5d3e03af0ef31493dd5c4831eb175586"}}

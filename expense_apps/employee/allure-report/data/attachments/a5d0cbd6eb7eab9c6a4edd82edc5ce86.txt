@@ -1,0 +1,5 @@
+Expense successfully updated:
+  ID: 1
+  Amount: $150.0
+  Description: Updated description
+  Date: 2024-02-02

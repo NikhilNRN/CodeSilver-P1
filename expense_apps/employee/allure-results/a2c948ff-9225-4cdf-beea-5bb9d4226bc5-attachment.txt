@@ -1,0 +1,5 @@
+Expense ID: 1
+Amount: $150.0
+Description: Business lunch
+User ID: 1
+Date: 2024-12-01

@@ -1,0 +1,1 @@
+✓ jwt_token= found in cookie header

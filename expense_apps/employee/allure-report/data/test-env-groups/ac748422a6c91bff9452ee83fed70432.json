@@ -1,0 +1,1 @@
+{"id":"ac748422a6c91bff9452ee83fed70432","fullName":"test.test_get_user_expenses_with_status.TestGetUserExpensesWithStatus#test_get_user_expenses_with_status_returns_empty_list","name":"Returns empty list when user has no expenses","status":"passed","testResultsByEnv":{"default":"7d4655fe48cb9f264025b45318045a5f"}}

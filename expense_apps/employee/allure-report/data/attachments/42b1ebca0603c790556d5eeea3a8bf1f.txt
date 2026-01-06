@@ -1,0 +1,1 @@
+Inside Flask application context (but auth_service not configured)

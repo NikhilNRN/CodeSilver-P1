@@ -1,0 +1,4 @@
+User ID: 67
+Amount: $15.75
+Description: '   \n \t' (INVALID - empty/whitespace)
+Date: 2012-06-06

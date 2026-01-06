@@ -1,0 +1,5 @@
+Scenario: Expense exists but belongs to different user
+Expense ID: 1
+Owner ID: 99
+Requesting User ID: 42
+Expected: None (authorization failure)

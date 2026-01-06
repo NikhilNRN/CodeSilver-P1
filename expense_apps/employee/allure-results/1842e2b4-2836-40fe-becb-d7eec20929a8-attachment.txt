@@ -1,0 +1,7 @@
+
+        ✓ JWT token cookie present
+        ✓ Cookie expired (set to Thu, 01 Jan 1970)
+        ✓ HttpOnly flag set
+        ✓ Path set to /
+        ✓ SameSite set to Lax
+        

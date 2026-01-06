@@ -1,0 +1,1 @@
+✓ get_user_expenses_with_status called once with user_id=7

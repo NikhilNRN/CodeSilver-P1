@@ -1,0 +1,4 @@
+User ID: 1
+Amount: $75.5
+Description: Integration test expense 1767687914.377745
+Date: 2024-12-30

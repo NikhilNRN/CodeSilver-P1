@@ -1,0 +1,1 @@
+{"id":"756b74b95d165311b7ed260c899a7094","fullName":"test.test_auth_logout#test_logout_success","name":"Successful logout clears JWT token and sets proper cookie attributes","status":"passed","testResultsByEnv":{"default":"93c804bc3a0233436880ba352dfc23e1"}}

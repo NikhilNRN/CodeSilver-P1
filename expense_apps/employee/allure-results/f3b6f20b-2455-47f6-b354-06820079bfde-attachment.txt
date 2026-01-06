@@ -1,0 +1,3 @@
+Result type: list
+Item count: 1
+Each item structure: tuple(Expense, Approval)

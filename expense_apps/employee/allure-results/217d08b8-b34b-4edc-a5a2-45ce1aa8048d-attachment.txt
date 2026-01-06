@@ -1,0 +1,8 @@
+Original:
+  Amount: $100.0
+  Description: Lunch
+  Date: 2024-01-01
+Updated:
+  Amount: $150.0
+  Description: Updated description
+  Date: 2024-02-02

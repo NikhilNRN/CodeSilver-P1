@@ -1,0 +1,6 @@
+Approval ID: 1
+Expense ID: 1
+Status: pending
+Reviewer: None
+Comment: None
+Review Date: None

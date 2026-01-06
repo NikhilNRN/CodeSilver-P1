@@ -1,0 +1,4 @@
+All 5 result(s) have correct structure:
+  - Type: tuple
+  - Length: 2
+  - Elements: (Expense, Approval)

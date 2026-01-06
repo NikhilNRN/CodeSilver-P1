@@ -1,0 +1,5 @@
+Scenario: Expense exists and belongs to user
+Expense ID: 1
+Owner ID: 42
+Requesting User ID: 42
+Expected: Return expense

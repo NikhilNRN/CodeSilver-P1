@@ -1,0 +1,1 @@
+{"id":"f76d939477ca4ed13e9be35c4464e56e","fullName":"test.integration.test_repository_integration.TestUserRepositoryIntegration#test_find_nonexistent_user","name":"TC-INT-USER-003: Find non-existent user returns None","status":"passed","testResultsByEnv":{"default":"777e4db671a766bed29bf46b6d3f0bea"}}

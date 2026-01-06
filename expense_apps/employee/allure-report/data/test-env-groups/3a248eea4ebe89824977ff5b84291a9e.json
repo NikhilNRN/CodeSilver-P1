@@ -1,0 +1,1 @@
+{"id":"3a248eea4ebe89824977ff5b84291a9e","fullName":"test.test_update_expense.TestUpdateExpense#test_update_expense_invalid_description_raises","name":"Raises ValueError for invalid description: '\t\n'","status":"passed","testResultsByEnv":{"default":"592fc8547866874d560aab5b1b17ef8e"}}

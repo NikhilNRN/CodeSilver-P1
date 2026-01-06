@@ -1,0 +1,4 @@
+User ID: 96
+Amount: $-0.01 (INVALID)
+Description: 'something'
+Date: 2012-06-06
