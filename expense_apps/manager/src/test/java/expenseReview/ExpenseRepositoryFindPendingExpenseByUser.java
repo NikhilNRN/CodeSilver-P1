@@ -201,30 +201,42 @@ public class ExpenseRepositoryFindPendingExpenseByUser {
     @Severity(SeverityLevel.NORMAL)
     @Description("Verify that pending expenses are returned in descending order by date.")
     void testFindPendingExpensesWithUsers_OrderingByDateDesc() throws SQLException {
+        // Stub the prepared statement and result set
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        // Simulate 3 rows in the ResultSet
         when(resultSet.next()).thenReturn(true, true, true, false);
 
+        // Stub all ResultSet getters used by mapRowToExpenseWithUser
         when(resultSet.getString("date")).thenReturn(
                 "2024-12-20",
                 "2024-12-15",
                 "2024-12-10"
         );
+        when(resultSet.getString("description")).thenReturn(
+                "Lunch",
+                "Taxi",
+                "Hotel"
+        );
+        when(resultSet.getInt("id")).thenReturn(1, 2, 3);
+        when(resultSet.getDouble("amount")).thenReturn(100.0, 50.0, 200.0);
+        when(resultSet.getObject("reviewer")).thenReturn(null, null, null);
 
-        when(resultSet.getInt(anyString())).thenAnswer(invocation -> 1);
-        when(resultSet.getDouble("amount")).thenReturn(100.0);
-        when(resultSet.getObject("reviewer")).thenReturn(null);
-
+        // Call the method under test
         List<ExpenseWithUser> results = expenseRepository.findPendingExpensesWithUsers();
 
+        // Assertions
         assertNotNull(results);
         assertEquals(3, results.size());
         assertEquals("2024-12-20", results.get(0).getExpense().getDate());
         assertEquals("2024-12-15", results.get(1).getExpense().getDate());
         assertEquals("2024-12-10", results.get(2).getExpense().getDate());
 
+        // Verify SQL ordering
         verify(connection).prepareStatement(argThat(sql -> sql.contains("ORDER BY e.date DESC")));
     }
+
 
     @Test
     @Story("Retrieve Pending Expenses")
