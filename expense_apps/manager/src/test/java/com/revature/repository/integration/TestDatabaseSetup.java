@@ -113,9 +113,13 @@ public class TestDatabaseSetup
              Statement stmt = conn.createStatement()) {
             // Split by semicolon and execute each statement
             for (String sql : seedSql.split(";")) {
-                String trimmed = sql.trim();
-                if (!trimmed.isEmpty() && !trimmed.startsWith("--")) {
-                    stmt.execute(trimmed);
+                String cleaned = sql.lines()
+                        .filter(line -> !line.trim().startsWith("--"))
+                        .collect(Collectors.joining("\n"))
+                        .trim();
+
+                if (!cleaned.isEmpty()) {
+                    stmt.execute(cleaned);
                 }
             }
         }

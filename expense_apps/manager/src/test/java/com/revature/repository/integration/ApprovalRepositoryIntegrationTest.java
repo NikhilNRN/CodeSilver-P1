@@ -37,12 +37,18 @@ public class ApprovalRepositoryIntegrationTest {
     @Story("Find Approval")
     @Description("Find approval by expense ID from real database")
     @Severity(SeverityLevel.CRITICAL)
-    void testFindByExpenseIdFromRealDatabase() {
-        Allure.step("Execute findByExpenseId test (expense ID 2)", () -> {
-            Optional<Approval> result = approvalRepository.findByExpenseId(2);
-            assertTrue(result.isPresent());
-        });
+    void testFindByExpenseIdFromRealDatabase()
+    {
+        // Act
+        Optional<Approval> result = approvalRepository.findByExpenseId(2);
+
+        // Assert
+        assertTrue(result.isPresent(), "Approval should be found");
+        assertEquals("approved", result.get().getStatus());
+        assertEquals(3, result.get().getReviewer()); // manager1
+        assertEquals("Approved for travel", result.get().getComment());
     }
+
 
     @Test
     @Story("Find Approval")
