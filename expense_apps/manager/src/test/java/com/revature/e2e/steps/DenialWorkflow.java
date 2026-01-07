@@ -87,29 +87,20 @@ public class DenialWorkflow {
         reviewButton.click();
     }
 
-    @When("the manager denies the expense")
-    public void the_manager_denies_the_expense() {
-        WebElement denyButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("deny-expense")
+    @When("the manager {word}s the expense")
+    public void the_manager_actions_the_expense(String action) {
+        String buttonId = action.equals("approve") ? "approve-expense" : "deny-expense";
+
+        WebElement actionButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.id(buttonId)
         ));
-        denyButton.click();
+        actionButton.click();
 
         // Wait longer for modal to disappear (increase timeout)
         WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(15));
         longWait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("review-modal")));
     }
 
-    @When("the manager approves the expense")
-    public void the_manager_approves_the_expense() {
-        WebElement approveButton = wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("approve-expense")
-        ));
-        approveButton.click();
-
-        // Wait longer for modal to disappear (increase timeout)
-        WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(15));
-        longWait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("review-modal")));
-    }
 
     @When("the manager clicks all expenses button")
     public void the_manager_clicks_all_expenses_button() {
