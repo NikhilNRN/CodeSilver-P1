@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -50,13 +52,19 @@ public class TestApprovalRepositoryUpdateApprovalStatus {
 
     @Description("Update approval status with valid inputs")
     @Severity(SeverityLevel.CRITICAL)
-    @Test
+    @ParameterizedTest
+    @CsvSource({
+            "approved, comment goes here",
+            "approved, ''",
+            "denied, comment goes here",
+            "denied, ''"
+    })
     @DisplayName("C50_01")
-    public void testUpdateApprovalStatus_normal_returnTrue() throws SQLException {
+    public void testUpdateApprovalStatus_normal_returnTrue(String status, String comment) throws SQLException {
         Allure.step("Stub PreparedStatement executeUpdate to return 1", () -> when(pstmt.executeUpdate()).thenReturn(1));
 
         Allure.step("Call updateApprovalStatus with valid inputs", () -> {
-            boolean result = repo.updateApprovalStatus(1, "approved", 2, "comment goes here");
+            boolean result = repo.updateApprovalStatus(1, status, 2, comment);
             Allure.step("Assert that updateApprovalStatus returned true", () -> Assertions.assertTrue(result));
         });
 
@@ -70,13 +78,17 @@ public class TestApprovalRepositoryUpdateApprovalStatus {
 
     @Description("Update approval status with invalid inputs")
     @Severity(SeverityLevel.CRITICAL)
-    @Test
+    @ParameterizedTest
+    @CsvSource({
+            "approved",
+            "denied"
+    })
     @DisplayName("C50_02")
-    public void testUpdateApprovalStatus_invalidInput_returnFalse() throws SQLException {
+    public void testUpdateApprovalStatus_invalidInput_returnFalse(String status) throws SQLException {
         Allure.step("Stub PreparedStatement executeUpdate to return 0", () -> when(pstmt.executeUpdate()).thenReturn(0));
 
         Allure.step("Call updateApprovalStatus with invalid expense ID", () -> {
-            boolean result = repo.updateApprovalStatus(-420, "approved", 2, "comment goes here");
+            boolean result = repo.updateApprovalStatus(-420, status, 2, "comment goes here");
             Allure.step("Assert that updateApprovalStatus returned false", () -> Assertions.assertFalse(result));
         });
 
@@ -89,15 +101,19 @@ public class TestApprovalRepositoryUpdateApprovalStatus {
 
     @Description("Update approval status with SQLException")
     @Severity(SeverityLevel.BLOCKER)
-    @Test
+    @ParameterizedTest
+    @CsvSource({
+            "approved",
+            "denied"
+    })
     @DisplayName("C50_03")
-    public void testUpdateApprovalStatus_SQLException_throwsException() throws SQLException {
+    public void testUpdateApprovalStatus_SQLException_throwsException(String status) throws SQLException {
         Allure.step("Stub PreparedStatement executeUpdate to throw SQLException", () -> when(pstmt.executeUpdate()).thenThrow(SQLException.class));
 
         Allure.step("Call updateApprovalStatus expecting RuntimeException", () -> {
             Allure.step("Assert that RuntimeException is thrown", () -> {
                 try {
-                    repo.updateApprovalStatus(-27, "approved", 2, "comment goes here");
+                    repo.updateApprovalStatus(-27, status, 2, "comment goes here");
                     fail("Expected RuntimeException was not thrown");
                 } catch (RuntimeException ex) {
                     // expected
