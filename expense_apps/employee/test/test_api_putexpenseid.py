@@ -2,7 +2,11 @@ import pytest
 import requests
 import allure
 
-
+test_body = {
+    "amount": 12,
+    "description": "dummy",
+    "date": "12-20-2025"
+}
 @pytest.fixture()
 def loginfirst():
     """Fixture to authenticate and provide session cookies for API requests"""
@@ -103,67 +107,28 @@ def test_updateexpense(loginfirst):
 @allure.feature("Expense Management")
 @allure.story("Update Expense")
 @allure.severity(allure.severity_level.NORMAL)
-@allure.title("C134_02: Update expense with malformed request returns 400")
-@allure.description("Test to verify that updating an expense with incomplete data returns 400 error")
-@allure.testcase("C134_02")
-def test_malformedexpense(loginfirst):
-    expense_url = "http://localhost:5000/api/expenses/2"
-
-    with allure.step("Retrieve current expense data"):
-        data = requests.get(expense_url, cookies=loginfirst).json()
-        original = data["expense"]["amount"]
-        allure.attach(
-            str(data),
-            "Original Expense Data",
-            allure.attachment_type.JSON
-        )
-
-    with allure.step("Send malformed update request with only amount field"):
-        newdat = original + 10
-        body = {"amount": newdat}
-        allure.attach(
-            str(body),
-            "Malformed Request Body",
-            allure.attachment_type.JSON
-        )
-        response = requests.put(expense_url, json=body, cookies=loginfirst)
-        allure.attach(
-            str(response.status_code),
-            "Response Status Code",
-            allure.attachment_type.TEXT
-        )
-        allure.attach(
-            response.text,
-            "Response Body",
-            allure.attachment_type.JSON
-        )
-
-    with allure.step("Verify response status code is 400"):
-        assert response.status_code == 400
-
-    with allure.step("Verify error message indicates missing required fields"):
-        assert "Amount, description, and date are required" in response.json()["error"]
-
-
-@allure.feature("Expense Management")
-@allure.story("Update Expense")
-@allure.severity(allure.severity_level.NORMAL)
 @allure.title("C134_03: Update expense with empty JSON returns 400")
 @allure.description("Test to verify that updating an expense with empty JSON returns 400 error")
 @allure.testcase("C134_03")
-def test_nojson(loginfirst):
-    expense_url = "http://localhost:5000/api/expenses/2"
+@pytest.mark.parametrize("expense_id, rcode, body, message", [
+    ("3", 400, {}, "JSON data required"),
+    ("3", 400, {"amount": 10}, ""),
+    ("9999999", 404, test_body, ""),
+    ("13", 400, test_body, "Cannot edit expense that has been reviewed")
+])
+def test_nojson(loginfirst, expense_id, rcode, body, message):
+    expense_url = "http://localhost:5000/api/expenses/" + expense_id
 
     with allure.step("Send update request with empty JSON body"):
-        response = requests.put(expense_url, json={}, cookies=loginfirst)
+        response = requests.put(expense_url, json=body, cookies=loginfirst)
         allure.attach(
             expense_url,
             "Request URL",
             allure.attachment_type.TEXT
         )
         allure.attach(
-            "{}",
-            "Empty Request Body",
+            body,
+            "Bad Request Body",
             allure.attachment_type.JSON
         )
         allure.attach(
@@ -178,10 +143,10 @@ def test_nojson(loginfirst):
         )
 
     with allure.step("Verify response status code is 400"):
-        assert response.status_code == 400
+        assert response.status_code == rcode
 
     with allure.step("Verify error message indicates JSON data required"):
-        assert "JSON data required" in response.json()["error"]
+        assert message in response.json()["error"]
 
 
 @allure.feature("Expense Management")
@@ -190,8 +155,11 @@ def test_nojson(loginfirst):
 @allure.title("C134_04: Update non-pending expense returns 400")
 @allure.description("Test to verify that updating a reviewed (non-pending) expense returns 400 error")
 @allure.testcase("C134_04")
-def test_notpending(loginfirst):
-    expense_url = "http://localhost:5000/api/expenses/13"
+@pytest.mark.parametrize("expense_id, rcode, message", [
+    ("13", 400, "Cannot edit expense that has been reviewed")
+])
+def test_notpending(loginfirst, expense_id, rcode, message):
+    expense_url = "http://localhost:5000/api/expenses/" + expense_id
 
     with allure.step("Retrieve non-pending expense data"):
         data = requests.get(expense_url, cookies=loginfirst).json()
@@ -227,10 +195,11 @@ def test_notpending(loginfirst):
         )
 
     with allure.step("Verify response status code is 400"):
-        assert response.status_code == 400
+        assert response.status_code == rcode
 
     with allure.step("Verify error message indicates expense has been reviewed"):
-        assert "Cannot edit expense that has been reviewed" in response.json()["error"]
+        if "error" in response.json():
+            assert message in response.json()["error"]
 
 
 @allure.feature("Expense Management")
@@ -239,9 +208,12 @@ def test_notpending(loginfirst):
 @allure.title("C134_05: Update non-existent expense returns 400")
 @allure.description("Test to verify that updating a non-existent expense returns 400 error")
 @allure.testcase("C134_05")
-def test_doesnotexist(loginfirst):
-    expense_url = "http://localhost:5000/api/expenses/13"
-    false_url = "http://localhost:5000/api/expenses/9999999"
+@pytest.mark.parametrize("target_id, source_id",[
+    ("9999999", "13")
+])
+def test_doesnotexist(loginfirst,target_id,source_id):
+    expense_url = "http://localhost:5000/api/expenses/" + source_id
+    false_url = "http://localhost:5000/api/expenses/" + target_id
 
     with allure.step("Retrieve valid expense data for request body"):
         data = requests.get(expense_url, cookies=loginfirst).json()

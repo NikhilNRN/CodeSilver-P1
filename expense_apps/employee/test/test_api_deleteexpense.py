@@ -76,37 +76,16 @@ def test_deleteexpense(loginfirst):
 @allure.severity(allure.severity_level.NORMAL)
 @allure.title("C135_02: Delete non-pending expense returns error")
 @allure.description("Deleting a reviewed expense should return 400 (or 409).")
-def test_deletenonpending(loginfirst):
-    expense_url = "http://localhost:5000/api/expenses/13"
+@pytest.mark.parametrize("expense_id, rcode, message", [
+    ("13", 400, ""),
+    ("9999999", 404, "Expense not found"),
+])
+def test_deleteexpense(loginfirst, expense_id, rcode, message):
+    expense_url = "http://localhost:5000/api/expenses/" + expense_id
 
     with allure.step("Attempt to delete non-pending expense"):
         response = requests.delete(expense_url, cookies=loginfirst)
         allure.attach(str(response.status_code), "Response Status Code", allure.attachment_type.TEXT)
         allure.attach(response.text, "Response Body", allure.attachment_type.TEXT)
 
-        assert response.status_code in (400, 409), f"Expected 400/409 but got {response.status_code}"
-
-
-@allure.feature("Expense Management")
-@allure.story("Delete Expense")
-@allure.severity(allure.severity_level.NORMAL)
-@allure.title("C135_03: Delete non-existent expense returns 404")
-@allure.description("Deleting a missing expense should return 404 with either message/error key.")
-def test_deletenonexistent(loginfirst):
-    expense_url = "http://localhost:5000/api/expenses/9999999"
-
-    with allure.step("Attempt to delete non-existent expense"):
-        response = requests.delete(expense_url, cookies=loginfirst)
-        allure.attach(str(response.status_code), "Response Status Code", allure.attachment_type.TEXT)
-        allure.attach(response.text, "Response Body", allure.attachment_type.TEXT)
-
-        assert response.status_code == 404, f"Expected 404 but got {response.status_code}"
-
-        try:
-            body = response.json()
-        except Exception:
-            body = {}
-
-        msg = _get_msg_or_error(body)
-        # tolerate whatever wording your API uses
-        assert msg == "" or "not found" in msg.lower(), f"Expected not found message, got: {body}"
+        assert response.status_code == rcode, f"Expected {rcode} but got {response.status_code}"

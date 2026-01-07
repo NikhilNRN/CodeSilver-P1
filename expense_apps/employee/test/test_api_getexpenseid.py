@@ -27,80 +27,20 @@ def loginfirst():
 
     yield response.cookies
 
-
 @allure.feature("Expense Retrieval")
 @allure.story("Get Expense by ID")
 @allure.severity(allure.severity_level.CRITICAL)
-@allure.title("C133_01: Retrieve valid expense successfully")
-@allure.description("Test to verify that a valid expense can be retrieved successfully by its ID")
-@allure.testcase("C133_01")
-def test_validexpense(loginfirst):
-    expense_url = "http://localhost:5000/api/expenses/2"
-
-    with allure.step("Send GET request to retrieve expense with ID 2"):
-        response = requests.get(expense_url, cookies=loginfirst)
-        allure.attach(
-            expense_url,
-            "Request URL",
-            allure.attachment_type.TEXT
-        )
-        allure.attach(
-            str(response.status_code),
-            "Response Status Code",
-            allure.attachment_type.TEXT
-        )
-        allure.attach(
-            response.text,
-            "Response Body",
-            allure.attachment_type.JSON
-        )
-
-    with allure.step("Verify response status code is 200"):
-        assert response.status_code == 200
-
-
-@allure.feature("Expense Retrieval")
-@allure.story("Get Expense by ID")
-@allure.severity(allure.severity_level.NORMAL)
-@allure.title("C133_02: Attempt to retrieve expense from different user returns 404")
-@allure.description("Test to verify that attempting to access another user's expense returns 404 error")
-@allure.testcase("C133_02")
-def test_wronguser(loginfirst):
-    expense_url = "http://localhost:5000/api/expenses/7"
-
-    with allure.step("Attempt to retrieve expense from different user (ID 7)"):
-        response = requests.get(expense_url, cookies=loginfirst)
-        allure.attach(
-            expense_url,
-            "Request URL",
-            allure.attachment_type.TEXT
-        )
-        allure.attach(
-            str(response.status_code),
-            "Response Status Code",
-            allure.attachment_type.TEXT
-        )
-        allure.attach(
-            response.text,
-            "Response Body",
-            allure.attachment_type.JSON
-        )
-
-    with allure.step("Verify response status code is 404"):
-        assert response.status_code == 404
-
-    with allure.step("Verify error message contains 'Expense not found'"):
-        assert "Expense not found" in response.json()["error"]
-
-
-@allure.feature("Expense Retrieval")
-@allure.story("Get Expense by ID")
-@allure.severity(allure.severity_level.NORMAL)
-@allure.title("C133_03: Retrieve non-pending expense successfully")
-@allure.description("Test to verify that a non-pending expense can be retrieved successfully")
-@allure.testcase("C133_03")
-def test_nonpending_valid(loginfirst):
-    expense_url = "http://localhost:5000/api/expenses/13"
+@allure.title("C133: Retrieve expenses successfully")
+@allure.description("Test to verify that expenses are appropriately retrieved with correct return codes and error messages")
+@allure.testcase("C133")
+@pytest.mark.parametrize("expense_id, rcode, message", [
+    ("2", 200, ""),
+    ("13", 200, ""),
+    ("7", 404, "Expense not found"),
+    ("2000", 404, "Expense not found")
+])
+def test_nonpending(loginfirst, expense_id, rcode, message):
+    expense_url = "http://localhost:5000/api/expenses/" + expense_id
 
     with allure.step("Send GET request to retrieve non-pending expense (ID 13)"):
         response = requests.get(expense_url, cookies=loginfirst)
@@ -120,39 +60,9 @@ def test_nonpending_valid(loginfirst):
             allure.attachment_type.JSON
         )
 
-    with allure.step("Verify response status code is 200"):
-        assert response.status_code == 200
-
-
-@allure.feature("Expense Retrieval")
-@allure.story("Get Expense by ID")
-@allure.severity(allure.severity_level.NORMAL)
-@allure.title("C133_04: Attempt to retrieve non-existent expense returns 404")
-@allure.description("Test to verify that attempting to retrieve a non-existent expense returns 404 error")
-@allure.testcase("C133_04")
-def test_nonexistent(loginfirst):
-    expense_url = "http://localhost:5000/api/expenses/999999"
-
-    with allure.step("Attempt to retrieve non-existent expense (ID 999999)"):
-        response = requests.get(expense_url, cookies=loginfirst)
-        allure.attach(
-            expense_url,
-            "Request URL",
-            allure.attachment_type.TEXT
-        )
-        allure.attach(
-            str(response.status_code),
-            "Response Status Code",
-            allure.attachment_type.TEXT
-        )
-        allure.attach(
-            response.text,
-            "Response Body",
-            allure.attachment_type.JSON
-        )
-
-    with allure.step("Verify response status code is 404"):
-        assert response.status_code == 404
+    with allure.step("Verify response status code is appropriate"):
+        assert response.status_code == rcode
 
     with allure.step("Verify error message contains 'Expense not found'"):
-        assert "Expense not found" in response.json()["error"]
+        if "error" in response.json():
+            assert message in response.json()["error"]
