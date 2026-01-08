@@ -2,6 +2,8 @@ package com.revature.e2e.steps;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.PendingException;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -102,30 +104,34 @@ public class ManagerLoginSuccessfully {
         assertTrue(driver.getCurrentUrl().contains("login.html"));
     }
 
-    @Then("the manager dashboard header should be displayed")
-    public void the_manager_dashboard_header_should_be_displayed() {
-        WebElement header = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//h1[normalize-space()='Manager Expense Dashboard']")
-        ));
-        String headerText = header.getText();
-        assertTrue(headerText.contains("Manager Expense Dashboard"));
-    }
+    @Then("the {string} should be displayed")
+    public void the_element_should_be_displayed(String elementName) {
+        By locator;
+        String expectedText = null;
 
-    @Then("the pending expenses header should be displayed")
-    public void the_pending_expenses_header_should_be_displayed() {
-        WebElement header = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//h3[normalize-space()='Pending Expenses for Review']")
-        ));
-        String headerText = header.getText();
-        assertTrue(headerText.contains("Pending Expenses for Review"));
-    }
+        switch(elementName) {
+            case "manager dashboard header":
+                locator = By.xpath("//h1[normalize-space()='Manager Expense Dashboard']");
+                expectedText = "Manager Expense Dashboard";
+                break;
+            case "pending expenses header":
+                locator = By.xpath("//h3[normalize-space()='Pending Expenses for Review']");
+                expectedText = "Pending Expenses for Review";
+                break;
+            case "pending expense section":
+                locator = By.xpath("//div[@id='pending-expenses-section']");
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown element: " + elementName);
+        }
 
-    @Then("the pending expense section should be displayed")
-    public void the_pending_expense_section_should_be_displayed() {
-        WebElement section = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//div[@id='pending-expenses-section']")
-        ));
-        assertTrue(section.isDisplayed());
+        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        assertTrue(element.isDisplayed());
+
+        if (expectedText != null) {
+            String actualText = element.getText();
+            assertTrue(actualText.contains(expectedText));
+        }
     }
 
     @When("the manager clicks the show reports button")
@@ -177,4 +183,5 @@ public class ManagerLoginSuccessfully {
             driver.quit();
         }
     }
+
 }

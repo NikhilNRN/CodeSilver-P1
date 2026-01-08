@@ -3,24 +3,17 @@ Feature: Complete Expense Review Workflow
   I want to approve or deny employee expense requests
   So that expenses are properly reviewed and their status is updated
 
-  #csp 150
-  Scenario: Manager logs in and denies an expense request
+  Scenario Outline: Manager logs in and reviews an expense request
     Given we are on the login page
     And the manager logs in
     And the manager views all pending expenses
-    When the manager selects the expense with description "ooo"
+    When the manager selects the expense with description "<expense_description>"
     And the manager clicks the review button
-    And the manager denies the expense
+    And the manager <action>s the expense
     And the manager clicks all expenses button
-    Then the expense status should be "denied"
+    Then the expense status should be "<expected_status>"
 
-    #csp 156
-  Scenario: Manager logs in and approves an expense request
-    Given we are on the login page
-    And the manager logs in
-    And the manager views all pending expenses
-    When the manager selects the expense with description "Gas"
-    And the manager clicks the review button
-    And the manager approves the expense
-    And the manager clicks all expenses button
-    Then the expense status should be "approved"
+    Examples:
+      | expense_description | action  | expected_status |
+      | ooo                 | deny    | denied          |
+      | Gas                 | approve | approved        |
